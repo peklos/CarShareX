@@ -1,0 +1,327 @@
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { toast } from 'react-hot-toast';
+import {
+  ArrowLeftIcon,
+  MapPinIcon,
+  BoltIcon,
+  TruckIcon,
+  CalendarIcon,
+  ClockIcon,
+} from '@heroicons/react/24/outline';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { fetchVehicleById } from './vehiclesSlice';
+import { createBooking } from '../bookings/bookingsSlice';
+import Layout from '../../components/layout/Layout';
+import Button from '../../components/ui/Button';
+import Card from '../../components/ui/Card';
+import Badge from '../../components/ui/Badge';
+import Spinner from '../../components/ui/Spinner';
+import { ROUTES } from '../../utils/constants';
+
+const VehicleDetail: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const { selectedVehicle: vehicle, loading } = useAppSelector((state) => state.vehicles);
+  const { createLoading, createError } = useAppSelector((state) => state.bookings);
+  const { isAuthenticated, role } = useAppSelector((state) => state.auth);
+
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchVehicleById(Number(id)));
+    }
+  }, [dispatch, id]);
+
+  const handleBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!isAuthenticated) {
+      toast.error('Войдите в систему для бронирования');
+      navigate(ROUTES.LOGIN);
+      return;
+    }
+
+    if (role !== 'client') {
+      toast.error('Только клиенты могут бронировать автомобили');
+      return;
+    }
+
+    if (!vehicle) return;
+
+    try {
+      await dispatch(
+        createBooking({
+          vehicle_id: vehicle.id,
+          start_datetime: new Date(startDate).toISOString(),
+          end_datetime: new Date(endDate).toISOString(),
+        })
+      ).unwrap();
+
+      toast.success('Бронирование создано успешно!');
+      navigate(ROUTES.BOOKINGS);
+    } catch (error: any) {
+      toast.error(createError || 'Ошибка создания бронирования');
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'available':
+        return <Badge variant="success">Доступен</Badge>;
+      case 'in_use':
+        return <Badge variant="warning">Занят</Badge>;
+      case 'maintenance':
+        return <Badge variant="danger">Обслуживание</Badge>;
+      default:
+        return <Badge variant="default">{status}</Badge>;
+    }
+  };
+
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'electric':
+        return <BoltIcon className="h-6 w-6" />;
+      case 'hybrid':
+        return <BoltIcon className="h-6 w-6 text-green-500" />;
+      default:
+        return <TruckIcon className="h-6 w-6" />;
+    }
+  };
+
+  const getTypeLabel = (type: string) => {
+    const labels: Record<string, string> = {
+      sedan: 'Седан',
+      suv: 'Внедорожник',
+      electric: 'Электромобиль',
+      hybrid: 'Гибрид',
+      premium: 'Премиум',
+      economy: 'Эконом',
+      crossover: 'Кроссовер',
+    };
+    return labels[type] || type;
+  };
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="flex justify-center items-center py-20">
+          <Spinner size="lg" />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!vehicle) {
+    return (
+      <Layout>
+        <div className="text-center py-20">
+          <h2 className="text-2xl font-bold text-neutral-700 mb-4">
+            Автомобиль не найден
+          </h2>
+          <Link to={ROUTES.VEHICLES}>
+            <Button variant="primary">Вернуться к каталогу</Button>
+          </Link>
+        </div>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout>
+      <div className="max-w-5xl mx-auto">
+        {/* Back button */}
+        <Link
+          to={ROUTES.VEHICLES}
+          className="inline-flex items-center space-x-2 text-neutral-600 hover:text-primary-500 mb-6 transition-colors"
+        >
+          <ArrowLeftIcon className="h-5 w-5" />
+          <span>Назад к каталогу</span>
+        </Link>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Vehicle Image and Info */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <Card className="overflow-hidden">
+              {/* Image */}
+              <div className="relative h-64 lg:h-96 bg-neutral-200">
+                {vehicle.image_url ? (
+                  <img
+                    src={vehicle.image_url}
+                    alt={`${vehicle.brand} ${vehicle.model}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full bg-gradient-to-br from-neutral-100 to-neutral-200">
+                    <TruckIcon className="h-24 w-24 text-neutral-400" />
+                  </div>
+                )}
+                <div className="absolute top-4 right-4">
+                  {getStatusBadge(vehicle.status)}
+                </div>
+              </div>
+
+              {/* Details */}
+              <div className="p-6">
+                <h1 className="text-3xl font-bold text-neutral-900 mb-2">
+                  {vehicle.brand} {vehicle.model}
+                </h1>
+
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="flex items-center space-x-2 text-neutral-600">
+                    {getTypeIcon(vehicle.vehicle_type)}
+                    <span className="font-medium">{getTypeLabel(vehicle.vehicle_type)}</span>
+                  </div>
+                  {vehicle.year && (
+                    <span className="text-neutral-500">{vehicle.year} г.</span>
+                  )}
+                </div>
+
+                {vehicle.description && (
+                  <p className="text-neutral-600 mb-6">{vehicle.description}</p>
+                )}
+
+                <div className="space-y-3">
+                  {vehicle.color && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-neutral-700">Цвет:</span>
+                      <div className="flex items-center space-x-2">
+                        <div
+                          className="w-6 h-6 rounded-full border-2 border-neutral-300"
+                          style={{ backgroundColor: vehicle.color.toLowerCase() }}
+                        />
+                        <span className="text-sm text-neutral-600 capitalize">
+                          {vehicle.color}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-neutral-700">Номер:</span>
+                    <span className="text-sm font-mono font-bold text-neutral-900">
+                      {vehicle.license_plate}
+                    </span>
+                  </div>
+
+                  {vehicle.parking_zone_id && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-neutral-700">Парковка:</span>
+                      <div className="flex items-center space-x-1 text-sm text-neutral-600">
+                        <MapPinIcon className="h-4 w-4" />
+                        <span>Зона {vehicle.parking_zone_id}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Booking Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Card>
+              <div className="p-6">
+                <h2 className="text-2xl font-bold text-neutral-900 mb-6">
+                  Забронировать автомобиль
+                </h2>
+
+                {vehicle.status !== 'available' ? (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                    <p className="text-yellow-800">
+                      Этот автомобиль в данный момент недоступен для бронирования
+                    </p>
+                  </div>
+                ) : !isAuthenticated ? (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <p className="text-blue-800 mb-4">
+                      Войдите в систему, чтобы забронировать автомобиль
+                    </p>
+                    <Link to={ROUTES.LOGIN}>
+                      <Button variant="primary" className="w-full">
+                        Войти
+                      </Button>
+                    </Link>
+                  </div>
+                ) : role !== 'client' ? (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p className="text-red-800">
+                      Только клиенты могут бронировать автомобили
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleBooking} className="space-y-6">
+                    {/* Start Date */}
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">
+                        <div className="flex items-center space-x-2">
+                          <CalendarIcon className="h-5 w-5 text-primary-500" />
+                          <span>Дата и время начала</span>
+                        </div>
+                      </label>
+                      <input
+                        type="datetime-local"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        min={new Date().toISOString().slice(0, 16)}
+                        required
+                        className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    {/* End Date */}
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-700 mb-2">
+                        <div className="flex items-center space-x-2">
+                          <ClockIcon className="h-5 w-5 text-primary-500" />
+                          <span>Дата и время окончания</span>
+                        </div>
+                      </label>
+                      <input
+                        type="datetime-local"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        min={startDate || new Date().toISOString().slice(0, 16)}
+                        required
+                        className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    {createError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                        <p className="text-sm text-red-600">{createError}</p>
+                      </div>
+                    )}
+
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      className="w-full"
+                      loading={createLoading}
+                    >
+                      Забронировать
+                    </Button>
+                  </form>
+                )}
+              </div>
+            </Card>
+          </motion.div>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default VehicleDetail;

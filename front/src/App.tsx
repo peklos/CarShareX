@@ -10,6 +10,9 @@ import Home from './pages/Home';
 import Login from './features/auth/Login';
 import Register from './features/auth/Register';
 import Vehicles from './features/vehicles/Vehicles';
+import VehicleDetail from './features/vehicles/VehicleDetail';
+import Bookings from './features/bookings/Bookings';
+import Transactions from './features/transactions/Transactions';
 
 import { ROUTES } from './utils/constants';
 
@@ -52,6 +55,7 @@ const App: React.FC = () => {
 
         {/* Vehicles catalog */}
         <Route path={ROUTES.VEHICLES} element={<Vehicles />} />
+        <Route path="/vehicles/:id" element={<VehicleDetail />} />
 
         {/* Protected client routes */}
         <Route
@@ -71,11 +75,16 @@ const App: React.FC = () => {
           path={ROUTES.BOOKINGS}
           element={
             <ProtectedRoute requireRole="client">
-              <Layout>
-                <div className="text-center py-20">
-                  <h2 className="text-3xl font-bold">Мои бронирования</h2>
-                </div>
-              </Layout>
+              <Bookings />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.TRANSACTIONS}
+          element={
+            <ProtectedRoute requireRole="client">
+              <Transactions />
             </ProtectedRoute>
           }
         />
