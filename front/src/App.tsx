@@ -1,0 +1,127 @@
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+
+import Layout from './components/layout/Layout';
+import ProtectedRoute from './features/auth/ProtectedRoute';
+
+// Pages
+import Home from './pages/Home';
+import Login from './features/auth/Login';
+import Register from './features/auth/Register';
+
+import { ROUTES } from './utils/constants';
+
+const App: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#fff',
+            color: '#292524',
+            borderRadius: '0.5rem',
+            boxShadow: '0 10px 30px -10px rgba(0,0,0,0.15)',
+          },
+          success: {
+            iconTheme: {
+              primary: '#f97316',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+
+      <Routes>
+        {/* Public routes without layout */}
+        <Route path={ROUTES.LOGIN} element={<Login />} />
+        <Route path={ROUTES.REGISTER} element={<Register />} />
+
+        {/* Public routes with layout */}
+        <Route
+          path={ROUTES.HOME}
+          element={
+            <Layout>
+              <Home />
+            </Layout>
+          }
+        />
+
+        {/* Temporary placeholder for vehicles */}
+        <Route
+          path={ROUTES.VEHICLES}
+          element={
+            <Layout>
+              <div className="text-center py-20">
+                <h2 className="text-3xl font-bold mb-4">Каталог автомобилей</h2>
+                <p className="text-neutral-600">Скоро здесь появится каталог из 40+ автомобилей</p>
+              </div>
+            </Layout>
+          }
+        />
+
+        {/* Protected client routes */}
+        <Route
+          path={ROUTES.PROFILE}
+          element={
+            <ProtectedRoute requireRole="client">
+              <Layout>
+                <div className="text-center py-20">
+                  <h2 className="text-3xl font-bold">Профиль</h2>
+                </div>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.BOOKINGS}
+          element={
+            <ProtectedRoute requireRole="client">
+              <Layout>
+                <div className="text-center py-20">
+                  <h2 className="text-3xl font-bold">Мои бронирования</h2>
+                </div>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected admin routes */}
+        <Route
+          path={ROUTES.ADMIN_DASHBOARD}
+          element={
+            <ProtectedRoute requireRole="admin">
+              <Layout>
+                <div className="text-center py-20">
+                  <h2 className="text-3xl font-bold">Админ панель</h2>
+                  <p className="text-neutral-600 mt-4">Dashboard с аналитикой</p>
+                </div>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Redirect /admin to dashboard */}
+        <Route path={ROUTES.ADMIN} element={<Navigate to={ROUTES.ADMIN_DASHBOARD} replace />} />
+
+        {/* 404 */}
+        <Route
+          path="*"
+          element={
+            <Layout>
+              <div className="text-center py-20">
+                <h2 className="text-4xl font-bold mb-4">404</h2>
+                <p className="text-neutral-600">Страница не найдена</p>
+              </div>
+            </Layout>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default App;
