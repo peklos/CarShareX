@@ -12,6 +12,7 @@ import {
   UserIcon,
   CreditCardIcon,
   ChartBarIcon,
+  UserGroupIcon,
 } from '@heroicons/react/24/outline';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { logout } from '../../features/auth/authSlice';
@@ -46,6 +47,9 @@ const Header: React.FC = () => {
 
   const adminNavigation = [
     { name: 'Панель управления', href: ROUTES.ADMIN_DASHBOARD, icon: ChartBarIcon },
+    { name: 'Пользователи', href: ROUTES.ADMIN_USERS, icon: UserGroupIcon },
+    { name: 'Автомобили', href: ROUTES.ADMIN_VEHICLES, icon: TruckIcon },
+    { name: 'Бронирования', href: ROUTES.ADMIN_BOOKINGS, icon: CalendarIcon },
   ];
 
   const navigation = role === 'admin' ? adminNavigation : clientNavigation;

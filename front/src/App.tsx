@@ -15,6 +15,9 @@ import Bookings from './features/bookings/Bookings';
 import Transactions from './features/transactions/Transactions';
 import Profile from './features/profile/Profile';
 import AdminDashboard from './features/admin/AdminDashboard';
+import AdminUsers from './features/admin/AdminUsers';
+import AdminVehicles from './features/admin/AdminVehicles';
+import AdminBookings from './features/admin/AdminBookings';
 
 import { ROUTES } from './utils/constants';
 
@@ -93,6 +96,33 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute requireRole="admin">
               <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.ADMIN_USERS}
+          element={
+            <ProtectedRoute requireRole="admin">
+              <AdminUsers />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.ADMIN_VEHICLES}
+          element={
+            <ProtectedRoute requireRole="admin">
+              <AdminVehicles />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.ADMIN_BOOKINGS}
+          element={
+            <ProtectedRoute requireRole="admin">
+              <AdminBookings />
             </ProtectedRoute>
           }
         />
