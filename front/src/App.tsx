@@ -14,6 +14,7 @@ import VehicleDetail from './features/vehicles/VehicleDetail';
 import Bookings from './features/bookings/Bookings';
 import Transactions from './features/transactions/Transactions';
 import Profile from './features/profile/Profile';
+import AdminDashboard from './features/admin/AdminDashboard';
 
 import { ROUTES } from './utils/constants';
 
@@ -91,12 +92,7 @@ const App: React.FC = () => {
           path={ROUTES.ADMIN_DASHBOARD}
           element={
             <ProtectedRoute requireRole="admin">
-              <Layout>
-                <div className="text-center py-20">
-                  <h2 className="text-3xl font-bold">Админ панель</h2>
-                  <p className="text-neutral-600 mt-4">Dashboard с аналитикой</p>
-                </div>
-              </Layout>
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />
