@@ -9,6 +9,8 @@ from routers import profile
 from routers import vehicles
 from routers import bookings
 from routers import transactions
+from routers import tariffs
+from routers import parking_zones
 
 # Роутеры админов
 from routers import employee_auth
@@ -20,6 +22,7 @@ from routers import admin_employees
 from routers import admin_tariffs
 from routers import admin_parking
 from routers import admin_branches
+from routers import admin_stats
 
 app = FastAPI(
     title="CarShareX API",
@@ -52,6 +55,8 @@ app.include_router(profile.router)
 app.include_router(vehicles.router)
 app.include_router(bookings.router)
 app.include_router(transactions.router)
+app.include_router(tariffs.router)
+app.include_router(parking_zones.router)
 
 # === АДМИНСКИЕ РОУТЕРЫ ===
 app.include_router(employee_auth.router)
@@ -63,15 +68,16 @@ app.include_router(admin_employees.router)
 app.include_router(admin_tariffs.router)
 app.include_router(admin_parking.router)
 app.include_router(admin_branches.router)
+app.include_router(admin_stats.router)
 
 @app.get("/", tags=["Main"])
 def root():
     return {
         "message": "CarShareX API работает",
-        "version": "1.0.0",
+        "version": "2.0.0",
         "docs": "/docs",
-        "client_endpoints": "/auth, /profile, /vehicles, /bookings, /transactions",
-        "admin_endpoints": "/admin/auth, /admin/users, /admin/vehicles, /admin/bookings, /admin/incidents, /admin/employees, /admin/tariffs, /admin/parking, /admin/branches"
+        "client_endpoints": "/auth, /profile, /vehicles (with filters), /bookings, /transactions, /tariffs, /parking-zones",
+        "admin_endpoints": "/admin/auth, /admin/users, /admin/vehicles, /admin/bookings, /admin/incidents, /admin/employees, /admin/tariffs, /admin/parking, /admin/branches, /admin/stats"
     }
 
 @app.get("/health", tags=["Health"])

@@ -25,6 +25,10 @@ def create_vehicle(vehicle_data: vehicle_schemas.VehicleCreate, db: Session = De
         brand=vehicle_data.brand,
         model=vehicle_data.model,
         vehicle_type=vehicle_data.vehicle_type,
+        year=vehicle_data.year,
+        color=vehicle_data.color,
+        image_url=vehicle_data.image_url,
+        description=vehicle_data.description,
         status="available",
         parking_zone_id=vehicle_data.parking_zone_id,
         tariff_id=vehicle_data.tariff_id
@@ -50,6 +54,14 @@ def update_vehicle(vehicle_id: int, vehicle_data: vehicle_schemas.VehicleUpdate,
         vehicle.model = vehicle_data.model
     if vehicle_data.vehicle_type:
         vehicle.vehicle_type = vehicle_data.vehicle_type
+    if vehicle_data.year is not None:
+        vehicle.year = vehicle_data.year
+    if vehicle_data.color:
+        vehicle.color = vehicle_data.color
+    if vehicle_data.image_url:
+        vehicle.image_url = vehicle_data.image_url
+    if vehicle_data.description:
+        vehicle.description = vehicle_data.description
     if vehicle_data.status:
         vehicle.status = vehicle_data.status
     if vehicle_data.parking_zone_id is not None:
