@@ -5,14 +5,11 @@ import { toast } from 'react-hot-toast';
 import {
   UserGroupIcon,
   MagnifyingGlassIcon,
-  PencilIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
 import Layout from '../../components/layout/Layout';
 import Card from '../../components/ui/Card';
-import Badge from '../../components/ui/Badge';
 import Spinner from '../../components/ui/Spinner';
-import Button from '../../components/ui/Button';
 import { API_URL } from '../../utils/constants';
 import { formatCurrency } from '../../utils/helpers';
 import { User } from '../../types';

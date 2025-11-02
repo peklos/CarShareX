@@ -73,13 +73,13 @@ const VehicleDetail: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'available':
-        return <Badge variant="success">Доступен</Badge>;
+        return <Badge variant="green">Доступен</Badge>;
       case 'in_use':
-        return <Badge variant="warning">Занят</Badge>;
+        return <Badge variant="orange">Занят</Badge>;
       case 'maintenance':
-        return <Badge variant="danger">Обслуживание</Badge>;
+        return <Badge variant="red">Обслуживание</Badge>;
       default:
-        return <Badge variant="default">{status}</Badge>;
+        return <Badge variant="gray">{status}</Badge>;
     }
   };
 

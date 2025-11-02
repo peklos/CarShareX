@@ -53,13 +53,13 @@ const AdminBookings: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
-        return <Badge variant="success">Активно</Badge>;
+        return <Badge variant="green">Активно</Badge>;
       case 'completed':
-        return <Badge variant="default">Завершено</Badge>;
+        return <Badge variant="gray">Завершено</Badge>;
       case 'pending':
-        return <Badge variant="warning">Ожидает</Badge>;
+        return <Badge variant="yellow">Ожидает</Badge>;
       default:
-        return <Badge variant="default">{status}</Badge>;
+        return <Badge variant="gray">{status}</Badge>;
     }
   };
 
@@ -182,7 +182,7 @@ const AdminBookings: React.FC = () => {
                         {formatDateTime(booking.start_datetime)}
                       </td>
                       <td className="py-4 px-6 text-sm text-neutral-600">
-                        {formatDateTime(booking.end_datetime)}
+                        {booking.end_datetime ? formatDateTime(booking.end_datetime) : '—'}
                       </td>
                       <td className="py-4 px-6">{getStatusBadge(booking.status)}</td>
                       <td className="py-4 px-6">

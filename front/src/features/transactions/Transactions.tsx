@@ -86,13 +86,13 @@ const Transactions: React.FC = () => {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case 'deposit':
-        return <Badge variant="success">Пополнение</Badge>;
+        return <Badge variant="green">Пополнение</Badge>;
       case 'payment':
-        return <Badge variant="default">Оплата</Badge>;
+        return <Badge variant="blue">Оплата</Badge>;
       case 'penalty':
-        return <Badge variant="danger">Штраф</Badge>;
+        return <Badge variant="red">Штраф</Badge>;
       default:
-        return <Badge variant="default">{type}</Badge>;
+        return <Badge variant="gray">{type}</Badge>;
     }
   };
 

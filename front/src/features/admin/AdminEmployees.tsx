@@ -203,7 +203,7 @@ const AdminEmployees: React.FC = () => {
     return role?.name || 'Неизвестно';
   };
 
-  const getBranchName = (branchId: number | null) => {
+  const getBranchName = (branchId: number | null | undefined) => {
     if (!branchId) return '-';
     const branch = branches.find((b) => b.id === branchId);
     return branch?.name || '-';

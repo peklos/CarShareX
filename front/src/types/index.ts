@@ -69,7 +69,9 @@ export interface Booking {
   vehicle_id: number;
   tariff_id: number;
   start_time: string;
+  start_datetime: string;
   end_time?: string;
+  end_datetime?: string;
   total_cost: number;
   status: 'pending' | 'active' | 'completed';
 }
@@ -87,6 +89,8 @@ export interface Transaction {
   booking_id?: number;
   transaction_type: 'payment' | 'deposit' | 'penalty';
   amount: number;
+  description?: string;
+  created_at: string;
   status: 'completed' | 'pending' | 'failed';
 }
 

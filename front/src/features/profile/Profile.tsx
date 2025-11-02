@@ -22,6 +22,12 @@ import Card from '../../components/ui/Card';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { formatCurrency } from '../../utils/helpers';
+import { User } from '../../types';
+
+// Type guard to check if user is a User (not Employee)
+const isUser = (user: any): user is User => {
+  return user && 'phone' in user;
+};
 
 const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -40,13 +46,13 @@ const Profile: React.FC = () => {
     defaultValues: {
       first_name: user?.first_name || '',
       last_name: user?.last_name || '',
-      phone: user?.phone || '',
-      drivers_license: user?.drivers_license || '',
+      phone: (user && isUser(user)) ? user.phone : '',
+      drivers_license: (user && isUser(user)) ? user.drivers_license : '',
     },
   });
 
   useEffect(() => {
-    if (user) {
+    if (user && isUser(user)) {
       reset({
         first_name: user.first_name,
         last_name: user.last_name,
@@ -81,7 +87,7 @@ const Profile: React.FC = () => {
   };
 
   const handleCancel = () => {
-    if (user) {
+    if (user && isUser(user)) {
       reset({
         first_name: user.first_name,
         last_name: user.last_name,
@@ -92,11 +98,11 @@ const Profile: React.FC = () => {
     setIsEditing(false);
   };
 
-  if (!user) {
+  if (!user || !isUser(user)) {
     return (
       <Layout>
         <div className="text-center py-20">
-          <p className="text-neutral-600">Пользователь не найден</p>
+          <p className="text-neutral-600">Профиль доступен только для клиентов</p>
         </div>
       </Layout>
     );

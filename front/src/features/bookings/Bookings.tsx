@@ -22,13 +22,13 @@ const Bookings: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
-        return <Badge variant="success">Активно</Badge>;
+        return <Badge variant="green">Активно</Badge>;
       case 'completed':
-        return <Badge variant="default">Завершено</Badge>;
+        return <Badge variant="gray">Завершено</Badge>;
       case 'pending':
-        return <Badge variant="warning">Ожидает</Badge>;
+        return <Badge variant="yellow">Ожидает</Badge>;
       default:
-        return <Badge variant="default">{status}</Badge>;
+        return <Badge variant="gray">{status}</Badge>;
     }
   };
 
@@ -140,19 +140,21 @@ const Bookings: React.FC = () => {
                             <div>
                               <p className="text-neutral-500">Окончание:</p>
                               <p className="text-neutral-900 font-medium">
-                                {formatDateTime(booking.end_datetime)}
+                                {booking.end_datetime ? formatDateTime(booking.end_datetime) : 'Не завершено'}
                               </p>
                             </div>
                           </div>
                         </div>
 
                         <div className="mt-3 flex items-center space-x-4 text-sm">
-                          <div className="flex items-center space-x-1 text-neutral-600">
-                            <ClockIcon className="h-4 w-4" />
-                            <span>
-                              Длительность: {calculateDuration(booking.start_datetime, booking.end_datetime)} ч.
-                            </span>
-                          </div>
+                          {booking.end_datetime && (
+                            <div className="flex items-center space-x-1 text-neutral-600">
+                              <ClockIcon className="h-4 w-4" />
+                              <span>
+                                Длительность: {calculateDuration(booking.start_datetime, booking.end_datetime)} ч.
+                              </span>
+                            </div>
+                          )}
                           {booking.total_cost !== undefined && (
                             <div className="flex items-center space-x-1 text-neutral-600">
                               <CurrencyDollarIcon className="h-4 w-4" />
