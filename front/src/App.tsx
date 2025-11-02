@@ -13,6 +13,7 @@ import Vehicles from './features/vehicles/Vehicles';
 import VehicleDetail from './features/vehicles/VehicleDetail';
 import Bookings from './features/bookings/Bookings';
 import Transactions from './features/transactions/Transactions';
+import Profile from './features/profile/Profile';
 
 import { ROUTES } from './utils/constants';
 
@@ -62,11 +63,7 @@ const App: React.FC = () => {
           path={ROUTES.PROFILE}
           element={
             <ProtectedRoute requireRole="client">
-              <Layout>
-                <div className="text-center py-20">
-                  <h2 className="text-3xl font-bold">Профиль</h2>
-                </div>
-              </Layout>
+              <Profile />
             </ProtectedRoute>
           }
         />
