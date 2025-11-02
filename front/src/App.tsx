@@ -18,6 +18,11 @@ import AdminDashboard from './features/admin/AdminDashboard';
 import AdminUsers from './features/admin/AdminUsers';
 import AdminVehicles from './features/admin/AdminVehicles';
 import AdminBookings from './features/admin/AdminBookings';
+import AdminIncidents from './features/admin/AdminIncidents';
+import AdminEmployees from './features/admin/AdminEmployees';
+import AdminTariffs from './features/admin/AdminTariffs';
+import AdminParking from './features/admin/AdminParking';
+import AdminBranches from './features/admin/AdminBranches';
 
 import { ROUTES } from './utils/constants';
 
@@ -123,6 +128,51 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute requireRole="admin">
               <AdminBookings />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.ADMIN_INCIDENTS}
+          element={
+            <ProtectedRoute requireRole="admin">
+              <AdminIncidents />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.ADMIN_EMPLOYEES}
+          element={
+            <ProtectedRoute requireRole="admin">
+              <AdminEmployees />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.ADMIN_TARIFFS}
+          element={
+            <ProtectedRoute requireRole="admin">
+              <AdminTariffs />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.ADMIN_PARKING}
+          element={
+            <ProtectedRoute requireRole="admin">
+              <AdminParking />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.ADMIN_BRANCHES}
+          element={
+            <ProtectedRoute requireRole="admin">
+              <AdminBranches />
             </ProtectedRoute>
           }
         />
