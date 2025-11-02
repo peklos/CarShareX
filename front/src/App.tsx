@@ -9,6 +9,7 @@ import ProtectedRoute from './features/auth/ProtectedRoute';
 import Home from './pages/Home';
 import Login from './features/auth/Login';
 import Register from './features/auth/Register';
+import Vehicles from './features/vehicles/Vehicles';
 
 import { ROUTES } from './utils/constants';
 
@@ -49,18 +50,8 @@ const App: React.FC = () => {
           }
         />
 
-        {/* Temporary placeholder for vehicles */}
-        <Route
-          path={ROUTES.VEHICLES}
-          element={
-            <Layout>
-              <div className="text-center py-20">
-                <h2 className="text-3xl font-bold mb-4">Каталог автомобилей</h2>
-                <p className="text-neutral-600">Скоро здесь появится каталог из 40+ автомобилей</p>
-              </div>
-            </Layout>
-          }
-        />
+        {/* Vehicles catalog */}
+        <Route path={ROUTES.VEHICLES} element={<Vehicles />} />
 
         {/* Protected client routes */}
         <Route
