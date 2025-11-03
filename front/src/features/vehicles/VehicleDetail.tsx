@@ -277,7 +277,7 @@ const VehicleDetail: React.FC = () => {
                         onChange={(e) => setStartDate(e.target.value)}
                         min={new Date().toISOString().slice(0, 16)}
                         required
-                        className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       />
                     </div>
 
@@ -295,7 +295,7 @@ const VehicleDetail: React.FC = () => {
                         onChange={(e) => setEndDate(e.target.value)}
                         min={startDate || new Date().toISOString().slice(0, 16)}
                         required
-                        className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       />
                     </div>
 

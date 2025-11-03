@@ -119,15 +119,14 @@
 
 Перейдите на [netlify.com](https://netlify.com) и создайте аккаунт (можно через GitHub).
 
-### 2. Настройка переменных окружения
+### 2. Настройка переменных окружения (ВАЖНО!)
 
-В папке `front/` создайте файл `.env.production`:
+⚠️ **КРИТИЧНО**: Frontend НЕ БУДЕТ работать без правильной настройки API URL!
 
-```env
-VITE_API_URL=https://your-backend-name.onrender.com
-```
+Файл `.env.production` **НЕ ИСПОЛЬЗУЕТСЯ** (он в .gitignore). Вместо этого настройте переменные окружения напрямую в Netlify:
 
-**Замените** `your-backend-name` на реальное имя вашего бэкенда из шага 3 выше!
+1. Узнайте URL вашего backend на Render (например: `https://carsharex.onrender.com`)
+2. Эту переменную вы добавите на шаге 5 при деплое на Netlify
 
 ### 3. Деплой через Netlify
 
@@ -140,10 +139,16 @@ VITE_API_URL=https://your-backend-name.onrender.com
    - **Build command**: `npm run build`
    - **Publish directory**: `front/dist`
 
-5. **Environment variables**:
+5. **Environment variables** (⚠️ КРИТИЧНО!):
+
+   Перед деплоем нажмите **"Show advanced"** → **"New variable"** и добавьте:
+
    ```
-   VITE_API_URL = https://your-backend-name.onrender.com
+   Key: VITE_API_URL
+   Value: https://carsharex.onrender.com
    ```
+
+   ⚠️ **Замените URL** на ваш настоящий URL с Render! Без этой переменной frontend НЕ СМОЖЕТ связаться с API!
 
 6. Нажмите **"Deploy site"**
 
@@ -219,11 +224,34 @@ Frontend будет доступен по адресу: `http://localhost:3000`
 3. Проверьте, что проект в Neon активен и доступен
 4. Убедитесь, что в DATABASE_URL добавлен `?sslmode=require` в конце
 
-### Frontend показывает ошибки CORS
+### Frontend показывает ошибки CORS / API не работает
 
-1. Убедитесь, что `VITE_API_URL` правильно указывает на бэкенд
-2. Проверьте, что бэкенд запущен и доступен
-3. Очистите кеш браузера и пересоберите: `npm run build`
+**Признаки проблемы:**
+- Ошибки 429, 404, "Method not allowed" при попытке логина/регистрации
+- Ошибка `index-D1b1fEiH.js:279` или похожие
+- Запросы уходят на `http://localhost:8000` вместо Render URL
+
+**Решение:**
+
+1. **Проверьте VITE_API_URL в Netlify:**
+   - Откройте ваш сайт в Netlify Dashboard
+   - Перейдите в **Site settings** → **Environment variables**
+   - Убедитесь что `VITE_API_URL` установлен правильно (например: `https://carsharex.onrender.com`)
+   - ⚠️ URL должен быть БЕЗ слеша в конце!
+
+2. **Если переменная не установлена или неправильная:**
+   - Добавьте/измените `VITE_API_URL` в Environment variables
+   - Перейдите в **Deploys** → **Trigger deploy** → **Clear cache and deploy site**
+   - Подождите пока сайт пересоберется (2-3 минуты)
+
+3. **Проверьте что бэкенд запущен и доступен:**
+   - Откройте в браузере `https://your-backend.onrender.com`
+   - Вы должны увидеть JSON с сообщением "CarShareX API работает"
+   - Если видите ошибку 404 - значит backend не запущен
+
+4. **Очистите кеш браузера:**
+   - Нажмите Ctrl+Shift+R (или Cmd+Shift+R на Mac)
+   - Или откройте в режиме инкогнито
 
 ### База данных пустая
 

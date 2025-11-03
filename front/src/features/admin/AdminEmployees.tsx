@@ -261,7 +261,7 @@ const AdminEmployees: React.FC = () => {
               placeholder="Поиск по имени или email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border-2 border-neutral-600 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
+              className="w-full pl-10 pr-4 py-2 bg-neutral-800 text-neutral-50 border-2 border-neutral-600 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
             />
           </div>
         </div>
@@ -420,7 +420,7 @@ const AdminEmployees: React.FC = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, role_id: e.target.value })
                       }
-                      className="w-full px-4 py-2 border-2 border-neutral-600 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
+                      className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border-2 border-neutral-600 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
                       required
                     >
                       {roles.map((role) => (
@@ -440,7 +440,7 @@ const AdminEmployees: React.FC = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, branch_id: e.target.value })
                       }
-                      className="w-full px-4 py-2 border-2 border-neutral-600 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
+                      className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border-2 border-neutral-600 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
                     >
                       <option value="">Не назначен</option>
                       {branches.map((branch) => (
