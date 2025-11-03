@@ -32,8 +32,8 @@ const VehicleDetail: React.FC = () => {
   // Separate fields for start date and time
   const [startDay, setStartDay] = useState('');
   const [startMonth, setStartMonth] = useState('');
-  const [startYear, setStartYear] = useState('');
-  const [startTime, setStartTime] = useState('');
+  const [startHour, setStartHour] = useState('');
+  const [startMinute, setStartMinute] = useState('');
 
   // Duration fields
   const [durationDays, setDurationDays] = useState('0');
@@ -68,19 +68,51 @@ const VehicleDetail: React.FC = () => {
     }
 
     // Validate all fields are filled
-    if (!startDay || !startMonth || !startYear || !startTime) {
+    if (!startDay || !startMonth || !startHour || !startMinute) {
       toast.error('Заполните все поля даты и времени начала');
       return;
     }
 
-    // Create start date from separate fields
+    // Validate ranges
+    const day = parseInt(startDay);
+    const month = parseInt(startMonth);
+    const hour = parseInt(startHour);
+    const minute = parseInt(startMinute);
+
+    if (day < 1 || day > 31) {
+      toast.error('День должен быть от 1 до 31');
+      return;
+    }
+
+    if (month < 1 || month > 12) {
+      toast.error('Месяц должен быть от 1 до 12');
+      return;
+    }
+
+    if (hour < 0 || hour > 23) {
+      toast.error('Часы должны быть от 0 до 23');
+      return;
+    }
+
+    if (minute < 0 || minute > 59) {
+      toast.error('Минуты должны быть от 0 до 59');
+      return;
+    }
+
+    // Create start date from separate fields (auto-set year to 2025)
     const startDateTime = new Date(
-      parseInt(startYear),
-      parseInt(startMonth) - 1, // Month is 0-indexed
-      parseInt(startDay),
-      parseInt(startTime.split(':')[0]),
-      parseInt(startTime.split(':')[1])
+      2025,
+      month - 1, // Month is 0-indexed
+      day,
+      hour,
+      minute
     );
+
+    // Check if date is valid
+    if (isNaN(startDateTime.getTime())) {
+      toast.error('Неверная дата');
+      return;
+    }
 
     // Validate date is in the future
     if (startDateTime < new Date()) {
@@ -192,6 +224,7 @@ const VehicleDetail: React.FC = () => {
                     src={vehicle.image_url}
                     alt={`${vehicle.brand} ${vehicle.model}`}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full bg-gradient-to-br from-neutral-100 to-neutral-200">
@@ -311,8 +344,14 @@ const VehicleDetail: React.FC = () => {
                           placeholder="День"
                           min="1"
                           max="31"
+                          maxLength={2}
                           value={startDay}
-                          onChange={(e) => setStartDay(e.target.value)}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '' || (parseInt(val) >= 1 && parseInt(val) <= 31 && val.length <= 2)) {
+                              setStartDay(val);
+                            }
+                          }}
                           required
                           className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
                         />
@@ -321,31 +360,52 @@ const VehicleDetail: React.FC = () => {
                           placeholder="Месяц"
                           min="1"
                           max="12"
+                          maxLength={2}
                           value={startMonth}
-                          onChange={(e) => setStartMonth(e.target.value)}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '' || (parseInt(val) >= 1 && parseInt(val) <= 12 && val.length <= 2)) {
+                              setStartMonth(val);
+                            }
+                          }}
                           required
                           className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
                         />
                         <input
                           type="number"
-                          placeholder="Год"
-                          min={new Date().getFullYear()}
-                          max={new Date().getFullYear() + 1}
-                          value={startYear}
-                          onChange={(e) => setStartYear(e.target.value)}
+                          placeholder="Часы"
+                          min="0"
+                          max="23"
+                          maxLength={2}
+                          value={startHour}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 23 && val.length <= 2)) {
+                              setStartHour(val);
+                            }
+                          }}
                           required
                           className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
                         />
                         <input
-                          type="time"
-                          value={startTime}
-                          onChange={(e) => setStartTime(e.target.value)}
+                          type="number"
+                          placeholder="Минуты"
+                          min="0"
+                          max="59"
+                          maxLength={2}
+                          value={startMinute}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 59 && val.length <= 2)) {
+                              setStartMinute(val);
+                            }
+                          }}
                           required
-                          className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
                         />
                       </div>
                       <div className="mt-1 text-xs text-neutral-500">
-                        День / Месяц / Год / Время
+                        День / Месяц / Часы / Минуты (год: 2025)
                       </div>
                     </div>
 
@@ -364,8 +424,14 @@ const VehicleDetail: React.FC = () => {
                             placeholder="Дни"
                             min="0"
                             max="30"
+                            maxLength={2}
                             value={durationDays}
-                            onChange={(e) => setDurationDays(e.target.value)}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 30 && val.length <= 2)) {
+                                setDurationDays(val);
+                              }
+                            }}
                             className="w-full px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
                           />
                           <div className="mt-1 text-xs text-neutral-500 text-center">дней</div>
@@ -376,8 +442,14 @@ const VehicleDetail: React.FC = () => {
                             placeholder="Часы"
                             min="0"
                             max="23"
+                            maxLength={2}
                             value={durationHours}
-                            onChange={(e) => setDurationHours(e.target.value)}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 23 && val.length <= 2)) {
+                                setDurationHours(val);
+                              }
+                            }}
                             className="w-full px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
                           />
                           <div className="mt-1 text-xs text-neutral-500 text-center">часов</div>
@@ -388,8 +460,14 @@ const VehicleDetail: React.FC = () => {
                             placeholder="Минуты"
                             min="0"
                             max="59"
+                            maxLength={2}
                             value={durationMinutes}
-                            onChange={(e) => setDurationMinutes(e.target.value)}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 59 && val.length <= 2)) {
+                                setDurationMinutes(val);
+                              }
+                            }}
                             className="w-full px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
                           />
                           <div className="mt-1 text-xs text-neutral-500 text-center">минут</div>

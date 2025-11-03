@@ -196,8 +196,16 @@ const Profile: React.FC = () => {
 
                   <Input
                     {...register('drivers_license')}
+                    type="text"
                     label="Водительское удостоверение (опционально)"
                     placeholder="77 12 345678"
+                    maxLength={12}
+                    pattern="[0-9\s]*"
+                    onKeyPress={(e) => {
+                      if (!/[0-9\s]/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
                     error={errors.drivers_license?.message}
                     icon={<IdentificationIcon className="h-5 w-5 text-neutral-400" />}
                   />
