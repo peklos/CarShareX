@@ -204,9 +204,11 @@ const Transactions: React.FC = () => {
                               {transaction.description}
                             </p>
                           )}
-                          <p className="text-xs text-neutral-400 mt-1">
-                            {formatDateTime(transaction.created_at)}
-                          </p>
+                          {transaction.created_at && (
+                            <p className="text-xs text-neutral-400 mt-1">
+                              {formatDateTime(transaction.created_at)}
+                            </p>
+                          )}
                         </div>
                       </div>
                       <div className="text-right">

@@ -88,7 +88,7 @@ export interface Transaction {
   transaction_type: 'payment' | 'deposit' | 'penalty';
   amount: number;
   description?: string;
-  created_at: string;
+  created_at?: string;
   status: 'completed' | 'pending' | 'failed';
 }
 

@@ -14,8 +14,8 @@ class TransactionResponse(BaseModel):
     booking_id: Optional[int]
     transaction_type: str
     amount: float
-    description: Optional[str]
-    created_at: datetime
+    description: Optional[str] = None
+    created_at: Optional[datetime] = None
     status: str
 
     class Config:
