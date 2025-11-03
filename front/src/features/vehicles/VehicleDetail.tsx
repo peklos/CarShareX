@@ -121,7 +121,7 @@ const VehicleDetail: React.FC = () => {
     return (
       <Layout>
         <div className="text-center py-20">
-          <h2 className="text-2xl font-bold text-neutral-700 mb-4">
+          <h2 className="text-2xl font-bold text-neutral-300 mb-4">
             Автомобиль не найден
           </h2>
           <Link to={ROUTES.VEHICLES}>
@@ -138,7 +138,7 @@ const VehicleDetail: React.FC = () => {
         {/* Back button */}
         <Link
           to={ROUTES.VEHICLES}
-          className="inline-flex items-center space-x-2 text-neutral-600 hover:text-primary-500 mb-6 transition-colors"
+          className="inline-flex items-center space-x-2 text-neutral-400 hover:text-primary-500 mb-6 transition-colors"
         >
           <ArrowLeftIcon className="h-5 w-5" />
           <span>Назад к каталогу</span>
@@ -152,7 +152,7 @@ const VehicleDetail: React.FC = () => {
           >
             <Card className="overflow-hidden">
               {/* Image */}
-              <div className="relative h-64 lg:h-96 bg-neutral-200">
+              <div className="relative h-64 lg:h-96 bg-neutral-800">
                 {vehicle.image_url ? (
                   <img
                     src={vehicle.image_url}
@@ -171,34 +171,34 @@ const VehicleDetail: React.FC = () => {
 
               {/* Details */}
               <div className="p-6">
-                <h1 className="text-3xl font-bold text-neutral-900 mb-2">
+                <h1 className="text-3xl font-bold text-neutral-50 mb-2">
                   {vehicle.brand} {vehicle.model}
                 </h1>
 
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="flex items-center space-x-2 text-neutral-600">
+                  <div className="flex items-center space-x-2 text-neutral-400">
                     {getTypeIcon(vehicle.vehicle_type)}
                     <span className="font-medium">{getTypeLabel(vehicle.vehicle_type)}</span>
                   </div>
                   {vehicle.year && (
-                    <span className="text-neutral-500">{vehicle.year} г.</span>
+                    <span className="text-neutral-400">{vehicle.year} г.</span>
                   )}
                 </div>
 
                 {vehicle.description && (
-                  <p className="text-neutral-600 mb-6">{vehicle.description}</p>
+                  <p className="text-neutral-400 mb-6">{vehicle.description}</p>
                 )}
 
                 <div className="space-y-3">
                   {vehicle.color && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-neutral-700">Цвет:</span>
+                      <span className="text-sm font-medium text-neutral-300">Цвет:</span>
                       <div className="flex items-center space-x-2">
                         <div
-                          className="w-6 h-6 rounded-full border-2 border-neutral-300"
+                          className="w-6 h-6 rounded-full border-2 border-neutral-600"
                           style={{ backgroundColor: vehicle.color.toLowerCase() }}
                         />
-                        <span className="text-sm text-neutral-600 capitalize">
+                        <span className="text-sm text-neutral-400 capitalize">
                           {vehicle.color}
                         </span>
                       </div>
@@ -206,16 +206,16 @@ const VehicleDetail: React.FC = () => {
                   )}
 
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-neutral-700">Номер:</span>
-                    <span className="text-sm font-mono font-bold text-neutral-900">
+                    <span className="text-sm font-medium text-neutral-300">Номер:</span>
+                    <span className="text-sm font-mono font-bold text-neutral-50">
                       {vehicle.license_plate}
                     </span>
                   </div>
 
                   {vehicle.parking_zone_id && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-neutral-700">Парковка:</span>
-                      <div className="flex items-center space-x-1 text-sm text-neutral-600">
+                      <span className="text-sm font-medium text-neutral-300">Парковка:</span>
+                      <div className="flex items-center space-x-1 text-sm text-neutral-400">
                         <MapPinIcon className="h-4 w-4" />
                         <span>Зона {vehicle.parking_zone_id}</span>
                       </div>
@@ -234,7 +234,7 @@ const VehicleDetail: React.FC = () => {
           >
             <Card>
               <div className="p-6">
-                <h2 className="text-2xl font-bold text-neutral-900 mb-6">
+                <h2 className="text-2xl font-bold text-neutral-50 mb-6">
                   Забронировать автомобиль
                 </h2>
 
@@ -265,7 +265,7 @@ const VehicleDetail: React.FC = () => {
                   <form onSubmit={handleBooking} className="space-y-6">
                     {/* Start Date */}
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      <label className="block text-sm font-medium text-neutral-300 mb-2">
                         <div className="flex items-center space-x-2">
                           <CalendarIcon className="h-5 w-5 text-primary-500" />
                           <span>Дата и время начала</span>
@@ -277,13 +277,13 @@ const VehicleDetail: React.FC = () => {
                         onChange={(e) => setStartDate(e.target.value)}
                         min={new Date().toISOString().slice(0, 16)}
                         required
-                        className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       />
                     </div>
 
                     {/* End Date */}
                     <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      <label className="block text-sm font-medium text-neutral-300 mb-2">
                         <div className="flex items-center space-x-2">
                           <ClockIcon className="h-5 w-5 text-primary-500" />
                           <span>Дата и время окончания</span>
@@ -295,7 +295,7 @@ const VehicleDetail: React.FC = () => {
                         onChange={(e) => setEndDate(e.target.value)}
                         min={startDate || new Date().toISOString().slice(0, 16)}
                         required
-                        className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       />
                     </div>
 

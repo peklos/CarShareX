@@ -102,7 +102,7 @@ const Profile: React.FC = () => {
     return (
       <Layout>
         <div className="text-center py-20">
-          <p className="text-neutral-600">Профиль доступен только для клиентов</p>
+          <p className="text-neutral-400">Профиль доступен только для клиентов</p>
         </div>
       </Layout>
     );
@@ -134,7 +134,7 @@ const Profile: React.FC = () => {
               </Button>
             )}
           </div>
-          <p className="text-neutral-600">Управление личной информацией</p>
+          <p className="text-neutral-400">Управление личной информацией</p>
         </motion.div>
 
         {/* Balance Card */}
@@ -229,24 +229,24 @@ const Profile: React.FC = () => {
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-neutral-500 mb-1">
+                      <label className="block text-sm font-medium text-neutral-400 mb-1">
                         Имя
                       </label>
                       <div className="flex items-center space-x-2">
                         <UserIcon className="h-5 w-5 text-neutral-400" />
-                        <p className="text-lg font-medium text-neutral-900">
+                        <p className="text-lg font-medium text-neutral-50">
                           {user.first_name}
                         </p>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-neutral-500 mb-1">
+                      <label className="block text-sm font-medium text-neutral-400 mb-1">
                         Фамилия
                       </label>
                       <div className="flex items-center space-x-2">
                         <UserIcon className="h-5 w-5 text-neutral-400" />
-                        <p className="text-lg font-medium text-neutral-900">
+                        <p className="text-lg font-medium text-neutral-50">
                           {user.last_name}
                         </p>
                       </div>
@@ -254,36 +254,36 @@ const Profile: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-neutral-500 mb-1">
+                    <label className="block text-sm font-medium text-neutral-400 mb-1">
                       Email
                     </label>
                     <div className="flex items-center space-x-2">
                       <EnvelopeIcon className="h-5 w-5 text-neutral-400" />
-                      <p className="text-lg font-medium text-neutral-900">
+                      <p className="text-lg font-medium text-neutral-50">
                         {user.email}
                       </p>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-neutral-500 mb-1">
+                    <label className="block text-sm font-medium text-neutral-400 mb-1">
                       Телефон
                     </label>
                     <div className="flex items-center space-x-2">
                       <PhoneIcon className="h-5 w-5 text-neutral-400" />
-                      <p className="text-lg font-medium text-neutral-900">
+                      <p className="text-lg font-medium text-neutral-50">
                         {user.phone}
                       </p>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-neutral-500 mb-1">
+                    <label className="block text-sm font-medium text-neutral-400 mb-1">
                       Водительское удостоверение
                     </label>
                     <div className="flex items-center space-x-2">
                       <IdentificationIcon className="h-5 w-5 text-neutral-400" />
-                      <p className="text-lg font-medium text-neutral-900">
+                      <p className="text-lg font-medium text-neutral-50">
                         {user.drivers_license || 'Не указано'}
                       </p>
                     </div>

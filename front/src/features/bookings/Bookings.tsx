@@ -74,7 +74,7 @@ const Bookings: React.FC = () => {
               Мои бронирования
             </h1>
           </div>
-          <p className="text-neutral-600">
+          <p className="text-neutral-400">
             История и активные бронирования автомобилей
           </p>
         </motion.div>
@@ -89,7 +89,7 @@ const Bookings: React.FC = () => {
         {/* Bookings count */}
         {!loading && bookings.length > 0 && (
           <div className="mb-4">
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-neutral-400">
               Всего бронирований: <span className="font-semibold">{bookings.length}</span>
             </p>
           </div>
@@ -114,7 +114,7 @@ const Bookings: React.FC = () => {
                           <div>
                             <div className="flex items-center space-x-2 mb-2">
                               <TruckIcon className="h-5 w-5 text-primary-500" />
-                              <h3 className="text-lg font-bold text-neutral-900">
+                              <h3 className="text-lg font-bold text-neutral-50">
                                 Бронирование #{booking.id}
                               </h3>
                             </div>
@@ -127,8 +127,8 @@ const Bookings: React.FC = () => {
                           <div className="flex items-start space-x-2">
                             <CalendarIcon className="h-5 w-5 text-neutral-400 flex-shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-neutral-500">Начало:</p>
-                              <p className="text-neutral-900 font-medium">
+                              <p className="text-neutral-400">Начало:</p>
+                              <p className="text-neutral-50 font-medium">
                                 {formatDateTime(booking.start_datetime)}
                               </p>
                             </div>
@@ -138,8 +138,8 @@ const Bookings: React.FC = () => {
                           <div className="flex items-start space-x-2">
                             <ClockIcon className="h-5 w-5 text-neutral-400 flex-shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-neutral-500">Окончание:</p>
-                              <p className="text-neutral-900 font-medium">
+                              <p className="text-neutral-400">Окончание:</p>
+                              <p className="text-neutral-50 font-medium">
                                 {booking.end_datetime ? formatDateTime(booking.end_datetime) : 'Не завершено'}
                               </p>
                             </div>
@@ -148,7 +148,7 @@ const Bookings: React.FC = () => {
 
                         <div className="mt-3 flex items-center space-x-4 text-sm">
                           {booking.end_datetime && (
-                            <div className="flex items-center space-x-1 text-neutral-600">
+                            <div className="flex items-center space-x-1 text-neutral-400">
                               <ClockIcon className="h-4 w-4" />
                               <span>
                                 Длительность: {calculateDuration(booking.start_datetime, booking.end_datetime)} ч.
@@ -156,7 +156,7 @@ const Bookings: React.FC = () => {
                             </div>
                           )}
                           {booking.total_cost !== undefined && (
-                            <div className="flex items-center space-x-1 text-neutral-600">
+                            <div className="flex items-center space-x-1 text-neutral-400">
                               <CurrencyDollarIcon className="h-4 w-4" />
                               <span className="font-semibold">
                                 {formatCurrency(booking.total_cost)}
@@ -170,7 +170,7 @@ const Bookings: React.FC = () => {
                       <div className="flex flex-col space-y-2 lg:ml-6">
                         <Link
                           to={`${ROUTES.VEHICLES}/${booking.vehicle_id}`}
-                          className="px-4 py-2 bg-primary-50 text-primary-600 rounded-lg hover:bg-primary-100 transition-colors text-center text-sm font-medium"
+                          className="px-4 py-2 bg-primary-900 text-primary-600 rounded-lg hover:bg-primary-100 transition-colors text-center text-sm font-medium"
                         >
                           Посмотреть автомобиль
                         </Link>
@@ -191,14 +191,14 @@ const Bookings: React.FC = () => {
             className="flex flex-col items-center justify-center py-20"
           >
             <CalendarIcon className="h-24 w-24 text-neutral-300 mb-4" />
-            <h3 className="text-xl font-semibold text-neutral-700 mb-2">
+            <h3 className="text-xl font-semibold text-neutral-300 mb-2">
               У вас пока нет бронирований
             </h3>
-            <p className="text-neutral-500 mb-6">
+            <p className="text-neutral-400 mb-6">
               Выберите автомобиль из каталога и забронируйте его
             </p>
             <Link to={ROUTES.VEHICLES}>
-              <button className="px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium">
+              <button className="px-6 py-3 bg-primary-9000 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium">
                 Посмотреть автомобили
               </button>
             </Link>

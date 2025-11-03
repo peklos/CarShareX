@@ -61,7 +61,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle }) => {
       <Link to={`${ROUTES.VEHICLES}/${vehicle.id}`}>
         <Card className="overflow-hidden h-full hover:shadow-xl transition-shadow">
           {/* Image */}
-          <div className="relative h-48 bg-neutral-200 overflow-hidden">
+          <div className="relative h-48 bg-neutral-800 overflow-hidden">
             {vehicle.image_url ? (
               <img
                 src={vehicle.image_url}
@@ -84,24 +84,24 @@ const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle }) => {
           {/* Content */}
           <div className="p-4">
             {/* Brand and Model */}
-            <h3 className="text-lg font-bold text-neutral-900 mb-1">
+            <h3 className="text-lg font-bold text-neutral-50 mb-1">
               {vehicle.brand} {vehicle.model}
             </h3>
 
             {/* Type and Year */}
             <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2 text-sm text-neutral-600">
+              <div className="flex items-center space-x-2 text-sm text-neutral-400">
                 {getTypeIcon(vehicle.vehicle_type)}
                 <span>{getTypeLabel(vehicle.vehicle_type)}</span>
               </div>
               {vehicle.year && (
-                <span className="text-sm text-neutral-500">{vehicle.year} г.</span>
+                <span className="text-sm text-neutral-400">{vehicle.year} г.</span>
               )}
             </div>
 
             {/* Description */}
             {vehicle.description && (
-              <p className="text-sm text-neutral-600 mb-3 line-clamp-2">
+              <p className="text-sm text-neutral-400 mb-3 line-clamp-2">
                 {vehicle.description}
               </p>
             )}
@@ -110,21 +110,21 @@ const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle }) => {
             {vehicle.color && (
               <div className="flex items-center space-x-2 mb-3">
                 <div
-                  className="w-4 h-4 rounded-full border border-neutral-300"
+                  className="w-4 h-4 rounded-full border border-neutral-600"
                   style={{ backgroundColor: vehicle.color.toLowerCase() }}
                   title={vehicle.color}
                 />
-                <span className="text-sm text-neutral-600 capitalize">{vehicle.color}</span>
+                <span className="text-sm text-neutral-400 capitalize">{vehicle.color}</span>
               </div>
             )}
 
             {/* Footer */}
-            <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
-              <span className="text-xs text-neutral-500 font-mono">
+            <div className="flex items-center justify-between pt-3 border-t border-neutral-800">
+              <span className="text-xs text-neutral-400 font-mono">
                 {vehicle.license_plate}
               </span>
               {vehicle.parking_zone_id && (
-                <div className="flex items-center space-x-1 text-xs text-neutral-500">
+                <div className="flex items-center space-x-1 text-xs text-neutral-400">
                   <MapPinIcon className="h-4 w-4" />
                   <span>Зона {vehicle.parking_zone_id}</span>
                 </div>

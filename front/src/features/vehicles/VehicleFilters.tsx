@@ -92,11 +92,11 @@ const VehicleFilters: React.FC<VehicleFiltersProps> = ({
         animate={{ height: showFilters || window.innerWidth >= 768 ? 'auto' : 0 }}
         className="overflow-hidden md:overflow-visible"
       >
-        <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+        <div className="bg-neutral-800 rounded-lg shadow-sm p-4 md:p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
-              <FunnelIcon className="h-5 w-5 text-neutral-600" />
-              <h3 className="text-lg font-semibold text-neutral-900">Фильтры</h3>
+              <FunnelIcon className="h-5 w-5 text-neutral-400" />
+              <h3 className="text-lg font-semibold text-neutral-50">Фильтры</h3>
             </div>
             <button
               onClick={handleClearFilters}
@@ -110,13 +110,13 @@ const VehicleFilters: React.FC<VehicleFiltersProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Vehicle Type */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
                 Тип автомобиля
               </label>
               <select
                 value={filters.vehicle_type || ''}
                 onChange={(e) => handleFilterChange('vehicle_type', e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               >
                 {vehicleTypes.map((type) => (
                   <option key={type.value} value={type.value}>
@@ -128,13 +128,13 @@ const VehicleFilters: React.FC<VehicleFiltersProps> = ({
 
             {/* Brand */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
                 Марка
               </label>
               <select
                 value={filters.brand || ''}
                 onChange={(e) => handleFilterChange('brand', e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               >
                 {brands.map((brand) => (
                   <option key={brand.value} value={brand.value}>
@@ -146,13 +146,13 @@ const VehicleFilters: React.FC<VehicleFiltersProps> = ({
 
             {/* Status */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
                 Статус
               </label>
               <select
                 value={filters.status || 'available'}
                 onChange={(e) => handleFilterChange('status', e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               >
                 {statuses.map((status) => (
                   <option key={status.value} value={status.value}>

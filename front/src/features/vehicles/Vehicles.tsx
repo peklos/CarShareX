@@ -40,7 +40,7 @@ const Vehicles: React.FC = () => {
               Каталог автомобилей
             </h1>
           </div>
-          <p className="text-neutral-600">
+          <p className="text-neutral-400">
             Выберите автомобиль для аренды из нашего парка
           </p>
         </motion.div>
@@ -54,7 +54,7 @@ const Vehicles: React.FC = () => {
         {/* Results count */}
         {!loading && (
           <div className="mb-4">
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-neutral-400">
               Найдено автомобилей: <span className="font-semibold">{vehicles.length}</span>
             </p>
           </div>
@@ -103,10 +103,10 @@ const Vehicles: React.FC = () => {
             className="flex flex-col items-center justify-center py-20"
           >
             <TruckIcon className="h-24 w-24 text-neutral-300 mb-4" />
-            <h3 className="text-xl font-semibold text-neutral-700 mb-2">
+            <h3 className="text-xl font-semibold text-neutral-300 mb-2">
               Автомобили не найдены
             </h3>
-            <p className="text-neutral-500 mb-6">
+            <p className="text-neutral-400 mb-6">
               Попробуйте изменить параметры фильтрации
             </p>
             <button

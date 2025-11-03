@@ -105,7 +105,7 @@ const AdminBookings: React.FC = () => {
               Управление бронированиями
             </h1>
           </div>
-          <p className="text-neutral-600">
+          <p className="text-neutral-400">
             Всего бронирований: <span className="font-semibold">{bookings.length}</span>
           </p>
         </motion.div>
@@ -124,7 +124,7 @@ const AdminBookings: React.FC = () => {
               placeholder="Поиск по ID бронирования, пользователя или автомобиля..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
         </motion.div>
@@ -138,50 +138,50 @@ const AdminBookings: React.FC = () => {
           <Card>
             <div className="overflow-x-auto">
               <table className="min-w-full">
-                <thead className="bg-neutral-50">
+                <thead className="bg-neutral-900">
                   <tr>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       ID
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       ID пользователя
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       ID автомобиля
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Начало
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Окончание
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Статус
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Стоимость
                     </th>
-                    <th className="text-right py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-right py-4 px-6 text-sm font-semibold text-neutral-300">
                       Действия
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-100">
+                <tbody className="divide-y divide-neutral-800">
                   {filteredBookings.map((booking) => (
-                    <tr key={booking.id} className="hover:bg-neutral-50 transition-colors">
-                      <td className="py-4 px-6 text-sm text-neutral-900">
+                    <tr key={booking.id} className="hover:bg-neutral-900 transition-colors">
+                      <td className="py-4 px-6 text-sm text-neutral-50">
                         #{booking.id}
                       </td>
-                      <td className="py-4 px-6 text-sm text-neutral-600">
+                      <td className="py-4 px-6 text-sm text-neutral-400">
                         #{booking.user_id}
                       </td>
-                      <td className="py-4 px-6 text-sm text-neutral-600">
+                      <td className="py-4 px-6 text-sm text-neutral-400">
                         #{booking.vehicle_id}
                       </td>
-                      <td className="py-4 px-6 text-sm text-neutral-600">
+                      <td className="py-4 px-6 text-sm text-neutral-400">
                         {formatDateTime(booking.start_datetime)}
                       </td>
-                      <td className="py-4 px-6 text-sm text-neutral-600">
+                      <td className="py-4 px-6 text-sm text-neutral-400">
                         {booking.end_datetime ? formatDateTime(booking.end_datetime) : '—'}
                       </td>
                       <td className="py-4 px-6">{getStatusBadge(booking.status)}</td>
@@ -212,7 +212,7 @@ const AdminBookings: React.FC = () => {
 
               {filteredBookings.length === 0 && (
                 <div className="text-center py-12">
-                  <p className="text-neutral-500">Бронирования не найдены</p>
+                  <p className="text-neutral-400">Бронирования не найдены</p>
                 </div>
               )}
             </div>

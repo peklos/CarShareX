@@ -198,7 +198,7 @@ const AdminVehicles: React.FC = () => {
               Добавить автомобиль
             </Button>
           </div>
-          <p className="text-neutral-600">
+          <p className="text-neutral-400">
             Всего автомобилей: <span className="font-semibold">{vehicles.length}</span>
           </p>
         </motion.div>
@@ -217,7 +217,7 @@ const AdminVehicles: React.FC = () => {
               placeholder="Поиск по марке, модели или номеру..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
         </motion.div>
@@ -231,59 +231,59 @@ const AdminVehicles: React.FC = () => {
           <Card>
             <div className="overflow-x-auto">
               <table className="min-w-full">
-                <thead className="bg-neutral-50">
+                <thead className="bg-neutral-900">
                   <tr>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       ID
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Автомобиль
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Номер
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Тип
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Статус
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Год
                     </th>
-                    <th className="text-right py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-right py-4 px-6 text-sm font-semibold text-neutral-300">
                       Действия
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-100">
+                <tbody className="divide-y divide-neutral-800">
                   {filteredVehicles.map((vehicle) => (
-                    <tr key={vehicle.id} className="hover:bg-neutral-50 transition-colors">
-                      <td className="py-4 px-6 text-sm text-neutral-900">
+                    <tr key={vehicle.id} className="hover:bg-neutral-900 transition-colors">
+                      <td className="py-4 px-6 text-sm text-neutral-50">
                         #{vehicle.id}
                       </td>
                       <td className="py-4 px-6">
-                        <div className="font-medium text-neutral-900">
+                        <div className="font-medium text-neutral-50">
                           {vehicle.brand} {vehicle.model}
                         </div>
                       </td>
                       <td className="py-4 px-6">
-                        <span className="font-mono text-sm text-neutral-600">
+                        <span className="font-mono text-sm text-neutral-400">
                           {vehicle.license_plate}
                         </span>
                       </td>
-                      <td className="py-4 px-6 text-sm text-neutral-600 capitalize">
+                      <td className="py-4 px-6 text-sm text-neutral-400 capitalize">
                         {vehicle.vehicle_type}
                       </td>
                       <td className="py-4 px-6">{getStatusBadge(vehicle.status)}</td>
-                      <td className="py-4 px-6 text-sm text-neutral-600">
+                      <td className="py-4 px-6 text-sm text-neutral-400">
                         {vehicle.year || '—'}
                       </td>
                       <td className="py-4 px-6">
                         <div className="flex items-center justify-end space-x-2">
                           <button
                             onClick={() => handleEdit(vehicle)}
-                            className="p-2 text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                            className="p-2 text-primary-600 hover:bg-primary-900 rounded-lg transition-colors"
                             title="Редактировать"
                           >
                             <PencilIcon className="h-5 w-5" />
@@ -304,7 +304,7 @@ const AdminVehicles: React.FC = () => {
 
               {filteredVehicles.length === 0 && (
                 <div className="text-center py-12">
-                  <p className="text-neutral-500">Автомобили не найдены</p>
+                  <p className="text-neutral-400">Автомобили не найдены</p>
                 </div>
               )}
             </div>
@@ -317,10 +317,10 @@ const AdminVehicles: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              className="bg-neutral-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             >
-              <div className="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-neutral-900">
+              <div className="sticky top-0 bg-neutral-800 border-b border-neutral-700 px-6 py-4 flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-neutral-50">
                   {editingVehicle ? 'Редактировать автомобиль' : 'Добавить автомобиль'}
                 </h2>
                 <button
@@ -329,7 +329,7 @@ const AdminVehicles: React.FC = () => {
                     setEditingVehicle(null);
                     resetForm();
                   }}
-                  className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-neutral-700 rounded-lg transition-colors"
                 >
                   <XMarkIcon className="h-6 w-6" />
                 </button>
@@ -364,13 +364,13 @@ const AdminVehicles: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    <label className="block text-sm font-medium text-neutral-300 mb-2">
                       Тип автомобиля
                     </label>
                     <select
                       value={formData.vehicle_type}
                       onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value })}
-                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       required
                     >
                       <option value="sedan">Седан</option>
@@ -384,13 +384,13 @@ const AdminVehicles: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    <label className="block text-sm font-medium text-neutral-300 mb-2">
                       Статус
                     </label>
                     <select
                       value={formData.status}
                       onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       required
                     >
                       <option value="available">Доступен</option>
@@ -427,14 +427,14 @@ const AdminVehicles: React.FC = () => {
                 />
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-300 mb-2">
                     Описание
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder="Описание автомобиля..."
                   />
                 </div>

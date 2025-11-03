@@ -44,10 +44,10 @@ const Home: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-5xl md:text-6xl font-bold text-neutral-900 mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold text-neutral-50 mb-6">
             Каршеринг <span className="text-gradient">нового поколения</span>
           </h1>
-          <p className="text-xl text-neutral-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-neutral-400 mb-8 max-w-2xl mx-auto">
             Более 40 автомобилей от эконома до премиума.
             Арендуйте на минуты, часы или сутки.
           </p>
@@ -82,7 +82,7 @@ const Home: React.FC = () => {
               <Card hover className="text-center h-full">
                 <feature.icon className="h-12 w-12 text-primary-500 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-neutral-600">{feature.description}</p>
+                <p className="text-neutral-400">{feature.description}</p>
               </Card>
             </motion.div>
           ))}

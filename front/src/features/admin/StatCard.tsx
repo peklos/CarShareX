@@ -49,8 +49,8 @@ const StatCard: React.FC<StatCardProps> = ({
               </span>
             )}
           </div>
-          <h3 className="text-sm font-medium text-neutral-600 mb-1">{title}</h3>
-          <p className="text-3xl font-bold text-neutral-900">{value}</p>
+          <h3 className="text-sm font-medium text-neutral-400 mb-1">{title}</h3>
+          <p className="text-3xl font-bold text-neutral-50">{value}</p>
         </div>
       </Card>
     </motion.div>

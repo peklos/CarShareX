@@ -84,7 +84,7 @@ const AdminUsers: React.FC = () => {
               </h1>
             </div>
           </div>
-          <p className="text-neutral-600">
+          <p className="text-neutral-400">
             Всего пользователей: <span className="font-semibold">{users.length}</span>
           </p>
         </motion.div>
@@ -103,7 +103,7 @@ const AdminUsers: React.FC = () => {
               placeholder="Поиск по имени, email или телефону..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
         </motion.div>
@@ -117,49 +117,49 @@ const AdminUsers: React.FC = () => {
           <Card>
             <div className="overflow-x-auto">
               <table className="min-w-full">
-                <thead className="bg-neutral-50">
+                <thead className="bg-neutral-900">
                   <tr>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       ID
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Имя
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Email
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Телефон
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Баланс
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-neutral-300">
                       Вод. удостоверение
                     </th>
-                    <th className="text-right py-4 px-6 text-sm font-semibold text-neutral-700">
+                    <th className="text-right py-4 px-6 text-sm font-semibold text-neutral-300">
                       Действия
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-100">
+                <tbody className="divide-y divide-neutral-800">
                   {filteredUsers.map((user) => (
                     <tr
                       key={user.id}
-                      className="hover:bg-neutral-50 transition-colors"
+                      className="hover:bg-neutral-900 transition-colors"
                     >
-                      <td className="py-4 px-6 text-sm text-neutral-900">
+                      <td className="py-4 px-6 text-sm text-neutral-50">
                         #{user.id}
                       </td>
                       <td className="py-4 px-6">
-                        <div className="font-medium text-neutral-900">
+                        <div className="font-medium text-neutral-50">
                           {user.first_name} {user.last_name}
                         </div>
                       </td>
-                      <td className="py-4 px-6 text-sm text-neutral-600">
+                      <td className="py-4 px-6 text-sm text-neutral-400">
                         {user.email}
                       </td>
-                      <td className="py-4 px-6 text-sm text-neutral-600">
+                      <td className="py-4 px-6 text-sm text-neutral-400">
                         {user.phone}
                       </td>
                       <td className="py-4 px-6">
@@ -167,7 +167,7 @@ const AdminUsers: React.FC = () => {
                           {formatCurrency(user.balance)}
                         </span>
                       </td>
-                      <td className="py-4 px-6 text-sm text-neutral-600">
+                      <td className="py-4 px-6 text-sm text-neutral-400">
                         {user.drivers_license || (
                           <span className="text-neutral-400">Не указано</span>
                         )}
@@ -190,7 +190,7 @@ const AdminUsers: React.FC = () => {
 
               {filteredUsers.length === 0 && (
                 <div className="text-center py-12">
-                  <p className="text-neutral-500">Пользователи не найдены</p>
+                  <p className="text-neutral-400">Пользователи не найдены</p>
                 </div>
               )}
             </div>
