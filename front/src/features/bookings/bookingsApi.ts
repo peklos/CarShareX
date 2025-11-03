@@ -6,6 +6,7 @@ export interface CreateBookingData {
   vehicle_id: number;
   tariff_id: number;
   start_time: string; // ISO datetime format
+  duration_hours: number; // Duration in hours
 }
 
 export const bookingsApi = {

@@ -118,6 +118,19 @@ const VehicleCard: React.FC<VehicleCardProps> = React.memo(({ vehicle }) => {
               </div>
             )}
 
+            {/* Price */}
+            {vehicle.tariff && (
+              <div className="bg-primary-500/10 rounded-lg p-2 mb-3">
+                <p className="text-primary-500 font-bold text-sm">
+                  {vehicle.tariff.price_per_hour
+                    ? `${vehicle.tariff.price_per_hour} ₽/час`
+                    : vehicle.tariff.price_per_minute
+                      ? `${vehicle.tariff.price_per_minute} ₽/мин`
+                      : 'Цена не указана'}
+                </p>
+              </div>
+            )}
+
             {/* Footer */}
             <div className="flex items-center justify-between pt-3 border-t border-neutral-800">
               <span className="text-xs text-neutral-400 font-mono">

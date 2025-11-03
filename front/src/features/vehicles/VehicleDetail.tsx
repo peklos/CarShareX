@@ -40,11 +40,34 @@ const VehicleDetail: React.FC = () => {
   const [durationHours, setDurationHours] = useState('1');
   const [durationMinutes, setDurationMinutes] = useState('0');
 
+  // Calculated cost
+  const [estimatedCost, setEstimatedCost] = useState(0);
+
   useEffect(() => {
     if (id) {
       dispatch(fetchVehicleById(Number(id)));
     }
   }, [dispatch, id]);
+
+  // Calculate estimated cost
+  useEffect(() => {
+    if (!vehicle?.tariff) return;
+
+    const days = parseInt(durationDays) || 0;
+    const hours = parseInt(durationHours) || 0;
+    const minutes = parseInt(durationMinutes) || 0;
+
+    const totalHours = days * 24 + hours + minutes / 60;
+
+    let cost = 0;
+    if (vehicle.tariff.price_per_hour) {
+      cost = vehicle.tariff.price_per_hour * totalHours;
+    } else if (vehicle.tariff.price_per_minute) {
+      cost = vehicle.tariff.price_per_minute * totalHours * 60;
+    }
+
+    setEstimatedCost(cost);
+  }, [durationDays, durationHours, durationMinutes, vehicle?.tariff]);
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,16 +143,28 @@ const VehicleDetail: React.FC = () => {
       return;
     }
 
+    // Calculate total duration in hours
+    const days = parseInt(durationDays) || 0;
+    const hours = parseInt(durationHours) || 0;
+    const minutes = parseInt(durationMinutes) || 0;
+    const totalDurationHours = days * 24 + hours + minutes / 60;
+
+    if (totalDurationHours <= 0) {
+      toast.error('Длительность бронирования должна быть больше 0');
+      return;
+    }
+
     try {
       await dispatch(
         createBooking({
           vehicle_id: vehicle.id,
           tariff_id: vehicle.tariff_id,
           start_time: startDateTime.toISOString(),
+          duration_hours: totalDurationHours,
         })
       ).unwrap();
 
-      toast.success('Бронирование создано успешно!');
+      toast.success(`Бронирование создано! Списано ${estimatedCost.toFixed(2)} ₽`);
       navigate(ROUTES.BOOKINGS);
     } catch (error: any) {
       toast.error(createError || 'Ошибка создания бронирования');
@@ -474,6 +509,28 @@ const VehicleDetail: React.FC = () => {
                         </div>
                       </div>
                     </div>
+
+                    {/* Estimated Cost */}
+                    {vehicle.tariff && estimatedCost > 0 && (
+                      <div className="bg-primary-500/10 border border-primary-500/30 rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-neutral-300">Стоимость бронирования:</span>
+                          <span className="text-2xl font-bold text-primary-500">
+                            {estimatedCost.toFixed(2)} ₽
+                          </span>
+                        </div>
+                        {vehicle.tariff.price_per_hour && (
+                          <p className="text-xs text-neutral-400 mt-1">
+                            Тариф: {vehicle.tariff.price_per_hour} ₽/час
+                          </p>
+                        )}
+                        {vehicle.tariff.price_per_minute && (
+                          <p className="text-xs text-neutral-400 mt-1">
+                            Тариф: {vehicle.tariff.price_per_minute} ₽/мин
+                          </p>
+                        )}
+                      </div>
+                    )}
 
                     {createError && (
                       <div className="bg-red-50 border border-red-200 rounded-lg p-3">

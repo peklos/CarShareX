@@ -52,6 +52,7 @@ export interface Vehicle {
   status: 'available' | 'in_use' | 'maintenance';
   parking_zone_id?: number;
   tariff_id?: number;
+  tariff?: Tariff;
 }
 
 export interface VehicleFilters {
