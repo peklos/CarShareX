@@ -137,8 +137,8 @@ class Transaction(Base):
     booking_id = Column(Integer, ForeignKey('bookings.id'), index=True)
     transaction_type = Column(String(30), nullable=False, index=True)
     amount = Column(Float, nullable=False)
-    description = Column(String(500))
-    created_at = Column(DateTime, default=datetime.utcnow)
+    description = Column(String(500), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=True)
     status = Column(String(30), default='completed', index=True)
 
     user = relationship('User', back_populates='transactions')

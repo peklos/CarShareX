@@ -15,7 +15,7 @@ interface VehicleCardProps {
   vehicle: Vehicle;
 }
 
-const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle }) => {
+const VehicleCard: React.FC<VehicleCardProps> = React.memo(({ vehicle }) => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'available':
@@ -135,6 +135,8 @@ const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle }) => {
       </Link>
     </motion.div>
   );
-};
+});
+
+VehicleCard.displayName = 'VehicleCard';
 
 export default VehicleCard;
