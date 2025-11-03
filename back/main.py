@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from db.database import engine, Base, SessionLocal
 from db.init_data import initialize_database
+from sqlalchemy import text, inspect
+from datetime import datetime
 
 # Роутеры клиентов
 from routers import auth
@@ -32,6 +34,37 @@ app = FastAPI(
 
 # Создание таблиц
 Base.metadata.create_all(bind=engine)
+
+# Миграция: добавление столбцов description и created_at в transactions если их нет
+def migrate_transactions_table():
+    """Добавляет столбцы description и created_at в таблицу transactions если их нет"""
+    inspector = inspect(engine)
+    columns = [col['name'] for col in inspector.get_columns('transactions')]
+
+    with engine.connect() as conn:
+        # Добавляем description если его нет
+        if 'description' not in columns:
+            try:
+                conn.execute(text("ALTER TABLE transactions ADD COLUMN description VARCHAR(500)"))
+                conn.commit()
+                print("✅ Добавлен столбец description в таблицу transactions")
+            except Exception as e:
+                print(f"⚠️  Не удалось добавить столбец description: {e}")
+
+        # Добавляем created_at если его нет
+        if 'created_at' not in columns:
+            try:
+                conn.execute(text("ALTER TABLE transactions ADD COLUMN created_at TIMESTAMP"))
+                conn.commit()
+                print("✅ Добавлен столбец created_at в таблицу transactions")
+            except Exception as e:
+                print(f"⚠️  Не удалось добавить столбец created_at: {e}")
+
+# Запуск миграции
+try:
+    migrate_transactions_table()
+except Exception as e:
+    print(f"⚠️  Ошибка миграции: {e}")
 
 # Инициализация начальных данных
 db = SessionLocal()
