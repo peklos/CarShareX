@@ -179,10 +179,10 @@ const AdminBookings: React.FC = () => {
                         #{booking.vehicle_id}
                       </td>
                       <td className="py-4 px-6 text-sm text-neutral-400">
-                        {formatDateTime(booking.start_datetime)}
+                        {formatDateTime(booking.start_time)}
                       </td>
                       <td className="py-4 px-6 text-sm text-neutral-400">
-                        {booking.end_datetime ? formatDateTime(booking.end_datetime) : '—'}
+                        {booking.end_time ? formatDateTime(booking.end_time) : '—'}
                       </td>
                       <td className="py-4 px-6">{getStatusBadge(booking.status)}</td>
                       <td className="py-4 px-6">

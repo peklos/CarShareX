@@ -29,8 +29,16 @@ const VehicleDetail: React.FC = () => {
   const { createLoading, createError } = useAppSelector((state) => state.bookings);
   const { isAuthenticated, role } = useAppSelector((state) => state.auth);
 
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  // Separate fields for start date and time
+  const [startDay, setStartDay] = useState('');
+  const [startMonth, setStartMonth] = useState('');
+  const [startYear, setStartYear] = useState('');
+  const [startTime, setStartTime] = useState('');
+
+  // Duration fields
+  const [durationDays, setDurationDays] = useState('0');
+  const [durationHours, setDurationHours] = useState('1');
+  const [durationMinutes, setDurationMinutes] = useState('0');
 
   useEffect(() => {
     if (id) {
@@ -59,12 +67,33 @@ const VehicleDetail: React.FC = () => {
       return;
     }
 
+    // Validate all fields are filled
+    if (!startDay || !startMonth || !startYear || !startTime) {
+      toast.error('Заполните все поля даты и времени начала');
+      return;
+    }
+
+    // Create start date from separate fields
+    const startDateTime = new Date(
+      parseInt(startYear),
+      parseInt(startMonth) - 1, // Month is 0-indexed
+      parseInt(startDay),
+      parseInt(startTime.split(':')[0]),
+      parseInt(startTime.split(':')[1])
+    );
+
+    // Validate date is in the future
+    if (startDateTime < new Date()) {
+      toast.error('Дата начала должна быть в будущем');
+      return;
+    }
+
     try {
       await dispatch(
         createBooking({
           vehicle_id: vehicle.id,
           tariff_id: vehicle.tariff_id,
-          start_time: new Date(startDate).toISOString(),
+          start_time: startDateTime.toISOString(),
         })
       ).unwrap();
 
@@ -270,38 +299,102 @@ const VehicleDetail: React.FC = () => {
                   <form onSubmit={handleBooking} className="space-y-6">
                     {/* Start Date */}
                     <div>
-                      <label className="block text-sm font-medium text-neutral-300 mb-2">
+                      <label className="block text-sm font-medium text-neutral-300 mb-3">
                         <div className="flex items-center space-x-2">
                           <CalendarIcon className="h-5 w-5 text-primary-500" />
                           <span>Дата и время начала</span>
                         </div>
                       </label>
-                      <input
-                        type="datetime-local"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                        min={new Date().toISOString().slice(0, 16)}
-                        required
-                        className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      />
+                      <div className="grid grid-cols-4 gap-2">
+                        <input
+                          type="number"
+                          placeholder="День"
+                          min="1"
+                          max="31"
+                          value={startDay}
+                          onChange={(e) => setStartDay(e.target.value)}
+                          required
+                          className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
+                        />
+                        <input
+                          type="number"
+                          placeholder="Месяц"
+                          min="1"
+                          max="12"
+                          value={startMonth}
+                          onChange={(e) => setStartMonth(e.target.value)}
+                          required
+                          className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
+                        />
+                        <input
+                          type="number"
+                          placeholder="Год"
+                          min={new Date().getFullYear()}
+                          max={new Date().getFullYear() + 1}
+                          value={startYear}
+                          onChange={(e) => setStartYear(e.target.value)}
+                          required
+                          className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
+                        />
+                        <input
+                          type="time"
+                          value={startTime}
+                          onChange={(e) => setStartTime(e.target.value)}
+                          required
+                          className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
+                      </div>
+                      <div className="mt-1 text-xs text-neutral-500">
+                        День / Месяц / Год / Время
+                      </div>
                     </div>
 
-                    {/* End Date */}
+                    {/* Duration */}
                     <div>
-                      <label className="block text-sm font-medium text-neutral-300 mb-2">
+                      <label className="block text-sm font-medium text-neutral-300 mb-3">
                         <div className="flex items-center space-x-2">
                           <ClockIcon className="h-5 w-5 text-primary-500" />
-                          <span>Дата и время окончания</span>
+                          <span>Длительность бронирования</span>
                         </div>
                       </label>
-                      <input
-                        type="datetime-local"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                        min={startDate || new Date().toISOString().slice(0, 16)}
-                        required
-                        className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      />
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <input
+                            type="number"
+                            placeholder="Дни"
+                            min="0"
+                            max="30"
+                            value={durationDays}
+                            onChange={(e) => setDurationDays(e.target.value)}
+                            className="w-full px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
+                          />
+                          <div className="mt-1 text-xs text-neutral-500 text-center">дней</div>
+                        </div>
+                        <div>
+                          <input
+                            type="number"
+                            placeholder="Часы"
+                            min="0"
+                            max="23"
+                            value={durationHours}
+                            onChange={(e) => setDurationHours(e.target.value)}
+                            className="w-full px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
+                          />
+                          <div className="mt-1 text-xs text-neutral-500 text-center">часов</div>
+                        </div>
+                        <div>
+                          <input
+                            type="number"
+                            placeholder="Минуты"
+                            min="0"
+                            max="59"
+                            value={durationMinutes}
+                            onChange={(e) => setDurationMinutes(e.target.value)}
+                            className="w-full px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
+                          />
+                          <div className="mt-1 text-xs text-neutral-500 text-center">минут</div>
+                        </div>
+                      </div>
                     </div>
 
                     {createError && (

@@ -26,7 +26,7 @@ export const profileApi = {
     if (!userStr) throw new Error('User not authenticated');
     const user = JSON.parse(userStr);
 
-    const response = await axios.put<User>(`${API_URL}/profile/${user.id}`, data);
+    const response = await axios.patch<User>(`${API_URL}/profile/${user.id}`, data);
     return response.data;
   },
 };

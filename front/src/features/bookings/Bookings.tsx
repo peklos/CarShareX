@@ -129,7 +129,7 @@ const Bookings: React.FC = () => {
                             <div>
                               <p className="text-neutral-400">Начало:</p>
                               <p className="text-neutral-50 font-medium">
-                                {formatDateTime(booking.start_datetime)}
+                                {formatDateTime(booking.start_time)}
                               </p>
                             </div>
                           </div>
@@ -140,18 +140,18 @@ const Bookings: React.FC = () => {
                             <div>
                               <p className="text-neutral-400">Окончание:</p>
                               <p className="text-neutral-50 font-medium">
-                                {booking.end_datetime ? formatDateTime(booking.end_datetime) : 'Не завершено'}
+                                {booking.end_time ? formatDateTime(booking.end_time) : 'Не завершено'}
                               </p>
                             </div>
                           </div>
                         </div>
 
                         <div className="mt-3 flex items-center space-x-4 text-sm">
-                          {booking.end_datetime && (
+                          {booking.end_time && (
                             <div className="flex items-center space-x-1 text-neutral-400">
                               <ClockIcon className="h-4 w-4" />
                               <span>
-                                Длительность: {calculateDuration(booking.start_datetime, booking.end_datetime)} ч.
+                                Длительность: {calculateDuration(booking.start_time, booking.end_time)} ч.
                               </span>
                             </div>
                           )}

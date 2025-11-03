@@ -69,9 +69,7 @@ export interface Booking {
   vehicle_id: number;
   tariff_id: number;
   start_time: string;
-  start_datetime: string;
   end_time?: string;
-  end_datetime?: string;
   total_cost: number;
   status: 'pending' | 'active' | 'completed';
 }
