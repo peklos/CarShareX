@@ -34,15 +34,16 @@ const App: React.FC = () => {
         toastOptions={{
           duration: 3000,
           style: {
-            background: '#fff',
-            color: '#292524',
+            background: '#292524',
+            color: '#fafaf9',
             borderRadius: '0.5rem',
-            boxShadow: '0 10px 30px -10px rgba(0,0,0,0.15)',
+            boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5)',
+            border: '1px solid #44403c',
           },
           success: {
             iconTheme: {
               primary: '#f97316',
-              secondary: '#fff',
+              secondary: '#292524',
             },
           },
         }}
@@ -187,7 +188,7 @@ const App: React.FC = () => {
             <Layout>
               <div className="text-center py-20">
                 <h2 className="text-4xl font-bold mb-4">404</h2>
-                <p className="text-neutral-600">Страница не найдена</p>
+                <p className="text-neutral-400">Страница не найдена</p>
               </div>
             </Layout>
           }
