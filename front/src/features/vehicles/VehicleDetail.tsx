@@ -54,12 +54,17 @@ const VehicleDetail: React.FC = () => {
 
     if (!vehicle) return;
 
+    if (!vehicle.tariff_id) {
+      toast.error('У автомобиля не установлен тариф');
+      return;
+    }
+
     try {
       await dispatch(
         createBooking({
           vehicle_id: vehicle.id,
-          start_datetime: new Date(startDate).toISOString(),
-          end_datetime: new Date(endDate).toISOString(),
+          tariff_id: vehicle.tariff_id,
+          start_time: new Date(startDate).toISOString(),
         })
       ).unwrap();
 

@@ -27,10 +27,10 @@ export const transactionsApi = {
     if (!userStr) throw new Error('User not authenticated');
     const user = JSON.parse(userStr);
 
-    const response = await axios.post<Transaction>(`${API_URL}/transactions/`, {
-      user_id: user.id,
-      ...data,
-    });
+    // Backend expects user_id and amount as query params for deposit
+    const response = await axios.post<Transaction>(
+      `${API_URL}/transactions/deposit?user_id=${user.id}&amount=${data.amount}`
+    );
     return response.data;
   },
 };
