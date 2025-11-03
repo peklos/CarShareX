@@ -116,7 +116,7 @@ const VehicleFilters: React.FC<VehicleFiltersProps> = ({
               <select
                 value={filters.vehicle_type || ''}
                 onChange={(e) => handleFilterChange('vehicle_type', e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               >
                 {vehicleTypes.map((type) => (
                   <option key={type.value} value={type.value}>
@@ -134,7 +134,7 @@ const VehicleFilters: React.FC<VehicleFiltersProps> = ({
               <select
                 value={filters.brand || ''}
                 onChange={(e) => handleFilterChange('brand', e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               >
                 {brands.map((brand) => (
                   <option key={brand.value} value={brand.value}>
@@ -152,7 +152,7 @@ const VehicleFilters: React.FC<VehicleFiltersProps> = ({
               <select
                 value={filters.status || 'available'}
                 onChange={(e) => handleFilterChange('status', e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               >
                 {statuses.map((status) => (
                   <option key={status.value} value={status.value}>
