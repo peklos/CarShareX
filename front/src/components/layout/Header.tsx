@@ -82,24 +82,174 @@ const Header: React.FC = () => {
                 </div>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex md:items-center md:space-x-4">
+                <div className="hidden md:flex md:items-center md:space-x-2">
                   {isAuthenticated ? (
                     <>
                       {/* Navigation Links */}
-                      {navigation.map((item) => (
-                        <Link
-                          key={item.name}
-                          to={item.href}
-                          className={`flex items-center space-x-1 px-3 py-2 rounded-lg font-medium transition-all ${
-                            isActive(item.href)
-                              ? 'bg-primary-900 text-primary-400'
-                              : 'text-neutral-300 hover:bg-neutral-700 hover:text-primary-400'
-                          }`}
-                        >
-                          <item.icon className="h-5 w-5" />
-                          <span>{item.name}</span>
-                        </Link>
-                      ))}
+                      {role === 'admin' ? (
+                        <>
+                          {/* Dashboard link */}
+                          <Link
+                            to={ROUTES.ADMIN_DASHBOARD}
+                            className={`flex items-center space-x-1 px-3 py-2 rounded-lg font-medium text-sm transition-all ${
+                              isActive(ROUTES.ADMIN_DASHBOARD)
+                                ? 'bg-primary-900 text-primary-400'
+                                : 'text-neutral-300 hover:bg-neutral-700 hover:text-primary-400'
+                            }`}
+                          >
+                            <ChartBarIcon className="h-4 w-4" />
+                            <span>Панель</span>
+                          </Link>
+
+                          {/* Management dropdown */}
+                          <Menu as="div" className="relative">
+                            <Menu.Button className="flex items-center space-x-1 px-3 py-2 rounded-lg font-medium text-sm text-neutral-300 hover:bg-neutral-700 hover:text-primary-400 transition-all">
+                              <UserGroupIcon className="h-4 w-4" />
+                              <span>Управление</span>
+                            </Menu.Button>
+                            <Transition
+                              as={Fragment}
+                              enter="transition ease-out duration-100"
+                              enterFrom="transform opacity-0 scale-95"
+                              enterTo="transform opacity-100 scale-100"
+                              leave="transition ease-in duration-75"
+                              leaveFrom="transform opacity-100 scale-100"
+                              leaveTo="transform opacity-0 scale-95"
+                            >
+                              <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-lg bg-neutral-800 shadow-lg ring-1 ring-neutral-700 focus:outline-none">
+                                <div className="py-1">
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
+                                        to={ROUTES.ADMIN_USERS}
+                                        className={`${active ? 'bg-neutral-700' : ''} flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
+                                      >
+                                        <UserGroupIcon className="h-4 w-4" />
+                                        <span>Пользователи</span>
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
+                                        to={ROUTES.ADMIN_VEHICLES}
+                                        className={`${active ? 'bg-neutral-700' : ''} flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
+                                      >
+                                        <TruckIcon className="h-4 w-4" />
+                                        <span>Автомобили</span>
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
+                                        to={ROUTES.ADMIN_BOOKINGS}
+                                        className={`${active ? 'bg-neutral-700' : ''} flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
+                                      >
+                                        <CalendarIcon className="h-4 w-4" />
+                                        <span>Бронирования</span>
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
+                                        to={ROUTES.ADMIN_INCIDENTS}
+                                        className={`${active ? 'bg-neutral-700' : ''} flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
+                                      >
+                                        <ExclamationTriangleIcon className="h-4 w-4" />
+                                        <span>Инциденты</span>
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                </div>
+                              </Menu.Items>
+                            </Transition>
+                          </Menu>
+
+                          {/* Settings dropdown */}
+                          <Menu as="div" className="relative">
+                            <Menu.Button className="flex items-center space-x-1 px-3 py-2 rounded-lg font-medium text-sm text-neutral-300 hover:bg-neutral-700 hover:text-primary-400 transition-all">
+                              <BuildingOfficeIcon className="h-4 w-4" />
+                              <span>Настройки</span>
+                            </Menu.Button>
+                            <Transition
+                              as={Fragment}
+                              enter="transition ease-out duration-100"
+                              enterFrom="transform opacity-0 scale-95"
+                              enterTo="transform opacity-100 scale-100"
+                              leave="transition ease-in duration-75"
+                              leaveFrom="transform opacity-100 scale-100"
+                              leaveTo="transform opacity-0 scale-95"
+                            >
+                              <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-lg bg-neutral-800 shadow-lg ring-1 ring-neutral-700 focus:outline-none">
+                                <div className="py-1">
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
+                                        to={ROUTES.ADMIN_TARIFFS}
+                                        className={`${active ? 'bg-neutral-700' : ''} flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
+                                      >
+                                        <CurrencyDollarIcon className="h-4 w-4" />
+                                        <span>Тарифы</span>
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
+                                        to={ROUTES.ADMIN_PARKING}
+                                        className={`${active ? 'bg-neutral-700' : ''} flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
+                                      >
+                                        <MapPinIcon className="h-4 w-4" />
+                                        <span>Парковки</span>
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
+                                        to={ROUTES.ADMIN_BRANCHES}
+                                        className={`${active ? 'bg-neutral-700' : ''} flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
+                                      >
+                                        <BuildingOfficeIcon className="h-4 w-4" />
+                                        <span>Офисы</span>
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
+                                        to={ROUTES.ADMIN_EMPLOYEES}
+                                        className={`${active ? 'bg-neutral-700' : ''} flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
+                                      >
+                                        <UserGroupIcon className="h-4 w-4" />
+                                        <span>Сотрудники</span>
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                </div>
+                              </Menu.Items>
+                            </Transition>
+                          </Menu>
+                        </>
+                      ) : (
+                        // Client navigation
+                        navigation.map((item) => (
+                          <Link
+                            key={item.name}
+                            to={item.href}
+                            className={`flex items-center space-x-1 px-3 py-2 rounded-lg font-medium transition-all ${
+                              isActive(item.href)
+                                ? 'bg-primary-900 text-primary-400'
+                                : 'text-neutral-300 hover:bg-neutral-700 hover:text-primary-400'
+                            }`}
+                          >
+                            <item.icon className="h-5 w-5" />
+                            <span>{item.name}</span>
+                          </Link>
+                        ))
+                      )}
 
                       {/* Balance (for clients) */}
                       {role === 'client' && user && 'balance' in user && (

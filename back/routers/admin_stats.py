@@ -90,9 +90,10 @@ def get_dashboard_stats(db: Session = Depends(database.get_db)):
     active_users_list = [
         {
             "id": u.id,
-            "name": f"{u.first_name} {u.last_name}",
+            "first_name": u.first_name,
+            "last_name": u.last_name,
             "email": u.email,
-            "trips_count": u.trips_count,
+            "bookings_count": u.trips_count,
             "total_spent": float(u.total_spent or 0)
         }
         for u in active_users
