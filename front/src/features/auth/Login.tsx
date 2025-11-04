@@ -73,12 +73,12 @@ const Login: React.FC = () => {
           <h2 className="mt-6 text-center text-4xl font-bold text-gradient">
             CarShareX
           </h2>
-          <p className="mt-2 text-center text-sm text-neutral-600">
+          <p className="mt-2 text-center text-sm text-neutral-400">
             Каршеринг нового поколения
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-neutral-800 rounded-2xl shadow-xl p-8">
           {/* Toggle buttons */}
           <div className="flex gap-2 mb-6">
             <button
@@ -86,8 +86,8 @@ const Login: React.FC = () => {
               onClick={() => setIsEmployee(false)}
               className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
                 !isEmployee
-                  ? 'bg-primary-500 text-white shadow-md'
-                  : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                  ? 'bg-primary-9000 text-white shadow-md'
+                  : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
               }`}
             >
               Клиент
@@ -97,8 +97,8 @@ const Login: React.FC = () => {
               onClick={() => setIsEmployee(true)}
               className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
                 isEmployee
-                  ? 'bg-primary-500 text-white shadow-md'
-                  : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                  ? 'bg-primary-9000 text-white shadow-md'
+                  : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
               }`}
             >
               Сотрудник
@@ -136,7 +136,7 @@ const Login: React.FC = () => {
 
           {!isEmployee && (
             <div className="mt-6 text-center">
-              <p className="text-sm text-neutral-600">
+              <p className="text-sm text-neutral-400">
                 Нет аккаунта?{' '}
                 <Link
                   to={ROUTES.REGISTER}
@@ -149,15 +149,15 @@ const Login: React.FC = () => {
           )}
 
           {/* Test credentials */}
-          <div className="mt-6 p-4 bg-neutral-50 rounded-lg">
-            <p className="text-xs font-semibold text-neutral-700 mb-2">Тестовые данные:</p>
+          <div className="mt-6 p-4 bg-neutral-900 rounded-lg">
+            <p className="text-xs font-semibold text-neutral-300 mb-2">Тестовые данные:</p>
             {!isEmployee ? (
-              <div className="text-xs text-neutral-600 space-y-1">
+              <div className="text-xs text-neutral-400 space-y-1">
                 <p>Email: morozov@mail.ru</p>
                 <p>Пароль: user123</p>
               </div>
             ) : (
-              <div className="text-xs text-neutral-600 space-y-1">
+              <div className="text-xs text-neutral-400 space-y-1">
                 <p>Email: ivanov@carsharex.ru</p>
                 <p>Пароль: admin123</p>
               </div>

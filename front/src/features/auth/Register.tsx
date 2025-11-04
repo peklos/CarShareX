@@ -54,12 +54,12 @@ const Register: React.FC = () => {
           <h2 className="mt-6 text-center text-4xl font-bold text-gradient">
             Регистрация
           </h2>
-          <p className="mt-2 text-center text-sm text-neutral-600">
+          <p className="mt-2 text-center text-sm text-neutral-400">
             Создайте аккаунт для доступа к каршерингу
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-neutral-800 rounded-2xl shadow-xl p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <Input
@@ -134,7 +134,7 @@ const Register: React.FC = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-neutral-400">
               Уже есть аккаунт?{' '}
               <Link
                 to={ROUTES.LOGIN}

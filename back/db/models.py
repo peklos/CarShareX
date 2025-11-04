@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Index
 from sqlalchemy.orm import relationship
+from datetime import datetime
 from .database import Base
 
 class Role(Base):
@@ -136,6 +137,8 @@ class Transaction(Base):
     booking_id = Column(Integer, ForeignKey('bookings.id'), index=True)
     transaction_type = Column(String(30), nullable=False, index=True)
     amount = Column(Float, nullable=False)
+    description = Column(String(500), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=True)
     status = Column(String(30), default='completed', index=True)
 
     user = relationship('User', back_populates='transactions')

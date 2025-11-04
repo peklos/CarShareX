@@ -18,21 +18,63 @@ def create_booking(booking_data: booking_schemas.BookingCreate, user_id: int, db
     if vehicle.status != "available":
         raise HTTPException(status_code=400, detail="Автомобиль недоступен")
 
+    # Получение тарифа
+    tariff = db.query(models.Tariff).filter(models.Tariff.id == booking_data.tariff_id).first()
+
+    if not tariff:
+        raise HTTPException(status_code=404, detail="Тариф не найден")
+
+    # Расчет стоимости
+    if tariff.price_per_hour:
+        total_cost = tariff.price_per_hour * booking_data.duration_hours
+    elif tariff.price_per_minute:
+        total_cost = tariff.price_per_minute * (booking_data.duration_hours * 60)
+    else:
+        raise HTTPException(status_code=400, detail="У тарифа не указана цена")
+
+    # Проверка баланса пользователя
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+
+    if user.balance < total_cost:
+        raise HTTPException(status_code=400, detail=f"Недостаточно средств. Требуется: {total_cost:.2f} ₽, доступно: {user.balance:.2f} ₽")
+
+    # Списание с баланса
+    user.balance -= total_cost
+
     # Создание бронирования
     new_booking = models.Booking(
         user_id=user_id,
         vehicle_id=booking_data.vehicle_id,
         tariff_id=booking_data.tariff_id,
         start_time=booking_data.start_time,
+        total_cost=total_cost,
         status="active"
     )
 
     # Обновление статуса автомобиля
     vehicle.status = "in_use"
 
+    # Создание транзакции
+    transaction = models.Transaction(
+        user_id=user_id,
+        booking_id=None,  # Будет обновлено после коммита
+        transaction_type="payment",
+        amount=total_cost,
+        description=f"Оплата бронирования автомобиля {vehicle.brand} {vehicle.model}",
+        status="completed"
+    )
+
     db.add(new_booking)
     db.commit()
     db.refresh(new_booking)
+
+    # Обновляем booking_id в транзакции
+    transaction.booking_id = new_booking.id
+    db.add(transaction)
+    db.commit()
 
     return new_booking
 

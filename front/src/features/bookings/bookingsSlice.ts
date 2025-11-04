@@ -47,8 +47,8 @@ export const createBooking = createAsyncThunk(
 
 export const completeBooking = createAsyncThunk(
   'bookings/completeBooking',
-  async (id: number) => {
-    const booking = await bookingsApi.completeBooking(id);
+  async (data: { id: number; end_time: string; total_cost: number }) => {
+    const booking = await bookingsApi.completeBooking(data.id, data.end_time, data.total_cost);
     return booking;
   }
 );

@@ -247,7 +247,7 @@ const AdminEmployees: React.FC = () => {
               Добавить сотрудника
             </Button>
           </div>
-          <p className="text-neutral-600">
+          <p className="text-neutral-400">
             Управление сотрудниками (только SuperAdmin)
           </p>
         </motion.div>
@@ -261,7 +261,7 @@ const AdminEmployees: React.FC = () => {
               placeholder="Поиск по имени или email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border-2 border-neutral-300 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
+              className="w-full pl-10 pr-4 py-2 bg-neutral-800 text-neutral-50 border-2 border-neutral-600 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
             />
           </div>
         </div>
@@ -271,23 +271,23 @@ const AdminEmployees: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="min-w-full">
               <thead>
-                <tr className="border-b border-neutral-200">
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                <tr className="border-b border-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     ID
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Имя
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Email
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Роль
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Офис
                   </th>
-                  <th className="text-right py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-right py-3 px-4 text-sm font-semibold text-neutral-300">
                     Действия
                   </th>
                 </tr>
@@ -301,14 +301,14 @@ const AdminEmployees: React.FC = () => {
                   </tr>
                 ) : (
                   filteredEmployees.map((emp) => (
-                    <tr key={emp.id} className="border-b border-neutral-100 hover:bg-neutral-50">
-                      <td className="py-3 px-4 text-sm font-mono text-neutral-900">
+                    <tr key={emp.id} className="border-b border-neutral-800 hover:bg-neutral-800">
+                      <td className="py-3 px-4 text-sm font-mono text-neutral-50">
                         #{emp.id}
                       </td>
-                      <td className="py-3 px-4 text-sm font-semibold text-neutral-900">
+                      <td className="py-3 px-4 text-sm font-semibold text-neutral-50">
                         {emp.first_name} {emp.last_name}
                       </td>
-                      <td className="py-3 px-4 text-sm text-neutral-600">{emp.email}</td>
+                      <td className="py-3 px-4 text-sm text-neutral-400">{emp.email}</td>
                       <td className="py-3 px-4">
                         <Badge
                           color={
@@ -322,20 +322,20 @@ const AdminEmployees: React.FC = () => {
                           {getRoleName(emp.role_id)}
                         </Badge>
                       </td>
-                      <td className="py-3 px-4 text-sm text-neutral-600">
+                      <td className="py-3 px-4 text-sm text-neutral-400">
                         {getBranchName(emp.branch_id)}
                       </td>
                       <td className="py-3 px-4 text-right">
                         <div className="flex gap-2 justify-end">
                           <button
                             onClick={() => handleOpenModal(emp)}
-                            className="p-2 text-neutral-600 hover:text-primary-500 transition-colors"
+                            className="p-2 text-neutral-400 hover:text-primary-500 transition-colors"
                           >
                             <PencilIcon className="h-5 w-5" />
                           </button>
                           <button
                             onClick={() => handleDelete(emp.id)}
-                            className="p-2 text-neutral-600 hover:text-red-500 transition-colors"
+                            className="p-2 text-neutral-400 hover:text-red-500 transition-colors"
                           >
                             <TrashIcon className="h-5 w-5" />
                           </button>
@@ -355,16 +355,16 @@ const AdminEmployees: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+              className="bg-neutral-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-neutral-900">
+                  <h2 className="text-2xl font-bold text-neutral-50">
                     {editingEmployee ? 'Редактировать сотрудника' : 'Новый сотрудник'}
                   </h2>
                   <button
                     onClick={handleCloseModal}
-                    className="text-neutral-400 hover:text-neutral-600"
+                    className="text-neutral-400 hover:text-neutral-400"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -412,7 +412,7 @@ const AdminEmployees: React.FC = () => {
                   />
 
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-300 mb-1">
                       Роль
                     </label>
                     <select
@@ -420,7 +420,7 @@ const AdminEmployees: React.FC = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, role_id: e.target.value })
                       }
-                      className="w-full px-4 py-2 border-2 border-neutral-300 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
+                      className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border-2 border-neutral-600 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
                       required
                     >
                       {roles.map((role) => (
@@ -432,7 +432,7 @@ const AdminEmployees: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-300 mb-1">
                       Офис
                     </label>
                     <select
@@ -440,7 +440,7 @@ const AdminEmployees: React.FC = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, branch_id: e.target.value })
                       }
-                      className="w-full px-4 py-2 border-2 border-neutral-300 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
+                      className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border-2 border-neutral-600 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
                     >
                       <option value="">Не назначен</option>
                       {branches.map((branch) => (

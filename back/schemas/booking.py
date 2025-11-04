@@ -6,6 +6,7 @@ class BookingCreate(BaseModel):
     vehicle_id: int
     tariff_id: int
     start_time: datetime
+    duration_hours: float  # Длительность бронирования в часах
 
 class BookingResponse(BaseModel):
     id: int

@@ -21,16 +21,17 @@ export const transactionsApi = {
     return response.data;
   },
 
-  // Create new transaction (deposit)
+  // Create new transaction (deposit, payment, penalty)
   createTransaction: async (data: CreateTransactionData): Promise<Transaction> => {
     const userStr = localStorage.getItem(STORAGE_KEYS.USER);
     if (!userStr) throw new Error('User not authenticated');
     const user = JSON.parse(userStr);
 
-    const response = await axios.post<Transaction>(`${API_URL}/transactions/`, {
-      user_id: user.id,
-      ...data,
-    });
+    // Use new endpoint that accepts transaction data in body
+    const response = await axios.post<Transaction>(
+      `${API_URL}/transactions/?user_id=${user.id}`,
+      data
+    );
     return response.data;
   },
 };

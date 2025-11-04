@@ -63,7 +63,7 @@ const Header: React.FC = () => {
   const navigation = role === 'admin' ? adminNavigation : clientNavigation;
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header className="bg-neutral-800 shadow-sm sticky top-0 z-50 border-b border-neutral-700">
       <Disclosure as="nav">
         {({ open }) => (
           <>
@@ -92,8 +92,8 @@ const Header: React.FC = () => {
                           to={item.href}
                           className={`flex items-center space-x-1 px-3 py-2 rounded-lg font-medium transition-all ${
                             isActive(item.href)
-                              ? 'bg-primary-50 text-primary-600'
-                              : 'text-neutral-700 hover:bg-neutral-100 hover:text-primary-500'
+                              ? 'bg-primary-900 text-primary-400'
+                              : 'text-neutral-300 hover:bg-neutral-700 hover:text-primary-400'
                           }`}
                         >
                           <item.icon className="h-5 w-5" />
@@ -103,11 +103,11 @@ const Header: React.FC = () => {
 
                       {/* Balance (for clients) */}
                       {role === 'client' && user && 'balance' in user && (
-                        <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-primary-50 to-orange-50 rounded-lg border border-primary-100">
-                          <CreditCardIcon className="h-5 w-5 text-primary-500" />
+                        <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-primary-900 to-orange-900 rounded-lg border border-primary-700">
+                          <CreditCardIcon className="h-5 w-5 text-primary-400" />
                           <div className="flex flex-col">
-                            <span className="text-xs text-neutral-600">Баланс</span>
-                            <span className="text-sm font-bold text-primary-600">
+                            <span className="text-xs text-neutral-400">Баланс</span>
+                            <span className="text-sm font-bold text-primary-300">
                               {formatCurrency(user.balance)}
                             </span>
                           </div>
@@ -116,15 +116,15 @@ const Header: React.FC = () => {
 
                       {/* User Menu */}
                       <Menu as="div" className="relative">
-                        <Menu.Button className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-neutral-100 transition-colors">
+                        <Menu.Button className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-neutral-700 transition-colors">
                           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-primary text-white font-semibold text-sm">
                             {user && getInitials(user.first_name, user.last_name)}
                           </div>
                           <div className="hidden lg:block text-left">
-                            <p className="text-sm font-medium text-neutral-700">
+                            <p className="text-sm font-medium text-neutral-200">
                               {user?.first_name || 'Пользователь'}
                             </p>
-                            <p className="text-xs text-neutral-500">
+                            <p className="text-xs text-neutral-400">
                               {role === 'admin' ? 'Администратор' : 'Клиент'}
                             </p>
                           </div>
@@ -139,12 +139,12 @@ const Header: React.FC = () => {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-neutral-100 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-neutral-700 rounded-lg bg-neutral-800 shadow-lg ring-1 ring-neutral-700 focus:outline-none">
                             <div className="px-4 py-3">
-                              <p className="text-sm font-medium text-neutral-900">
+                              <p className="text-sm font-medium text-neutral-100">
                                 {user?.first_name} {user?.last_name}
                               </p>
-                              <p className="text-sm text-neutral-500 truncate">
+                              <p className="text-sm text-neutral-400 truncate">
                                 {user?.email}
                               </p>
                             </div>
@@ -157,8 +157,8 @@ const Header: React.FC = () => {
                                       <Link
                                         to={ROUTES.PROFILE}
                                         className={`${
-                                          active ? 'bg-neutral-100' : ''
-                                        } flex items-center space-x-2 px-4 py-2 text-sm text-neutral-700`}
+                                          active ? 'bg-neutral-700' : ''
+                                        } flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
                                       >
                                         <UserIcon className="h-4 w-4" />
                                         <span>Мой профиль</span>
@@ -170,8 +170,8 @@ const Header: React.FC = () => {
                                       <Link
                                         to={ROUTES.TRANSACTIONS}
                                         className={`${
-                                          active ? 'bg-neutral-100' : ''
-                                        } flex items-center space-x-2 px-4 py-2 text-sm text-neutral-700`}
+                                          active ? 'bg-neutral-700' : ''
+                                        } flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
                                       >
                                         <CreditCardIcon className="h-4 w-4" />
                                         <span>История транзакций</span>
@@ -188,7 +188,7 @@ const Header: React.FC = () => {
                                   <button
                                     onClick={handleLogout}
                                     className={`${
-                                      active ? 'bg-red-50 text-red-600' : 'text-neutral-700'
+                                      active ? 'bg-red-900 text-red-300' : 'text-neutral-300'
                                     } flex items-center space-x-2 w-full px-4 py-2 text-sm text-left`}
                                   >
                                     <ArrowRightOnRectangleIcon className="h-4 w-4" />
@@ -207,8 +207,8 @@ const Header: React.FC = () => {
                         to={ROUTES.VEHICLES}
                         className={`px-3 py-2 rounded-lg font-medium transition-colors ${
                           isActive(ROUTES.VEHICLES)
-                            ? 'text-primary-600'
-                            : 'text-neutral-700 hover:text-primary-500'
+                            ? 'text-primary-400'
+                            : 'text-neutral-300 hover:text-primary-400'
                         }`}
                       >
                         Автомобили
@@ -229,7 +229,7 @@ const Header: React.FC = () => {
 
                 {/* Mobile menu button */}
                 <div className="flex md:hidden">
-                  <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-lg text-neutral-700 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                  <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-lg text-neutral-300 hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
                     <span className="sr-only">Открыть меню</span>
                     {open ? (
                       <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -250,20 +250,20 @@ const Header: React.FC = () => {
               leaveFrom="transform scale-100 opacity-100"
               leaveTo="transform scale-95 opacity-0"
             >
-              <Disclosure.Panel className="md:hidden border-t border-neutral-200">
+              <Disclosure.Panel className="md:hidden border-t border-neutral-700">
                 <div className="px-4 pt-2 pb-3 space-y-1">
                   {isAuthenticated ? (
                     <>
                       {/* User info */}
-                      <div className="flex items-center space-x-3 px-3 py-3 bg-neutral-50 rounded-lg mb-3">
+                      <div className="flex items-center space-x-3 px-3 py-3 bg-neutral-700 rounded-lg mb-3">
                         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-primary text-white font-semibold">
                           {user && getInitials(user.first_name, user.last_name)}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-neutral-900">
+                          <p className="text-sm font-medium text-neutral-100">
                             {user?.first_name} {user?.last_name}
                           </p>
-                          <p className="text-xs text-neutral-500">
+                          <p className="text-xs text-neutral-400">
                             {role === 'admin' ? 'Администратор' : 'Клиент'}
                           </p>
                         </div>
@@ -271,9 +271,9 @@ const Header: React.FC = () => {
 
                       {/* Balance (mobile) */}
                       {role === 'client' && user && 'balance' in user && (
-                        <div className="flex items-center justify-between px-3 py-2 bg-gradient-to-r from-primary-50 to-orange-50 rounded-lg border border-primary-100 mb-3">
-                          <span className="text-sm font-medium text-neutral-700">Баланс:</span>
-                          <span className="text-lg font-bold text-primary-600">
+                        <div className="flex items-center justify-between px-3 py-2 bg-gradient-to-r from-primary-900 to-orange-900 rounded-lg border border-primary-700 mb-3">
+                          <span className="text-sm font-medium text-neutral-300">Баланс:</span>
+                          <span className="text-lg font-bold text-primary-300">
                             {formatCurrency(user.balance)}
                           </span>
                         </div>
@@ -287,8 +287,8 @@ const Header: React.FC = () => {
                           to={item.href}
                           className={`flex items-center space-x-2 px-3 py-2 rounded-lg font-medium transition-colors ${
                             isActive(item.href)
-                              ? 'bg-primary-50 text-primary-600'
-                              : 'text-neutral-700 hover:bg-neutral-100'
+                              ? 'bg-primary-900 text-primary-400'
+                              : 'text-neutral-300 hover:bg-neutral-700'
                           }`}
                         >
                           <item.icon className="h-5 w-5" />
@@ -301,7 +301,7 @@ const Header: React.FC = () => {
                         <Disclosure.Button
                           as={Link}
                           to={ROUTES.TRANSACTIONS}
-                          className="flex items-center space-x-2 px-3 py-2 rounded-lg font-medium text-neutral-700 hover:bg-neutral-100"
+                          className="flex items-center space-x-2 px-3 py-2 rounded-lg font-medium text-neutral-300 hover:bg-neutral-700"
                         >
                           <CreditCardIcon className="h-5 w-5" />
                           <span>Транзакции</span>
@@ -311,7 +311,7 @@ const Header: React.FC = () => {
                       {/* Logout button */}
                       <button
                         onClick={handleLogout}
-                        className="flex items-center space-x-2 w-full px-3 py-2 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-colors"
+                        className="flex items-center space-x-2 w-full px-3 py-2 rounded-lg font-medium text-red-400 hover:bg-red-900 transition-colors"
                       >
                         <ArrowRightOnRectangleIcon className="h-5 w-5" />
                         <span>Выйти</span>
@@ -322,21 +322,21 @@ const Header: React.FC = () => {
                       <Disclosure.Button
                         as={Link}
                         to={ROUTES.VEHICLES}
-                        className="block px-3 py-2 rounded-lg font-medium text-neutral-700 hover:bg-neutral-100"
+                        className="block px-3 py-2 rounded-lg font-medium text-neutral-300 hover:bg-neutral-700"
                       >
                         Автомобили
                       </Disclosure.Button>
                       <Disclosure.Button
                         as={Link}
                         to={ROUTES.LOGIN}
-                        className="block px-3 py-2 rounded-lg font-medium text-neutral-700 hover:bg-neutral-100"
+                        className="block px-3 py-2 rounded-lg font-medium text-neutral-300 hover:bg-neutral-700"
                       >
                         Войти
                       </Disclosure.Button>
                       <Disclosure.Button
                         as={Link}
                         to={ROUTES.REGISTER}
-                        className="block px-3 py-2 rounded-lg font-medium text-primary-600 hover:bg-primary-50"
+                        className="block px-3 py-2 rounded-lg font-medium text-primary-400 hover:bg-primary-900"
                       >
                         Регистрация
                       </Disclosure.Button>

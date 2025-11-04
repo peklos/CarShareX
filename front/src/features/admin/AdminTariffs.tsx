@@ -155,7 +155,7 @@ const AdminTariffs: React.FC = () => {
               Добавить тариф
             </Button>
           </div>
-          <p className="text-neutral-600">Управление тарифами аренды</p>
+          <p className="text-neutral-400">Управление тарифами аренды</p>
         </motion.div>
 
         {/* Tariffs Grid */}
@@ -170,17 +170,17 @@ const AdminTariffs: React.FC = () => {
               <Card hover>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold text-neutral-900">{tariff.name}</h3>
+                    <h3 className="text-xl font-bold text-neutral-50">{tariff.name}</h3>
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleOpenModal(tariff)}
-                        className="p-2 text-neutral-600 hover:text-primary-500 transition-colors"
+                        className="p-2 text-neutral-400 hover:text-primary-500 transition-colors"
                       >
                         <PencilIcon className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => handleDelete(tariff.id)}
-                        className="p-2 text-neutral-600 hover:text-red-500 transition-colors"
+                        className="p-2 text-neutral-400 hover:text-red-500 transition-colors"
                       >
                         <TrashIcon className="h-5 w-5" />
                       </button>
@@ -189,7 +189,7 @@ const AdminTariffs: React.FC = () => {
                   <div className="space-y-2">
                     {tariff.price_per_minute && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-neutral-600">За минуту:</span>
+                        <span className="text-sm text-neutral-400">За минуту:</span>
                         <span className="text-lg font-semibold text-primary-600">
                           {formatCurrency(tariff.price_per_minute)}
                         </span>
@@ -197,7 +197,7 @@ const AdminTariffs: React.FC = () => {
                     )}
                     {tariff.price_per_hour && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-neutral-600">За час:</span>
+                        <span className="text-sm text-neutral-400">За час:</span>
                         <span className="text-lg font-semibold text-primary-600">
                           {formatCurrency(tariff.price_per_hour)}
                         </span>
@@ -225,16 +225,16 @@ const AdminTariffs: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-lg shadow-xl max-w-md w-full"
+              className="bg-neutral-800 rounded-lg shadow-xl max-w-md w-full"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-neutral-900">
+                  <h2 className="text-2xl font-bold text-neutral-50">
                     {editingTariff ? 'Редактировать тариф' : 'Новый тариф'}
                   </h2>
                   <button
                     onClick={handleCloseModal}
-                    className="text-neutral-400 hover:text-neutral-600"
+                    className="text-neutral-400 hover:text-neutral-400"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -272,7 +272,7 @@ const AdminTariffs: React.FC = () => {
                     placeholder="350.00"
                   />
 
-                  <p className="text-sm text-neutral-600">
+                  <p className="text-sm text-neutral-400">
                     Можно указать либо цену за минуту, либо за час, либо обе
                   </p>
 

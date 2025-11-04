@@ -96,7 +96,7 @@ const AdminIncidents: React.FC = () => {
               Инциденты
             </h1>
           </div>
-          <p className="text-neutral-600">Управление инцидентами и происшествиями</p>
+          <p className="text-neutral-400">Управление инцидентами и происшествиями</p>
         </motion.div>
 
         {/* Search */}
@@ -108,7 +108,7 @@ const AdminIncidents: React.FC = () => {
               placeholder="Поиск по описанию или ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border-2 border-neutral-300 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
+              className="w-full pl-10 pr-4 py-2 bg-neutral-800 text-neutral-50 border-2 border-neutral-600 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
             />
           </div>
         </div>
@@ -117,13 +117,13 @@ const AdminIncidents: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <Card>
             <div className="text-center">
-              <p className="text-sm text-neutral-600">Всего инцидентов</p>
-              <p className="text-2xl font-bold text-neutral-900">{incidents.length}</p>
+              <p className="text-sm text-neutral-400">Всего инцидентов</p>
+              <p className="text-2xl font-bold text-neutral-50">{incidents.length}</p>
             </div>
           </Card>
           <Card>
             <div className="text-center">
-              <p className="text-sm text-neutral-600">В обработке</p>
+              <p className="text-sm text-neutral-400">В обработке</p>
               <p className="text-2xl font-bold text-yellow-600">
                 {incidents.filter((i) => i.status === 'in_progress').length}
               </p>
@@ -131,7 +131,7 @@ const AdminIncidents: React.FC = () => {
           </Card>
           <Card>
             <div className="text-center">
-              <p className="text-sm text-neutral-600">Решено</p>
+              <p className="text-sm text-neutral-400">Решено</p>
               <p className="text-2xl font-bold text-green-600">
                 {incidents.filter((i) => i.status === 'resolved').length}
               </p>
@@ -144,26 +144,26 @@ const AdminIncidents: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="min-w-full">
               <thead>
-                <tr className="border-b border-neutral-200">
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                <tr className="border-b border-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     ID
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Тип
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Описание
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Автомобиль
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Пользователь
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Статус
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Действия
                   </th>
                 </tr>
@@ -171,26 +171,26 @@ const AdminIncidents: React.FC = () => {
               <tbody>
                 {filteredIncidents.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-8 text-neutral-500">
+                    <td colSpan={7} className="text-center py-8 text-neutral-400">
                       Инциденты не найдены
                     </td>
                   </tr>
                 ) : (
                   filteredIncidents.map((incident) => (
-                    <tr key={incident.id} className="border-b border-neutral-100 hover:bg-neutral-50">
-                      <td className="py-3 px-4 text-sm font-mono text-neutral-900">
+                    <tr key={incident.id} className="border-b border-neutral-800 hover:bg-neutral-800">
+                      <td className="py-3 px-4 text-sm font-mono text-neutral-50">
                         #{incident.id}
                       </td>
-                      <td className="py-3 px-4 text-sm text-neutral-900">
+                      <td className="py-3 px-4 text-sm text-neutral-50">
                         {incidentTypes[incident.incident_type as keyof typeof incidentTypes] || incident.incident_type}
                       </td>
-                      <td className="py-3 px-4 text-sm text-neutral-700 max-w-xs truncate">
+                      <td className="py-3 px-4 text-sm text-neutral-300 max-w-xs truncate">
                         {incident.description}
                       </td>
-                      <td className="py-3 px-4 text-sm text-neutral-600">
+                      <td className="py-3 px-4 text-sm text-neutral-400">
                         Авто #{incident.vehicle_id}
                       </td>
-                      <td className="py-3 px-4 text-sm text-neutral-600">
+                      <td className="py-3 px-4 text-sm text-neutral-400">
                         {incident.user_id ? `Клиент #${incident.user_id}` : '-'}
                       </td>
                       <td className="py-3 px-4">

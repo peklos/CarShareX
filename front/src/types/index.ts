@@ -52,6 +52,7 @@ export interface Vehicle {
   status: 'available' | 'in_use' | 'maintenance';
   parking_zone_id?: number;
   tariff_id?: number;
+  tariff?: Tariff;
 }
 
 export interface VehicleFilters {
@@ -69,9 +70,7 @@ export interface Booking {
   vehicle_id: number;
   tariff_id: number;
   start_time: string;
-  start_datetime: string;
   end_time?: string;
-  end_datetime?: string;
   total_cost: number;
   status: 'pending' | 'active' | 'completed';
 }
@@ -90,7 +89,7 @@ export interface Transaction {
   transaction_type: 'payment' | 'deposit' | 'penalty';
   amount: number;
   description?: string;
-  created_at: string;
+  created_at?: string;
   status: 'completed' | 'pending' | 'failed';
 }
 

@@ -4,8 +4,9 @@ import { API_URL, STORAGE_KEYS } from '../../utils/constants';
 
 export interface CreateBookingData {
   vehicle_id: number;
-  start_datetime: string; // ISO format
-  end_datetime: string; // ISO format
+  tariff_id: number;
+  start_time: string; // ISO datetime format
+  duration_hours: number; // Duration in hours
 }
 
 export const bookingsApi = {
@@ -33,17 +34,23 @@ export const bookingsApi = {
     if (!userStr) throw new Error('User not authenticated');
     const user = JSON.parse(userStr);
 
-    const response = await axios.post<Booking>(`${API_URL}/bookings/`, {
-      user_id: user.id,
-      ...data,
-    });
+    // Backend expects user_id as query param, booking data in body
+    const response = await axios.post<Booking>(
+      `${API_URL}/bookings/?user_id=${user.id}`,
+      data
+    );
     return response.data;
   },
 
   // Complete booking
-  completeBooking: async (id: number): Promise<Booking> => {
-    const response = await axios.put<Booking>(
-      `${API_URL}/bookings/${id}/complete`
+  completeBooking: async (id: number, end_time: string, total_cost: number): Promise<Booking> => {
+    // Backend expects PATCH with complete_data in body
+    const response = await axios.patch<Booking>(
+      `${API_URL}/bookings/${id}/complete`,
+      {
+        end_time,
+        total_cost,
+      }
     );
     return response.data;
   },

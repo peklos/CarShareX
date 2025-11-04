@@ -140,7 +140,7 @@ const Transactions: React.FC = () => {
               Пополнить баланс
             </Button>
           </div>
-          <p className="text-neutral-600">История операций с балансом</p>
+          <p className="text-neutral-400">История операций с балансом</p>
         </motion.div>
 
         {/* Balance Card */}
@@ -169,7 +169,7 @@ const Transactions: React.FC = () => {
         {/* Transactions count */}
         {!loading && transactions.length > 0 && (
           <div className="mb-4">
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-neutral-400">
               Всего операций: <span className="font-semibold">{transactions.length}</span>
             </p>
           </div>
@@ -194,19 +194,21 @@ const Transactions: React.FC = () => {
                         </div>
                         <div>
                           <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="font-semibold text-neutral-900">
+                            <h3 className="font-semibold text-neutral-50">
                               {getTypeLabel(transaction.transaction_type)}
                             </h3>
                             {getTypeBadge(transaction.transaction_type)}
                           </div>
                           {transaction.description && (
-                            <p className="text-sm text-neutral-600">
+                            <p className="text-sm text-neutral-400">
                               {transaction.description}
                             </p>
                           )}
-                          <p className="text-xs text-neutral-500 mt-1">
-                            {formatDateTime(transaction.created_at)}
-                          </p>
+                          {transaction.created_at && (
+                            <p className="text-xs text-neutral-400 mt-1">
+                              {formatDateTime(transaction.created_at)}
+                            </p>
+                          )}
                         </div>
                       </div>
                       <div className="text-right">
@@ -237,10 +239,10 @@ const Transactions: React.FC = () => {
             className="flex flex-col items-center justify-center py-20"
           >
             <CreditCardIcon className="h-24 w-24 text-neutral-300 mb-4" />
-            <h3 className="text-xl font-semibold text-neutral-700 mb-2">
+            <h3 className="text-xl font-semibold text-neutral-300 mb-2">
               У вас пока нет транзакций
             </h3>
-            <p className="text-neutral-500 mb-6">
+            <p className="text-neutral-400 mb-6">
               Пополните баланс для начала работы с сервисом
             </p>
             <Button
@@ -258,15 +260,15 @@ const Transactions: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-2xl shadow-2xl max-w-md w-full"
+              className="bg-neutral-800 rounded-2xl shadow-2xl max-w-md w-full"
             >
               <div className="p-6">
-                <h2 className="text-2xl font-bold text-neutral-900 mb-4">
+                <h2 className="text-2xl font-bold text-neutral-50 mb-4">
                   Пополнение баланса
                 </h2>
                 <form onSubmit={handleDeposit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    <label className="block text-sm font-medium text-neutral-300 mb-2">
                       Сумма пополнения
                     </label>
                     <input
@@ -277,7 +279,7 @@ const Transactions: React.FC = () => {
                       step="0.01"
                       required
                       placeholder="1000"
-                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full px-4 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     />
                   </div>
 

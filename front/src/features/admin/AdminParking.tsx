@@ -154,7 +154,7 @@ const AdminParking: React.FC = () => {
               Добавить зону
             </Button>
           </div>
-          <p className="text-neutral-600">Управление парковочными зонами</p>
+          <p className="text-neutral-400">Управление парковочными зонами</p>
         </motion.div>
 
         {/* Parking Zones Table */}
@@ -162,20 +162,20 @@ const AdminParking: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="min-w-full">
               <thead>
-                <tr className="border-b border-neutral-200">
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                <tr className="border-b border-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     ID
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Название
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Адрес
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-300">
                     Вместимость
                   </th>
-                  <th className="text-right py-3 px-4 text-sm font-semibold text-neutral-700">
+                  <th className="text-right py-3 px-4 text-sm font-semibold text-neutral-300">
                     Действия
                   </th>
                 </tr>
@@ -183,36 +183,36 @@ const AdminParking: React.FC = () => {
               <tbody>
                 {parkingZones.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="text-center py-8 text-neutral-500">
+                    <td colSpan={5} className="text-center py-8 text-neutral-400">
                       Парковочные зоны не найдены
                     </td>
                   </tr>
                 ) : (
                   parkingZones.map((zone) => (
-                    <tr key={zone.id} className="border-b border-neutral-100 hover:bg-neutral-50">
-                      <td className="py-3 px-4 text-sm font-mono text-neutral-900">
+                    <tr key={zone.id} className="border-b border-neutral-800 hover:bg-neutral-800">
+                      <td className="py-3 px-4 text-sm font-mono text-neutral-50">
                         #{zone.id}
                       </td>
-                      <td className="py-3 px-4 text-sm font-semibold text-neutral-900">
+                      <td className="py-3 px-4 text-sm font-semibold text-neutral-50">
                         {zone.name}
                       </td>
-                      <td className="py-3 px-4 text-sm text-neutral-600">
+                      <td className="py-3 px-4 text-sm text-neutral-400">
                         {zone.address}
                       </td>
-                      <td className="py-3 px-4 text-sm text-neutral-900">
+                      <td className="py-3 px-4 text-sm text-neutral-50">
                         {zone.capacity} мест
                       </td>
                       <td className="py-3 px-4 text-right">
                         <div className="flex gap-2 justify-end">
                           <button
                             onClick={() => handleOpenModal(zone)}
-                            className="p-2 text-neutral-600 hover:text-primary-500 transition-colors"
+                            className="p-2 text-neutral-400 hover:text-primary-500 transition-colors"
                           >
                             <PencilIcon className="h-5 w-5" />
                           </button>
                           <button
                             onClick={() => handleDelete(zone.id)}
-                            className="p-2 text-neutral-600 hover:text-red-500 transition-colors"
+                            className="p-2 text-neutral-400 hover:text-red-500 transition-colors"
                           >
                             <TrashIcon className="h-5 w-5" />
                           </button>
@@ -232,16 +232,16 @@ const AdminParking: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-lg shadow-xl max-w-md w-full"
+              className="bg-neutral-800 rounded-lg shadow-xl max-w-md w-full"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-neutral-900">
+                  <h2 className="text-2xl font-bold text-neutral-50">
                     {editingZone ? 'Редактировать зону' : 'Новая парковочная зона'}
                   </h2>
                   <button
                     onClick={handleCloseModal}
-                    className="text-neutral-400 hover:text-neutral-600"
+                    className="text-neutral-400 hover:text-neutral-400"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
