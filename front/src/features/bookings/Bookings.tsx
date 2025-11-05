@@ -146,7 +146,7 @@ const Bookings: React.FC = () => {
                                     ? (() => {
                                         const startDate = new Date(booking.start_time);
                                         const estimatedEnd = new Date(startDate.getTime() + booking.duration_hours * 60 * 60 * 1000);
-                                        return `${formatDateTime(estimatedEnd)} (ожидается)`;
+                                        return `${formatDateTime(estimatedEnd.toISOString())} (ожидается)`;
                                       })()
                                     : 'В процессе'}
                               </p>
