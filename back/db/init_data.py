@@ -77,7 +77,7 @@ def initialize_database(db: Session):
     tariffs_data = [
         {"name": "Поминутный", "price_per_minute": 8.0, "price_per_hour": None},
         {"name": "Почасовой", "price_per_minute": None, "price_per_hour": 350.0},
-        {"name": "Суточный", "price_per_minute": None, "price_per_hour": 2500.0},
+        {"name": "Суточный", "price_per_minute": None, "price_per_hour": 100.0},  # ~2400₽ за сутки
         {"name": "Премиум", "price_per_minute": 12.0, "price_per_hour": 550.0}
     ]
 
