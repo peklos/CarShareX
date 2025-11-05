@@ -145,6 +145,7 @@ app.include_router(admin_tariffs.router)
 app.include_router(admin_parking.router)
 app.include_router(admin_branches.router)
 app.include_router(admin_stats.router)
+app.include_router(update_images.router)
 
 # === СТАТИЧЕСКИЕ ФАЙЛЫ ===
 # Создаем папку static если её нет
