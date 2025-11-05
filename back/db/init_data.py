@@ -59,11 +59,11 @@ def initialize_database(db: Session):
 
     # Пользователи
     users_data = [
-        {"first_name": "Иван", "last_name": "Морозов", "email": "morozov@mail.ru", "phone": "+79161234572", "password": "user123", "drivers_license": "77 12 345678", "balance": 500.0},
-        {"first_name": "Елена", "last_name": "Васильева", "email": "vasileva@gmail.com", "phone": "+79161234573", "password": "user123", "drivers_license": "77 23 456789", "balance": 1000.0},
-        {"first_name": "Михаил", "last_name": "Новиков", "email": "novikov@yandex.ru", "phone": "+79161234574", "password": "user123", "drivers_license": "77 34 567890", "balance": 250.0},
-        {"first_name": "Ольга", "last_name": "Козлова", "email": "kozlova@mail.ru", "phone": "+79161234575", "password": "user123", "drivers_license": "77 45 678901", "balance": 750.0},
-        {"first_name": "Александр", "last_name": "Лебедев", "email": "lebedev@gmail.com", "phone": "+79161234576", "password": "user123", "drivers_license": "77 56 789012", "balance": 300.0}
+        {"first_name": "Иван", "last_name": "Морозов", "email": "morozov@mail.ru", "phone": "+79161234572", "password": "user123", "drivers_license": "77 12 345678", "balance": 10000.0},
+        {"first_name": "Елена", "last_name": "Васильева", "email": "vasileva@gmail.com", "phone": "+79161234573", "password": "user123", "drivers_license": "77 23 456789", "balance": 10000.0},
+        {"first_name": "Михаил", "last_name": "Новиков", "email": "novikov@yandex.ru", "phone": "+79161234574", "password": "user123", "drivers_license": "77 34 567890", "balance": 10000.0},
+        {"first_name": "Ольга", "last_name": "Козлова", "email": "kozlova@mail.ru", "phone": "+79161234575", "password": "user123", "drivers_license": "77 45 678901", "balance": 10000.0},
+        {"first_name": "Александр", "last_name": "Лебедев", "email": "lebedev@gmail.com", "phone": "+79161234576", "password": "user123", "drivers_license": "77 56 789012", "balance": 10000.0}
     ]
 
     for user_data in users_data:

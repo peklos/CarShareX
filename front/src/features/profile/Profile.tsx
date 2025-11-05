@@ -35,6 +35,8 @@ const Profile: React.FC = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showTopUp, setShowTopUp] = useState(false);
+  const [topUpAmount, setTopUpAmount] = useState('1000');
 
   const {
     register,
@@ -98,6 +100,29 @@ const Profile: React.FC = () => {
     setIsEditing(false);
   };
 
+  const handleTopUp = async () => {
+    const amount = parseFloat(topUpAmount);
+
+    if (isNaN(amount) || amount <= 0) {
+      toast.error('Введите корректную сумму');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const updatedUser = await profileApi.topUpBalance(amount);
+      dispatch(updateUser(updatedUser));
+      toast.success(`Баланс пополнен на ${amount.toFixed(2)} ₽`);
+      setShowTopUp(false);
+      setTopUpAmount('1000');
+    } catch (error: any) {
+      const message = error.response?.data?.detail || 'Ошибка пополнения баланса';
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!user || !isUser(user)) {
     return (
       <Layout>
@@ -146,9 +171,17 @@ const Profile: React.FC = () => {
           >
             <Card className="bg-gradient-to-r from-primary-500 to-orange-500">
               <div className="p-6 text-white">
-                <div className="flex items-center space-x-2 mb-2">
-                  <CreditCardIcon className="h-6 w-6" />
-                  <p className="text-sm opacity-90">Текущий баланс</p>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    <CreditCardIcon className="h-6 w-6" />
+                    <p className="text-sm opacity-90">Текущий баланс</p>
+                  </div>
+                  <button
+                    onClick={() => setShowTopUp(true)}
+                    className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors"
+                  >
+                    Пополнить
+                  </button>
                 </div>
                 <p className="text-4xl font-bold">{formatCurrency(user.balance)}</p>
               </div>
@@ -301,6 +334,66 @@ const Profile: React.FC = () => {
             </div>
           </Card>
         </motion.div>
+
+        {/* Top Up Modal */}
+        {showTopUp && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-neutral-900 rounded-xl p-6 max-w-md w-full"
+            >
+              <h3 className="text-2xl font-bold text-neutral-50 mb-4">
+                Пополнение баланса
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-neutral-300 mb-2">
+                    Сумма пополнения (₽)
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    step="1"
+                    value={topUpAmount}
+                    onChange={(e) => setTopUpAmount(e.target.value)}
+                    className="w-full px-4 py-3 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="1000"
+                  />
+                </div>
+                <div className="flex space-x-2">
+                  {[500, 1000, 2500, 5000].map((amount) => (
+                    <button
+                      key={amount}
+                      onClick={() => setTopUpAmount(amount.toString())}
+                      className="flex-1 px-3 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-50 rounded-lg text-sm transition-colors"
+                    >
+                      {amount} ₽
+                    </button>
+                  ))}
+                </div>
+                <div className="flex space-x-3 pt-4">
+                  <Button
+                    variant="primary"
+                    onClick={handleTopUp}
+                    loading={loading}
+                    className="flex-1"
+                  >
+                    Пополнить
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowTopUp(false)}
+                    disabled={loading}
+                    className="flex-1"
+                  >
+                    Отмена
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
       </div>
     </Layout>
   );
