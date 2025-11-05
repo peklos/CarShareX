@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { Booking } from '../../types';
 import { API_URL, STORAGE_KEYS } from '../../utils/constants';
+import { apiGet, apiPost, apiPatch, ApiResponse } from '../../utils/apiWrapper';
 
 export interface CreateBookingData {
   vehicle_id: number;
@@ -11,47 +11,41 @@ export interface CreateBookingData {
 
 export const bookingsApi = {
   // Get all user bookings
-  getUserBookings: async (): Promise<Booking[]> => {
+  getUserBookings: async (): Promise<ApiResponse<Booking[]>> => {
     const userStr = localStorage.getItem(STORAGE_KEYS.USER);
-    if (!userStr) throw new Error('User not authenticated');
+    if (!userStr) return { data: null, error: 'User not authenticated' };
     const user = JSON.parse(userStr);
 
-    const response = await axios.get<Booking[]>(
-      `${API_URL}/bookings/user/${user.id}`
-    );
-    return response.data;
+    return apiGet<Booking[]>(`${API_URL}/bookings/user/${user.id}`);
   },
 
   // Get booking by ID
-  getBookingById: async (id: number): Promise<Booking> => {
-    const response = await axios.get<Booking>(`${API_URL}/bookings/${id}`);
-    return response.data;
+  getBookingById: async (id: number): Promise<ApiResponse<Booking>> => {
+    return apiGet<Booking>(`${API_URL}/bookings/${id}`);
   },
 
   // Create new booking
-  createBooking: async (data: CreateBookingData): Promise<Booking> => {
+  createBooking: async (data: CreateBookingData): Promise<ApiResponse<Booking>> => {
     const userStr = localStorage.getItem(STORAGE_KEYS.USER);
-    if (!userStr) throw new Error('User not authenticated');
+    if (!userStr) return { data: null, error: 'User not authenticated' };
     const user = JSON.parse(userStr);
 
     // Backend expects user_id as query param, booking data in body
-    const response = await axios.post<Booking>(
+    return apiPost<Booking>(
       `${API_URL}/bookings/?user_id=${user.id}`,
       data
     );
-    return response.data;
   },
 
   // Complete booking
-  completeBooking: async (id: number, end_time: string, total_cost: number): Promise<Booking> => {
+  completeBooking: async (id: number, end_time: string, total_cost: number): Promise<ApiResponse<Booking>> => {
     // Backend expects PATCH with complete_data in body
-    const response = await axios.patch<Booking>(
+    return apiPatch<Booking>(
       `${API_URL}/bookings/${id}/complete`,
       {
         end_time,
         total_cost,
       }
     );
-    return response.data;
   },
 };

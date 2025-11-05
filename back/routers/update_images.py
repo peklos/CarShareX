@@ -10,11 +10,11 @@ def update_car_images(db: Session = Depends(database.get_db)):
     """Обновить все картинки автомобилей на Loremflickr"""
 
     car_images = [
-        "https://loremflickr.com/800/600/car?random=1",
-        "https://loremflickr.com/800/600/car?random=2",
-        "https://loremflickr.com/800/600/car?random=3",
-        "https://loremflickr.com/800/600/car?random=4",
-        "https://loremflickr.com/800/600/car?random=5"
+        "https://loremflickr.com/800/600/audi?random=1",
+        "https://loremflickr.com/800/600/audi?random=2",
+        "https://loremflickr.com/800/600/audi?random=3",
+        "https://loremflickr.com/800/600/audi?random=4",
+        "https://loremflickr.com/800/600/audi?random=5"
     ]
 
     vehicles = db.query(models.Vehicle).all()

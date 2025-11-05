@@ -17,11 +17,11 @@ def initialize_database(db: Session):
     # Список картинок автомобилей из Loremflickr (доступно в РФ)
     # Каждый URL будет возвращать случайную картинку авто при каждом запросе
     car_images = [
-        "https://loremflickr.com/800/600/car?random=1",
-        "https://loremflickr.com/800/600/car?random=2",
-        "https://loremflickr.com/800/600/car?random=3",
-        "https://loremflickr.com/800/600/car?random=4",
-        "https://loremflickr.com/800/600/car?random=5"
+        "https://loremflickr.com/800/600/audi?random=1",
+        "https://loremflickr.com/800/600/audi?random=2",
+        "https://loremflickr.com/800/600/audi?random=3",
+        "https://loremflickr.com/800/600/audi?random=4",
+        "https://loremflickr.com/800/600/audi?random=5"
     ]
 
     def get_random_car_image():

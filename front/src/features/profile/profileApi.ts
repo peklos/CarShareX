@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { User } from '../../types';
 import { API_URL, STORAGE_KEYS } from '../../utils/constants';
+import { apiGet, apiPost, apiPatch, ApiResponse } from '../../utils/apiWrapper';
 
 export interface UpdateProfileData {
   first_name: string;
@@ -11,34 +11,31 @@ export interface UpdateProfileData {
 
 export const profileApi = {
   // Get current user profile
-  getProfile: async (): Promise<User> => {
+  getProfile: async (): Promise<ApiResponse<User>> => {
     const userStr = localStorage.getItem(STORAGE_KEYS.USER);
-    if (!userStr) throw new Error('User not authenticated');
+    if (!userStr) return { data: null, error: 'User not authenticated' };
     const user = JSON.parse(userStr);
 
-    const response = await axios.get<User>(`${API_URL}/profile/${user.id}`);
-    return response.data;
+    return apiGet<User>(`${API_URL}/profile/${user.id}`);
   },
 
   // Update user profile
-  updateProfile: async (data: UpdateProfileData): Promise<User> => {
+  updateProfile: async (data: UpdateProfileData): Promise<ApiResponse<User>> => {
     const userStr = localStorage.getItem(STORAGE_KEYS.USER);
-    if (!userStr) throw new Error('User not authenticated');
+    if (!userStr) return { data: null, error: 'User not authenticated' };
     const user = JSON.parse(userStr);
 
-    const response = await axios.patch<User>(`${API_URL}/profile/${user.id}`, data);
-    return response.data;
+    return apiPatch<User>(`${API_URL}/profile/${user.id}`, data);
   },
 
   // Top up balance
-  topUpBalance: async (amount: number): Promise<User> => {
+  topUpBalance: async (amount: number): Promise<ApiResponse<User>> => {
     const userStr = localStorage.getItem(STORAGE_KEYS.USER);
-    if (!userStr) throw new Error('User not authenticated');
+    if (!userStr) return { data: null, error: 'User not authenticated' };
     const user = JSON.parse(userStr);
 
-    const response = await axios.post<User>(`${API_URL}/profile/${user.id}/top-up`, {
+    return apiPost<User>(`${API_URL}/profile/${user.id}/top-up`, {
       amount: amount,
     });
-    return response.data;
   },
 };
