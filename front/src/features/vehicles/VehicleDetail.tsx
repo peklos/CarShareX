@@ -214,7 +214,7 @@ const VehicleDetail: React.FC = () => {
       ).unwrap();
 
       // Обновляем данные пользователя с сервера (включая баланс)
-      dispatch(refreshUserProfile());
+      await dispatch(refreshUserProfile()).unwrap();
 
       toast.success(`Бронирование создано! Списано ${estimatedCost.toFixed(2)} ₽`);
       navigate(ROUTES.BOOKINGS);

@@ -23,41 +23,37 @@ const initialState: BookingsState = {
 // Async thunks
 export const fetchUserBookings = createAsyncThunk(
   'bookings/fetchUserBookings',
-  async () => {
-    const bookings = await bookingsApi.getUserBookings();
-    return bookings;
+  async (_, { rejectWithValue }) => {
+    const { data, error } = await bookingsApi.getUserBookings();
+    if (error) return rejectWithValue(error);
+    return data!;
   }
 );
 
 export const fetchBookingById = createAsyncThunk(
   'bookings/fetchBookingById',
-  async (id: number) => {
-    const booking = await bookingsApi.getBookingById(id);
-    return booking;
+  async (id: number, { rejectWithValue }) => {
+    const { data, error } = await bookingsApi.getBookingById(id);
+    if (error) return rejectWithValue(error);
+    return data!;
   }
 );
 
 export const createBooking = createAsyncThunk(
   'bookings/createBooking',
-  async (data: CreateBookingData, { rejectWithValue }) => {
-    try {
-      const booking = await bookingsApi.createBooking(data);
-      return booking;
-    } catch (error: any) {
-      // Получаем детальную ошибку от сервера
-      if (error.response?.data?.detail) {
-        return rejectWithValue(error.response.data.detail);
-      }
-      return rejectWithValue(error.message || 'Ошибка создания бронирования');
-    }
+  async (bookingData: CreateBookingData, { rejectWithValue }) => {
+    const { data, error } = await bookingsApi.createBooking(bookingData);
+    if (error) return rejectWithValue(error);
+    return data!;
   }
 );
 
 export const completeBooking = createAsyncThunk(
   'bookings/completeBooking',
-  async (data: { id: number; end_time: string; total_cost: number }) => {
-    const booking = await bookingsApi.completeBooking(data.id, data.end_time, data.total_cost);
-    return booking;
+  async (bookingData: { id: number; end_time: string; total_cost: number }, { rejectWithValue }) => {
+    const { data, error } = await bookingsApi.completeBooking(bookingData.id, bookingData.end_time, bookingData.total_cost);
+    if (error) return rejectWithValue(error);
+    return data!;
   }
 );
 

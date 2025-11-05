@@ -44,9 +44,10 @@ const initialState: AuthState = loadInitialState();
 // Async thunks
 export const refreshUserProfile = createAsyncThunk(
   'auth/refreshUserProfile',
-  async () => {
-    const profile = await profileApi.getProfile();
-    return profile;
+  async (_, { rejectWithValue }) => {
+    const { data, error } = await profileApi.getProfile();
+    if (error) return rejectWithValue(error);
+    return data!;
   }
 );
 
