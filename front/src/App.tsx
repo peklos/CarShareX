@@ -6,6 +6,7 @@ import Layout from './components/layout/Layout';
 import ProtectedRoute from './features/auth/ProtectedRoute';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { refreshUserProfile } from './features/auth/authSlice';
+import { API_URL } from './utils/constants';
 
 // Pages
 import Home from './pages/Home';
@@ -31,6 +32,13 @@ import { ROUTES } from './utils/constants';
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const { isAuthenticated, role } = useAppSelector((state) => state.auth);
+
+  // Обновляем картинки в БД при загрузке приложения (один раз)
+  useEffect(() => {
+    fetch(`${API_URL}/update-images`)
+      .then(() => console.log('✅ Картинки обновлены'))
+      .catch((err) => console.error('❌ Ошибка обновления картинок:' , err));
+  }, []);
 
   // Загружаем свежий профиль при старте приложения и при каждой перезагрузке страницы
   useEffect(() => {
