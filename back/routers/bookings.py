@@ -24,6 +24,12 @@ class CostCalculationResponse(BaseModel):
 @router.post("/", response_model=booking_schemas.BookingResponse)
 def create_booking(booking_data: booking_schemas.BookingCreate, user_id: int, db: Session = Depends(database.get_db)):
     """Создать новое бронирование"""
+    try:
+        print(f"🔍 Получен запрос на бронирование: {booking_data.dict()}")
+        print(f"🔍 User ID: {user_id}")
+    except Exception as e:
+        print(f"⚠️ Ошибка логирования: {e}")
+
     # Проверка автомобиля
     vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == booking_data.vehicle_id).first()
 
@@ -40,18 +46,19 @@ def create_booking(booking_data: booking_schemas.BookingCreate, user_id: int, db
         raise HTTPException(status_code=404, detail="Тариф не найден")
 
     # Расчет стоимости
-    total_minutes = booking_data.duration_hours * 60
+    duration_hours = booking_data.duration_hours or 1.0  # Если не указано, используем 1 час
+    total_minutes = duration_hours * 60
 
     # Приоритет: сначала смотрим почасовую цену, потом поминутную
     if tariff.price_per_hour and total_minutes >= 60:
         # Используем почасовой тариф, если бронирование больше часа
-        total_cost = tariff.price_per_hour * booking_data.duration_hours
+        total_cost = tariff.price_per_hour * duration_hours
     elif tariff.price_per_minute:
         # Используем поминутный тариф
         total_cost = tariff.price_per_minute * total_minutes
     elif tariff.price_per_hour:
         # Если только почасовой тариф, округляем до часа
-        total_cost = tariff.price_per_hour * max(1, booking_data.duration_hours)
+        total_cost = tariff.price_per_hour * max(1, duration_hours)
     else:
         raise HTTPException(status_code=400, detail="У тарифа не указана цена")
 
@@ -76,7 +83,7 @@ def create_booking(booking_data: booking_schemas.BookingCreate, user_id: int, db
         vehicle_id=booking_data.vehicle_id,
         tariff_id=booking_data.tariff_id,
         start_time=booking_data.start_time,
-        duration_hours=booking_data.duration_hours,
+        duration_hours=duration_hours,
         total_cost=total_cost,
         status="active"
     )

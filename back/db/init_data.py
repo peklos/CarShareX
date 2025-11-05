@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from . import models
+import random
 
 def initialize_database(db: Session):
     """Инициализация базы данных тестовыми данными"""
@@ -12,6 +13,19 @@ def initialize_database(db: Session):
     print("\n" + "="*50)
     print("🚀 Инициализация базы данных...")
     print("="*50 + "\n")
+
+    # Список доступных картинок автомобилей (доступны в РФ)
+    car_images = [
+        "https://cdn.pixabay.com/photo/2016/11/18/17/46/automobile-1835506_1280.jpg",
+        "https://cdn.pixabay.com/photo/2017/03/05/00/34/panorama-2117310_1280.jpg",
+        "https://cdn.pixabay.com/photo/2015/07/11/23/02/plane-841441_1280.jpg",
+        "https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg",
+        "https://cdn.pixabay.com/photo/2012/11/02/13/02/car-63930_1280.jpg"
+    ]
+
+    def get_random_car_image():
+        """Возвращает случайную картинку автомобиля"""
+        return random.choice(car_images)
 
     # Роли
     roles_data = [
@@ -157,11 +171,13 @@ def initialize_database(db: Session):
     ]
 
     for vehicle_data in vehicles_data:
+        # Заменяем image_url на случайную картинку из доступных
+        vehicle_data['image_url'] = get_random_car_image()
         vehicle = models.Vehicle(**vehicle_data)
         db.add(vehicle)
 
     db.commit()
-    print("✅ Автомобили созданы")
+    print("✅ Автомобили созданы (с рандомными картинками из 5 доступных в РФ)")
 
     # Бронирования (расширенный список)
     from datetime import datetime, timedelta
