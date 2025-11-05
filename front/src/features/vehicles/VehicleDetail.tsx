@@ -307,20 +307,15 @@ const VehicleDetail: React.FC = () => {
             <Card className="overflow-hidden">
               {/* Image */}
               <div className="relative h-64 lg:h-96 bg-neutral-800">
-                {vehicle.image_url ? (
-                  <img
-                    src={optimizeImageUrl(vehicle.image_url, IMAGE_SIZES.detail)}
-                    srcSet={generateSrcSet(vehicle.image_url, [600, 800, 1200, 1600])}
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    alt={`${vehicle.brand} ${vehicle.model}`}
-                    className="w-full h-full object-cover"
-                    loading="eager"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full bg-gradient-to-br from-neutral-100 to-neutral-200">
-                    <TruckIcon className="h-24 w-24 text-neutral-400" />
-                  </div>
-                )}
+                <img
+                  src="/car.png"
+                  alt={`${vehicle.brand} ${vehicle.model}`}
+                  className="w-full h-full object-cover"
+                  loading="eager"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
                 <div className="absolute top-4 right-4">
                   {getStatusBadge(vehicle.status)}
                 </div>

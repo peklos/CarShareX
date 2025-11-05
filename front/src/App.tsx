@@ -32,11 +32,23 @@ const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const { isAuthenticated, role } = useAppSelector((state) => state.auth);
 
-  // Загружаем свежий профиль при старте приложения (если пользователь залогинен)
+  // Загружаем свежий профиль при старте приложения и при каждой перезагрузке страницы
   useEffect(() => {
     if (isAuthenticated && role === 'client') {
       dispatch(refreshUserProfile());
     }
+  }, [dispatch, isAuthenticated, role]);
+
+  // Обновляем баланс при возвращении на вкладку
+  useEffect(() => {
+    const handleFocus = () => {
+      if (isAuthenticated && role === 'client') {
+        dispatch(refreshUserProfile());
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, [dispatch, isAuthenticated, role]);
 
   return (
