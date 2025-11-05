@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from db.database import engine, Base, SessionLocal
 from db.init_data import initialize_database
 from sqlalchemy import text, inspect
 from datetime import datetime
+import os
 
 # Роутеры клиентов
 from routers import auth
@@ -127,6 +129,13 @@ app.include_router(admin_tariffs.router)
 app.include_router(admin_parking.router)
 app.include_router(admin_branches.router)
 app.include_router(admin_stats.router)
+
+# === СТАТИЧЕСКИЕ ФАЙЛЫ ===
+# Создаем папку static если её нет
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    print("✅ Статические файлы подключены")
 
 @app.get("/", tags=["Main"])
 def root():
