@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import models, database
-import random
 
 router = APIRouter(prefix="/admin", tags=["Утилиты"])
 
@@ -9,19 +8,13 @@ router = APIRouter(prefix="/admin", tags=["Утилиты"])
 def update_car_images(db: Session = Depends(database.get_db)):
     """Обновить все картинки автомобилей на Loremflickr"""
 
-    car_images = [
-        "https://loremflickr.com/800/600/audi?random=1",
-        "https://loremflickr.com/800/600/audi?random=2",
-        "https://loremflickr.com/800/600/audi?random=3",
-        "https://loremflickr.com/800/600/audi?random=4",
-        "https://loremflickr.com/800/600/audi?random=5"
-    ]
+    car_image_url = "http://loremflickr.com/800/600/car"
 
     vehicles = db.query(models.Vehicle).all()
     updated_count = 0
 
     for vehicle in vehicles:
-        vehicle.image_url = random.choice(car_images)
+        vehicle.image_url = car_image_url
         updated_count += 1
 
     db.commit()
