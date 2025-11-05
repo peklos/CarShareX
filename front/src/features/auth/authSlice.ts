@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { User, Employee } from '../../types';
 import { STORAGE_KEYS } from '../../utils/constants';
+import { profileApi } from '../profile/profileApi';
 
 interface AuthState {
   user: User | Employee | null;
@@ -39,6 +40,15 @@ const loadInitialState = (): AuthState => {
 };
 
 const initialState: AuthState = loadInitialState();
+
+// Async thunks
+export const refreshUserProfile = createAsyncThunk(
+  'auth/refreshUserProfile',
+  async () => {
+    const profile = await profileApi.getProfile();
+    return profile;
+  }
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -84,6 +94,17 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      // Refresh user profile
+      .addCase(refreshUserProfile.fulfilled, (state, action) => {
+        state.user = action.payload;
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(action.payload));
+      })
+      .addCase(refreshUserProfile.rejected, (state, action) => {
+        console.error('Failed to refresh user profile:', action.error);
+      });
   },
 });
 

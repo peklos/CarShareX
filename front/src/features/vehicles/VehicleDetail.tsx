@@ -13,7 +13,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchVehicleById } from './vehiclesSlice';
 import { createBooking } from '../bookings/bookingsSlice';
-import { updateUser } from '../auth/authSlice';
+import { refreshUserProfile } from '../auth/authSlice';
 import Layout from '../../components/layout/Layout';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
@@ -213,16 +213,14 @@ const VehicleDetail: React.FC = () => {
         })
       ).unwrap();
 
-      // Обновляем баланс пользователя после успешного бронирования
-      if (user && 'balance' in user) {
-        const newBalance = user.balance - estimatedCost;
-        dispatch(updateUser({ balance: newBalance }));
-      }
+      // Обновляем данные пользователя с сервера (включая баланс)
+      dispatch(refreshUserProfile());
 
       toast.success(`Бронирование создано! Списано ${estimatedCost.toFixed(2)} ₽`);
       navigate(ROUTES.BOOKINGS);
     } catch (error: any) {
-      toast.error(createError || 'Ошибка создания бронирования');
+      // Ошибка уже обработана в slice и доступна через createError
+      console.error('Booking error:', error);
     }
   };
 
