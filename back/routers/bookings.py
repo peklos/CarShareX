@@ -10,20 +10,22 @@ router = APIRouter(prefix="/bookings", tags=["Бронирования клие�
 
 class CostCalculationRequest(BaseModel):
     tariff_id: int
-    duration_hours: float
+    start_date: str  # Дата в формате YYYY-MM-DD
+    end_date: str  # Дата в формате YYYY-MM-DD
 
 
 class CostCalculationResponse(BaseModel):
     tariff_id: int
     tariff_name: str
-    duration_hours: float
+    days_count: int
     total_cost: float
-    price_per_hour: Optional[float] = None
-    price_per_minute: Optional[float] = None
+    price_per_day: float
 
 @router.post("/", response_model=booking_schemas.BookingResponse)
 def create_booking(booking_data: booking_schemas.BookingCreate, user_id: int, db: Session = Depends(database.get_db)):
-    """Создать новое бронирование"""
+    """Создать новое бронирование (только посуточная аренда)"""
+    from datetime import datetime
+
     try:
         print(f"🔍 Получен запрос на бронирование: {booking_data.dict()}")
         print(f"🔍 User ID: {user_id}")
@@ -45,20 +47,21 @@ def create_booking(booking_data: booking_schemas.BookingCreate, user_id: int, db
     if not tariff:
         raise HTTPException(status_code=404, detail="Тариф не найден")
 
-    # Расчет стоимости
-    duration_hours = booking_data.duration_hours or 1.0  # Если не указано, используем 1 час
-    total_minutes = duration_hours * 60
+    # Расчет количества дней
+    days_count = (booking_data.end_date - booking_data.start_date).days
 
-    # Приоритет: сначала смотрим почасовую цену, потом поминутную
-    if tariff.price_per_hour and total_minutes >= 60:
-        # Используем почасовой тариф, если бронирование больше часа
-        total_cost = tariff.price_per_hour * duration_hours
+    if days_count <= 0:
+        raise HTTPException(status_code=400, detail="Дата окончания должна быть позже даты начала")
+
+    # Расчет стоимости (за день = 24 часа по почасовому тарифу)
+    if tariff.price_per_hour:
+        # Цена за день = цена за час * 24 часа
+        price_per_day = tariff.price_per_hour * 24
+        total_cost = price_per_day * days_count
     elif tariff.price_per_minute:
-        # Используем поминутный тариф
-        total_cost = tariff.price_per_minute * total_minutes
-    elif tariff.price_per_hour:
-        # Если только почасовой тариф, округляем до часа
-        total_cost = tariff.price_per_hour * max(1, duration_hours)
+        # Цена за день = цена за минуту * 1440 минут (24 часа)
+        price_per_day = tariff.price_per_minute * 1440
+        total_cost = price_per_day * days_count
     else:
         raise HTTPException(status_code=400, detail="У тарифа не указана цена")
 
@@ -77,13 +80,18 @@ def create_booking(booking_data: booking_schemas.BookingCreate, user_id: int, db
     # Списание с баланса
     user.balance -= total_cost
 
+    # Конвертируем даты в datetime (начало дня для start_date, конец дня для end_date)
+    start_datetime = datetime.combine(booking_data.start_date, datetime.min.time())
+    end_datetime = datetime.combine(booking_data.end_date, datetime.max.time())
+
     # Создание бронирования
     new_booking = models.Booking(
         user_id=user_id,
         vehicle_id=booking_data.vehicle_id,
         tariff_id=booking_data.tariff_id,
-        start_time=booking_data.start_time,
-        duration_hours=duration_hours,
+        start_time=start_datetime,
+        end_time=end_datetime,
+        duration_hours=None,  # Не используем для посуточной аренды
         total_cost=total_cost,
         status="active"
     )
@@ -97,7 +105,7 @@ def create_booking(booking_data: booking_schemas.BookingCreate, user_id: int, db
         booking_id=None,  # Будет обновлено после коммита
         transaction_type="payment",
         amount=total_cost,
-        description=f"Оплата бронирования автомобиля {vehicle.brand} {vehicle.model}",
+        description=f"Оплата бронирования автомобиля {vehicle.brand} {vehicle.model} на {days_count} дн.",
         status="completed"
     )
 
@@ -162,32 +170,45 @@ def complete_booking(booking_id: int, complete_data: booking_schemas.BookingComp
 
 @router.post("/calculate-cost", response_model=CostCalculationResponse)
 def calculate_booking_cost(request: CostCalculationRequest, db: Session = Depends(database.get_db)):
-    """Рассчитать стоимость бронирования"""
+    """Рассчитать стоимость бронирования (только посуточная аренда)"""
+    from datetime import datetime
+
     # Получение тарифа
     tariff = db.query(models.Tariff).filter(models.Tariff.id == request.tariff_id).first()
 
     if not tariff:
         raise HTTPException(status_code=404, detail="Тариф не найден")
 
-    # Расчет стоимости (используем ту же логику, что и при создании бронирования)
-    total_minutes = request.duration_hours * 60
+    # Парсим даты
+    try:
+        start_date = datetime.fromisoformat(request.start_date).date()
+        end_date = datetime.fromisoformat(request.end_date).date()
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Неверный формат даты. Используйте YYYY-MM-DD")
 
-    if tariff.price_per_hour and total_minutes >= 60:
-        total_cost = tariff.price_per_hour * request.duration_hours
+    # Расчет количества дней
+    days_count = (end_date - start_date).days
+
+    if days_count <= 0:
+        raise HTTPException(status_code=400, detail="Дата окончания должна быть позже даты начала")
+
+    # Расчет стоимости (за день = 24 часа по почасовому тарифу)
+    if tariff.price_per_hour:
+        price_per_day = tariff.price_per_hour * 24
+        total_cost = price_per_day * days_count
     elif tariff.price_per_minute:
-        total_cost = tariff.price_per_minute * total_minutes
-    elif tariff.price_per_hour:
-        total_cost = tariff.price_per_hour * max(1, request.duration_hours)
+        price_per_day = tariff.price_per_minute * 1440
+        total_cost = price_per_day * days_count
     else:
         raise HTTPException(status_code=400, detail="У тарифа не указана цена")
 
     total_cost = round(total_cost, 2)
+    price_per_day = round(price_per_day, 2)
 
     return CostCalculationResponse(
         tariff_id=tariff.id,
         tariff_name=tariff.name,
-        duration_hours=request.duration_hours,
+        days_count=days_count,
         total_cost=total_cost,
-        price_per_hour=tariff.price_per_hour,
-        price_per_minute=tariff.price_per_minute
+        price_per_day=price_per_day
     )

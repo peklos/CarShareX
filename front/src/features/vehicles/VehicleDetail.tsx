@@ -9,7 +9,6 @@ import {
   BoltIcon,
   TruckIcon,
   CalendarIcon,
-  ClockIcon,
 } from '@heroicons/react/24/outline';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchVehicleById } from './vehiclesSlice';
@@ -38,16 +37,15 @@ const VehicleDetail: React.FC = () => {
   const [selectedTariffId, setSelectedTariffId] = useState<number | null>(null);
   const [loadingTariffs, setLoadingTariffs] = useState(false);
 
-  // Separate fields for start date and time
+  // Поля для даты начала
   const [startDay, setStartDay] = useState('');
   const [startMonth, setStartMonth] = useState('');
-  const [startHour, setStartHour] = useState('');
-  const [startMinute, setStartMinute] = useState('');
+  const [startYear, setStartYear] = useState('2025');
 
-  // Duration fields
-  const [durationDays, setDurationDays] = useState('0');
-  const [durationHours, setDurationHours] = useState('1');
-  const [durationMinutes, setDurationMinutes] = useState('0');
+  // Поля для даты окончания
+  const [endDay, setEndDay] = useState('');
+  const [endMonth, setEndMonth] = useState('');
+  const [endYear, setEndYear] = useState('2025');
 
   // Calculated cost
   const [estimatedCost, setEstimatedCost] = useState(0);
@@ -88,13 +86,21 @@ const VehicleDetail: React.FC = () => {
   useEffect(() => {
     if (!selectedTariffId) return;
 
-    const days = parseInt(durationDays) || 0;
-    const hours = parseInt(durationHours) || 0;
-    const minutes = parseInt(durationMinutes) || 0;
+    // Проверяем, что все поля дат заполнены
+    if (!startDay || !startMonth || !startYear || !endDay || !endMonth || !endYear) {
+      setEstimatedCost(0);
+      return;
+    }
 
-    const totalHours = days * 24 + hours + minutes / 60;
+    // Создаем строки дат в формате YYYY-MM-DD
+    const startDate = `${startYear}-${startMonth.padStart(2, '0')}-${startDay.padStart(2, '0')}`;
+    const endDate = `${endYear}-${endMonth.padStart(2, '0')}-${endDay.padStart(2, '0')}`;
 
-    if (totalHours <= 0) {
+    // Проверяем валидность дат
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime()) || end <= start) {
       setEstimatedCost(0);
       return;
     }
@@ -104,24 +110,13 @@ const VehicleDetail: React.FC = () => {
       try {
         const response = await axios.post(`${API_URL}/bookings/calculate-cost`, {
           tariff_id: selectedTariffId,
-          duration_hours: totalHours,
+          start_date: startDate,
+          end_date: endDate,
         });
         setEstimatedCost(response.data.total_cost);
       } catch (error) {
         console.error('Failed to calculate cost:', error);
-        // Fallback to local calculation
-        const selectedTariff = tariffs.find(t => t.id === selectedTariffId);
-        if (selectedTariff) {
-          let cost = 0;
-          if (selectedTariff.price_per_hour && totalHours >= 1) {
-            cost = selectedTariff.price_per_hour * totalHours;
-          } else if (selectedTariff.price_per_minute) {
-            cost = selectedTariff.price_per_minute * totalHours * 60;
-          } else if (selectedTariff.price_per_hour) {
-            cost = selectedTariff.price_per_hour * Math.max(1, totalHours);
-          }
-          setEstimatedCost(Math.round(cost * 100) / 100);
-        }
+        setEstimatedCost(0);
       } finally {
         setCalculatingCost(false);
       }
@@ -129,7 +124,7 @@ const VehicleDetail: React.FC = () => {
 
     const debounceTimer = setTimeout(calculateCost, 300);
     return () => clearTimeout(debounceTimer);
-  }, [durationDays, durationHours, durationMinutes, selectedTariffId, tariffs]);
+  }, [startDay, startMonth, startYear, endDay, endMonth, endYear, selectedTariffId]);
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,66 +148,58 @@ const VehicleDetail: React.FC = () => {
     }
 
     // Validate all fields are filled
-    if (!startDay || !startMonth || !startHour || !startMinute) {
-      toast.error('Заполните все поля даты и времени начала');
+    if (!startDay || !startMonth || !startYear || !endDay || !endMonth || !endYear) {
+      toast.error('Заполните все поля дат начала и окончания');
       return;
     }
 
     // Validate ranges
-    const day = parseInt(startDay);
-    const month = parseInt(startMonth);
-    const hour = parseInt(startHour);
-    const minute = parseInt(startMinute);
+    const sDay = parseInt(startDay);
+    const sMonth = parseInt(startMonth);
+    const sYear = parseInt(startYear);
+    const eDay = parseInt(endDay);
+    const eMonth = parseInt(endMonth);
+    const eYear = parseInt(endYear);
 
-    if (day < 1 || day > 31) {
+    if (sDay < 1 || sDay > 31 || eDay < 1 || eDay > 31) {
       toast.error('День должен быть от 1 до 31');
       return;
     }
 
-    if (month < 1 || month > 12) {
+    if (sMonth < 1 || sMonth > 12 || eMonth < 1 || eMonth > 12) {
       toast.error('Месяц должен быть от 1 до 12');
       return;
     }
 
-    if (hour < 0 || hour > 23) {
-      toast.error('Часы должны быть от 0 до 23');
+    if (sYear < 2025 || sYear > 2030 || eYear < 2025 || eYear > 2030) {
+      toast.error('Год должен быть от 2025 до 2030');
       return;
     }
 
-    if (minute < 0 || minute > 59) {
-      toast.error('Минуты должны быть от 0 до 59');
-      return;
-    }
+    // Create date strings in YYYY-MM-DD format
+    const startDate = `${sYear}-${sMonth.toString().padStart(2, '0')}-${sDay.toString().padStart(2, '0')}`;
+    const endDate = `${eYear}-${eMonth.toString().padStart(2, '0')}-${eDay.toString().padStart(2, '0')}`;
 
-    // Create start date from separate fields (auto-set year to 2025)
-    const startDateTime = new Date(
-      2025,
-      month - 1, // Month is 0-indexed
-      day,
-      hour,
-      minute
-    );
+    // Check if dates are valid
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
-    // Check if date is valid
-    if (isNaN(startDateTime.getTime())) {
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       toast.error('Неверная дата');
       return;
     }
 
-    // Validate date is in the future
-    if (startDateTime < new Date()) {
-      toast.error('Дата начала должна быть в будущем');
+    // Validate end date is after start date
+    if (end <= start) {
+      toast.error('Дата окончания должна быть позже даты начала');
       return;
     }
 
-    // Calculate total duration in hours
-    const days = parseInt(durationDays) || 0;
-    const hours = parseInt(durationHours) || 0;
-    const minutes = parseInt(durationMinutes) || 0;
-    const totalDurationHours = days * 24 + hours + minutes / 60;
-
-    if (totalDurationHours <= 0) {
-      toast.error('Длительность бронирования должна быть больше 0');
+    // Validate start date is in the future
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (start < today) {
+      toast.error('Дата начала должна быть не раньше сегодняшнего дня');
       return;
     }
 
@@ -221,8 +208,8 @@ const VehicleDetail: React.FC = () => {
         createBooking({
           vehicle_id: vehicle.id,
           tariff_id: selectedTariffId,
-          start_time: startDateTime.toISOString(),
-          duration_hours: totalDurationHours,
+          start_date: startDate,
+          end_date: endDate,
         })
       ).unwrap();
 
@@ -481,15 +468,15 @@ const VehicleDetail: React.FC = () => {
                       )}
                     </div>
 
-                    {/* Start Date */}
+                    {/* Дата начала */}
                     <div>
                       <label className="block text-sm font-medium text-neutral-300 mb-3">
                         <div className="flex items-center space-x-2">
                           <CalendarIcon className="h-5 w-5 text-primary-500" />
-                          <span>Дата и время начала</span>
+                          <span>Дата начала</span>
                         </div>
                       </label>
-                      <div className="grid grid-cols-4 gap-2">
+                      <div className="grid grid-cols-3 gap-2">
                         <input
                           type="number"
                           placeholder="День"
@@ -524,31 +511,15 @@ const VehicleDetail: React.FC = () => {
                         />
                         <input
                           type="number"
-                          placeholder="Часы"
-                          min="0"
-                          max="23"
-                          maxLength={2}
-                          value={startHour}
+                          placeholder="Год"
+                          min="2025"
+                          max="2030"
+                          maxLength={4}
+                          value={startYear}
                           onChange={(e) => {
                             const val = e.target.value;
-                            if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 23 && val.length <= 2)) {
-                              setStartHour(val);
-                            }
-                          }}
-                          required
-                          className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
-                        />
-                        <input
-                          type="number"
-                          placeholder="Минуты"
-                          min="0"
-                          max="59"
-                          maxLength={2}
-                          value={startMinute}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 59 && val.length <= 2)) {
-                              setStartMinute(val);
+                            if (val === '' || (parseInt(val) >= 2025 && parseInt(val) <= 2030 && val.length <= 4)) {
+                              setStartYear(val);
                             }
                           }}
                           required
@@ -556,73 +527,70 @@ const VehicleDetail: React.FC = () => {
                         />
                       </div>
                       <div className="mt-1 text-xs text-neutral-500">
-                        День / Месяц / Часы / Минуты (год: 2025)
+                        День / Месяц / Год
                       </div>
                     </div>
 
-                    {/* Duration */}
+                    {/* Дата окончания */}
                     <div>
                       <label className="block text-sm font-medium text-neutral-300 mb-3">
                         <div className="flex items-center space-x-2">
-                          <ClockIcon className="h-5 w-5 text-primary-500" />
-                          <span>Длительность бронирования</span>
+                          <CalendarIcon className="h-5 w-5 text-primary-500" />
+                          <span>Дата окончания</span>
                         </div>
                       </label>
                       <div className="grid grid-cols-3 gap-2">
-                        <div>
-                          <input
-                            type="number"
-                            placeholder="Дни"
-                            min="0"
-                            max="30"
-                            maxLength={2}
-                            value={durationDays}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 30 && val.length <= 2)) {
-                                setDurationDays(val);
-                              }
-                            }}
-                            className="w-full px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
-                          />
-                          <div className="mt-1 text-xs text-neutral-500 text-center">дней</div>
-                        </div>
-                        <div>
-                          <input
-                            type="number"
-                            placeholder="Часы"
-                            min="0"
-                            max="23"
-                            maxLength={2}
-                            value={durationHours}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 23 && val.length <= 2)) {
-                                setDurationHours(val);
-                              }
-                            }}
-                            className="w-full px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
-                          />
-                          <div className="mt-1 text-xs text-neutral-500 text-center">часов</div>
-                        </div>
-                        <div>
-                          <input
-                            type="number"
-                            placeholder="Минуты"
-                            min="0"
-                            max="59"
-                            maxLength={2}
-                            value={durationMinutes}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 59 && val.length <= 2)) {
-                                setDurationMinutes(val);
-                              }
-                            }}
-                            className="w-full px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
-                          />
-                          <div className="mt-1 text-xs text-neutral-500 text-center">минут</div>
-                        </div>
+                        <input
+                          type="number"
+                          placeholder="День"
+                          min="1"
+                          max="31"
+                          maxLength={2}
+                          value={endDay}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '' || (parseInt(val) >= 1 && parseInt(val) <= 31 && val.length <= 2)) {
+                              setEndDay(val);
+                            }
+                          }}
+                          required
+                          className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
+                        />
+                        <input
+                          type="number"
+                          placeholder="Месяц"
+                          min="1"
+                          max="12"
+                          maxLength={2}
+                          value={endMonth}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '' || (parseInt(val) >= 1 && parseInt(val) <= 12 && val.length <= 2)) {
+                              setEndMonth(val);
+                            }
+                          }}
+                          required
+                          className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
+                        />
+                        <input
+                          type="number"
+                          placeholder="Год"
+                          min="2025"
+                          max="2030"
+                          maxLength={4}
+                          value={endYear}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '' || (parseInt(val) >= 2025 && parseInt(val) <= 2030 && val.length <= 4)) {
+                              setEndYear(val);
+                            }
+                          }}
+                          required
+                          className="px-3 py-2 bg-neutral-800 text-neutral-50 border border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center"
+                        />
+                      </div>
+                      <div className="mt-1 text-xs text-neutral-500">
+                        День / Месяц / Год
                       </div>
                     </div>
 
@@ -641,12 +609,12 @@ const VehicleDetail: React.FC = () => {
                         </div>
                         {tariffs.find(t => t.id === selectedTariffId)?.price_per_hour && (
                           <p className="text-xs text-neutral-400 mt-1">
-                            Тариф: {tariffs.find(t => t.id === selectedTariffId)?.price_per_hour} ₽/час
+                            Тариф: {(tariffs.find(t => t.id === selectedTariffId)?.price_per_hour! * 24).toFixed(2)} ₽/день (посуточная аренда)
                           </p>
                         )}
-                        {tariffs.find(t => t.id === selectedTariffId)?.price_per_minute && (
+                        {tariffs.find(t => t.id === selectedTariffId)?.price_per_minute && !tariffs.find(t => t.id === selectedTariffId)?.price_per_hour && (
                           <p className="text-xs text-neutral-400 mt-1">
-                            Тариф: {tariffs.find(t => t.id === selectedTariffId)?.price_per_minute} ₽/мин
+                            Тариф: {(tariffs.find(t => t.id === selectedTariffId)?.price_per_minute! * 1440).toFixed(2)} ₽/день (посуточная аренда)
                           </p>
                         )}
                       </div>

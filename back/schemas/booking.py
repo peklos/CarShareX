@@ -1,24 +1,31 @@
 from pydantic import BaseModel, validator
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 
 class BookingCreate(BaseModel):
     vehicle_id: int
     tariff_id: int
-    start_time: datetime  # datetime объект
-    duration_hours: Optional[float] = 1.0  # Длительность бронирования в часах (по умолчанию 1 час)
+    start_date: date  # Дата начала (без времени)
+    end_date: date  # Дата окончания (без времени)
 
-    @validator('start_time', pre=True)
-    def parse_start_time(cls, v):
-        """Конвертируем строку ISO в datetime"""
+    @validator('start_date', 'end_date', pre=True)
+    def parse_date(cls, v):
+        """Конвертируем строку в date"""
         if isinstance(v, str):
-            # Убираем 'Z' и заменяем на '+00:00' для корректного парсинга
-            v = v.replace('Z', '+00:00')
+            # Если передана полная дата-время, берем только дату
+            if 'T' in v or ' ' in v:
+                return datetime.fromisoformat(v.replace('Z', '+00:00').split('T')[0].split(' ')[0]).date()
             try:
-                return datetime.fromisoformat(v)
+                return datetime.fromisoformat(v).date()
             except ValueError:
-                # Пробуем без timezone
-                return datetime.fromisoformat(v.split('+')[0].split('Z')[0])
+                raise ValueError(f"Неверный формат даты: {v}")
+        return v
+
+    @validator('end_date')
+    def validate_end_date(cls, v, values):
+        """Проверяем, что дата окончания больше даты начала"""
+        if 'start_date' in values and v <= values['start_date']:
+            raise ValueError("Дата окончания должна быть позже даты начала")
         return v
 
 class BookingResponse(BaseModel):
