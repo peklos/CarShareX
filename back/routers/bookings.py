@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from db import models, database
 from schemas import booking as booking_schemas
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/bookings", tags=["Бронирования клиента"])
@@ -18,8 +18,8 @@ class CostCalculationResponse(BaseModel):
     tariff_name: str
     duration_hours: float
     total_cost: float
-    price_per_hour: float = None
-    price_per_minute: float = None
+    price_per_hour: Optional[float] = None
+    price_per_minute: Optional[float] = None
 
 @router.post("/", response_model=booking_schemas.BookingResponse)
 def create_booking(booking_data: booking_schemas.BookingCreate, user_id: int, db: Session = Depends(database.get_db)):
