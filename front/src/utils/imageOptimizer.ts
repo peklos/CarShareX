@@ -13,12 +13,12 @@ interface ImageOptimizationOptions {
 /**
  * Возвращает URL изображения без изменений
  * @param url - Исходный URL изображения
- * @param options - Опции оптимизации (не используются)
+ * @param _options - Опции оптимизации (не используются)
  * @returns URL изображения
  */
 export function optimizeImageUrl(
   url: string,
-  options: ImageOptimizationOptions = {}
+  _options: ImageOptimizationOptions = {}
 ): string {
   // Если URL пустой или не является строкой, возвращаем его как есть
   if (!url || typeof url !== 'string') {
@@ -31,13 +31,13 @@ export function optimizeImageUrl(
 
 /**
  * Генерирует srcSet для responsive изображений
- * @param url - Исходный URL изображения
- * @param sizes - Массив размеров для генерации
+ * @param _url - Исходный URL изображения
+ * @param _sizes - Массив размеров для генерации
  * @returns srcSet строка (пустая для локальных изображений)
  */
 export function generateSrcSet(
-  url: string,
-  sizes: number[] = [400, 800, 1200, 1600]
+  _url: string,
+  _sizes: number[] = [400, 800, 1200, 1600]
 ): string {
   // Для локальных изображений не генерируем srcSet
   return '';
