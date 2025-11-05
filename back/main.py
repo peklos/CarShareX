@@ -29,6 +29,7 @@ from routers import admin_tariffs
 from routers import admin_parking
 from routers import admin_branches
 from routers import admin_stats
+from routers import update_images
 
 app = FastAPI(
     title="CarShareX API",
