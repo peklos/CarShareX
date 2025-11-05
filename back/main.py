@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from db.database import engine, Base, SessionLocal
 from db.init_data import initialize_database
 from sqlalchemy import text, inspect
@@ -99,6 +101,19 @@ try:
     initialize_database(db)
 finally:
     db.close()
+
+# Обработчик ошибок валидации для отладки
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    print("❌ ОШИБКА ВАЛИДАЦИИ:")
+    print(f"📍 URL: {request.url}")
+    print(f"📍 Метод: {request.method}")
+    print(f"📍 Тело запроса: {await request.body()}")
+    print(f"📍 Ошибки: {exc.errors()}")
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content={"detail": exc.errors(), "body": str(await request.body())},
+    )
 
 # CORS (разрешаем все для учебного проекта)
 app.add_middleware(
