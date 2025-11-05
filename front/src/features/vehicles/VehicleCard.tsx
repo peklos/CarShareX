@@ -54,6 +54,9 @@ const VehicleCard: React.FC<VehicleCardProps> = React.memo(({ vehicle }) => {
     return labels[type] || type;
   };
 
+  // Используем локальную картинку для всех машин
+  const carImageUrl = '/car.png';
+
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -63,20 +66,19 @@ const VehicleCard: React.FC<VehicleCardProps> = React.memo(({ vehicle }) => {
         <Card className="overflow-hidden h-full hover:shadow-xl transition-shadow">
           {/* Image */}
           <div className="relative h-48 bg-neutral-800 overflow-hidden">
-            {vehicle.image_url ? (
-              <img
-                src={optimizeImageUrl(vehicle.image_url, IMAGE_SIZES.card)}
-                srcSet={generateSrcSet(vehicle.image_url, [400, 600, 800])}
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                alt={`${vehicle.brand} ${vehicle.model}`}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full bg-gradient-to-br from-neutral-100 to-neutral-200">
-                <TruckIcon className="h-16 w-16 text-neutral-400" />
-              </div>
-            )}
+            <img
+              src={carImageUrl}
+              alt={`${vehicle.brand} ${vehicle.model}`}
+              className="w-full h-full object-cover"
+              loading="lazy"
+              onError={(e) => {
+                // Fallback на иконку если картинка не загрузилась
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+            <div className="flex items-center justify-center h-full bg-gradient-to-br from-neutral-100 to-neutral-200" style={{ display: 'none' }}>
+              <TruckIcon className="h-16 w-16 text-neutral-400" />
+            </div>
 
             {/* Status badge */}
             <div className="absolute top-3 right-3">

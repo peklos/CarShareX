@@ -28,6 +28,15 @@ export const profileApi = {
     return apiPatch<User>(`${API_URL}/profile/${user.id}`, data);
   },
 
+  // Get user balance
+  getBalance: async (): Promise<ApiResponse<{ balance: number }>> => {
+    const userStr = localStorage.getItem(STORAGE_KEYS.USER);
+    if (!userStr) return { data: null, error: 'User not authenticated' };
+    const user = JSON.parse(userStr);
+
+    return apiGet<{ balance: number }>(`${API_URL}/profile/${user.id}/balance`);
+  },
+
   // Top up balance
   topUpBalance: async (amount: number): Promise<ApiResponse<User>> => {
     const userStr = localStorage.getItem(STORAGE_KEYS.USER);

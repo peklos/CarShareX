@@ -43,6 +43,17 @@ def update_profile(user_id: int, user_data: user_schemas.UserUpdate, db: Session
     return user
 
 
+@router.get("/{user_id}/balance")
+def get_balance(user_id: int, db: Session = Depends(database.get_db)):
+    """Получить баланс пользователя"""
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+
+    return {"balance": user.balance}
+
+
 @router.post("/{user_id}/top-up", response_model=user_schemas.UserResponse)
 def top_up_balance(user_id: int, request: TopUpBalanceRequest, db: Session = Depends(database.get_db)):
     """Пополнить баланс пользователя"""
