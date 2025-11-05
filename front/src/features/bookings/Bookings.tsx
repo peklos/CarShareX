@@ -140,7 +140,15 @@ const Bookings: React.FC = () => {
                             <div>
                               <p className="text-neutral-400">Окончание:</p>
                               <p className="text-neutral-50 font-medium">
-                                {booking.end_time ? formatDateTime(booking.end_time) : 'Не завершено'}
+                                {booking.end_time
+                                  ? formatDateTime(booking.end_time)
+                                  : booking.duration_hours
+                                    ? (() => {
+                                        const startDate = new Date(booking.start_time);
+                                        const estimatedEnd = new Date(startDate.getTime() + booking.duration_hours * 60 * 60 * 1000);
+                                        return `${formatDateTime(estimatedEnd)} (ожидается)`;
+                                      })()
+                                    : 'В процессе'}
                               </p>
                             </div>
                           </div>

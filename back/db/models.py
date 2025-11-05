@@ -114,6 +114,7 @@ class Booking(Base):
     tariff_id = Column(Integer, ForeignKey('tariffs.id'), index=True)
     start_time = Column(DateTime, nullable=False, index=True)
     end_time = Column(DateTime)
+    duration_hours = Column(Float)
     total_cost = Column(Float, default=0.0)
     status = Column(String(30), default='pending', index=True)
 

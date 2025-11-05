@@ -60,9 +60,26 @@ def migrate_transactions_table():
             except Exception as e:
                 print(f"⚠️  Не удалось добавить столбец created_at: {e}")
 
-# Запуск миграции
+# Миграция: добавление столбца duration_hours в bookings если его нет
+def migrate_bookings_table():
+    """Добавляет столбец duration_hours в таблицу bookings если его нет"""
+    inspector = inspect(engine)
+    columns = [col['name'] for col in inspector.get_columns('bookings')]
+
+    with engine.connect() as conn:
+        # Добавляем duration_hours если его нет
+        if 'duration_hours' not in columns:
+            try:
+                conn.execute(text("ALTER TABLE bookings ADD COLUMN duration_hours FLOAT"))
+                conn.commit()
+                print("✅ Добавлен столбец duration_hours в таблицу bookings")
+            except Exception as e:
+                print(f"⚠️  Не удалось добавить столбец duration_hours: {e}")
+
+# Запуск миграций
 try:
     migrate_transactions_table()
+    migrate_bookings_table()
 except Exception as e:
     print(f"⚠️  Ошибка миграции: {e}")
 

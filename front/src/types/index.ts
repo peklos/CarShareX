@@ -71,6 +71,7 @@ export interface Booking {
   tariff_id: number;
   start_time: string;
   end_time?: string;
+  duration_hours?: number;
   total_cost: number;
   status: 'pending' | 'active' | 'completed';
 }
