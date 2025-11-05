@@ -70,11 +70,19 @@ def migrate_bookings_table():
         # Добавляем duration_hours если его нет
         if 'duration_hours' not in columns:
             try:
-                conn.execute(text("ALTER TABLE bookings ADD COLUMN duration_hours FLOAT"))
+                # Используем DOUBLE PRECISION для PostgreSQL совместимости
+                conn.execute(text("ALTER TABLE bookings ADD COLUMN duration_hours DOUBLE PRECISION"))
                 conn.commit()
                 print("✅ Добавлен столбец duration_hours в таблицу bookings")
             except Exception as e:
                 print(f"⚠️  Не удалось добавить столбец duration_hours: {e}")
+                # Попытка с FLOAT для SQLite
+                try:
+                    conn.execute(text("ALTER TABLE bookings ADD COLUMN duration_hours FLOAT"))
+                    conn.commit()
+                    print("✅ Добавлен столбец duration_hours в таблицу bookings (FLOAT)")
+                except Exception as e2:
+                    print(f"⚠️  Повторная попытка не удалась: {e2}")
 
 # Запуск миграций
 try:
