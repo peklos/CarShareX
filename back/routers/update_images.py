@@ -8,7 +8,7 @@ router = APIRouter(prefix="/admin", tags=["Утилиты"])
 def update_car_images(db: Session = Depends(database.get_db)):
     """Обновить все картинки автомобилей"""
 
-    car_image_url = "https://www.ixbt.com/img/n1/news/2024/10/1/cc7b4f9fc16e8192047257514d86572e_large.jpg"
+    car_image_url = "/car.png"
 
     vehicles = db.query(models.Vehicle).all()
     updated_count = 0

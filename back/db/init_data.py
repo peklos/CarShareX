@@ -15,7 +15,7 @@ def initialize_database(db: Session):
     print("="*50 + "\n")
 
     # Картинка автомобиля (одна для всех)
-    car_image_url = "https://www.ixbt.com/img/n1/news/2024/10/1/cc7b4f9fc16e8192047257514d86572e_large.jpg"
+    car_image_url = "/car.png"
 
     def get_random_car_image():
         """Возвращает картинку автомобиля"""

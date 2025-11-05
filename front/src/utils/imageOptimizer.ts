@@ -1,9 +1,7 @@
 /**
- * Оптимизация URL изображений с Unsplash
- * Добавляет параметры для автоматического изменения размера и формата
+ * Оптимизация URL изображений
+ * Упрощенная версия для работы с локальными изображениями
  */
-
-import { API_URL } from './constants';
 
 interface ImageOptimizationOptions {
   width?: number;
@@ -13,10 +11,10 @@ interface ImageOptimizationOptions {
 }
 
 /**
- * Оптимизирует URL изображения, добавляя параметры для сжатия и изменения размера
+ * Возвращает URL изображения без изменений
  * @param url - Исходный URL изображения
- * @param options - Опции оптимизации
- * @returns Оптимизированный URL
+ * @param options - Опции оптимизации (не используются)
+ * @returns URL изображения
  */
 export function optimizeImageUrl(
   url: string,
@@ -27,81 +25,22 @@ export function optimizeImageUrl(
     return url;
   }
 
-  // Если это локальный путь (начинается с /static), преобразуем в полный URL
-  if (url.startsWith('/static')) {
-    return `${API_URL}${url}`;
-  }
-
-  // Для Loremflickr и других сервисов возвращаем URL как есть
-  if (url.indexOf('loremflickr.com') !== -1 || url.indexOf('flickr.com') !== -1) {
-    return url;
-  }
-
-  // Проверяем, является ли URL изображением с Unsplash
-  if (url.indexOf('unsplash.com') === -1) {
-    return url;
-  }
-
-  const {
-    width,
-    height,
-    quality = 80,
-    format = 'auto'
-  } = options;
-
-  // Создаем URL объект
-  const urlObj = new URL(url);
-
-  // Добавляем параметры оптимизации
-  if (width) {
-    urlObj.searchParams.set('w', width.toString());
-  }
-  if (height) {
-    urlObj.searchParams.set('h', height.toString());
-  }
-
-  // Добавляем качество (для Unsplash это параметр q)
-  urlObj.searchParams.set('q', quality.toString());
-
-  // Добавляем формат (для Unsplash это параметр fm)
-  if (format !== 'auto') {
-    urlObj.searchParams.set('fm', format);
-  } else {
-    // Auto означает WebP для браузеров, которые его поддерживают
-    urlObj.searchParams.set('fm', 'webp');
-  }
-
-  // Включаем автоматическую оптимизацию Unsplash
-  urlObj.searchParams.set('auto', 'format,compress');
-
-  // Добавляем fit=crop для правильного кропа
-  if (width || height) {
-    urlObj.searchParams.set('fit', 'crop');
-  }
-
-  return urlObj.toString();
+  // Возвращаем URL без изменений
+  return url;
 }
 
 /**
  * Генерирует srcSet для responsive изображений
  * @param url - Исходный URL изображения
  * @param sizes - Массив размеров для генерации
- * @returns srcSet строка
+ * @returns srcSet строка (пустая для локальных изображений)
  */
 export function generateSrcSet(
   url: string,
   sizes: number[] = [400, 800, 1200, 1600]
 ): string {
-  if (!url || typeof url !== 'string' || url.indexOf('unsplash.com') === -1) {
-    return '';
-  }
-
-  return sizes
-    .map((size) => {
-      const optimizedUrl = optimizeImageUrl(url, { width: size, quality: 80 });
-      return `${optimizedUrl} ${size}w`;
-    })
-    .join(', ');
+  // Для локальных изображений не генерируем srcSet
+  return '';
 }
 
 /**
