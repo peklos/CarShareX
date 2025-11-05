@@ -5,8 +5,8 @@ import { API_URL, STORAGE_KEYS } from '../../utils/constants';
 export interface CreateBookingData {
   vehicle_id: number;
   tariff_id: number;
-  start_time: string; // ISO datetime format
-  duration_hours: number; // Duration in hours
+  start_date: string; // Date in YYYY-MM-DD format
+  end_date: string; // Date in YYYY-MM-DD format
 }
 
 export const bookingsApi = {

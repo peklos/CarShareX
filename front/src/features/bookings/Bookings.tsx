@@ -32,21 +32,19 @@ const Bookings: React.FC = () => {
     }
   };
 
-  const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString('ru-RU', {
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('ru-RU', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
     });
   };
 
-  const calculateDuration = (start: string, end: string) => {
+  const calculateDurationDays = (start: string, end: string) => {
     const startDate = new Date(start);
     const endDate = new Date(end);
-    const hours = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60));
-    return hours;
+    const days = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    return days;
   };
 
   if (loading) {
@@ -127,28 +125,20 @@ const Bookings: React.FC = () => {
                           <div className="flex items-start space-x-2">
                             <CalendarIcon className="h-5 w-5 text-neutral-400 flex-shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-neutral-400">Начало:</p>
+                              <p className="text-neutral-400">Дата начала:</p>
                               <p className="text-neutral-50 font-medium">
-                                {formatDateTime(booking.start_time)}
+                                {formatDate(booking.start_time)}
                               </p>
                             </div>
                           </div>
 
                           {/* End date */}
                           <div className="flex items-start space-x-2">
-                            <ClockIcon className="h-5 w-5 text-neutral-400 flex-shrink-0 mt-0.5" />
+                            <CalendarIcon className="h-5 w-5 text-neutral-400 flex-shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-neutral-400">Окончание:</p>
+                              <p className="text-neutral-400">Дата окончания:</p>
                               <p className="text-neutral-50 font-medium">
-                                {booking.end_time
-                                  ? formatDateTime(booking.end_time)
-                                  : booking.duration_hours
-                                    ? (() => {
-                                        const startDate = new Date(booking.start_time);
-                                        const estimatedEnd = new Date(startDate.getTime() + booking.duration_hours * 60 * 60 * 1000);
-                                        return `${formatDateTime(estimatedEnd.toISOString())} (ожидается)`;
-                                      })()
-                                    : 'В процессе'}
+                                {booking.end_time ? formatDate(booking.end_time) : 'Не указана'}
                               </p>
                             </div>
                           </div>
@@ -159,7 +149,7 @@ const Bookings: React.FC = () => {
                             <div className="flex items-center space-x-1 text-neutral-400">
                               <ClockIcon className="h-4 w-4" />
                               <span>
-                                Длительность: {calculateDuration(booking.start_time, booking.end_time)} ч.
+                                Длительность: {calculateDurationDays(booking.start_time, booking.end_time)} дн.
                               </span>
                             </div>
                           )}
