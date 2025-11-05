@@ -39,9 +39,17 @@ export const fetchBookingById = createAsyncThunk(
 
 export const createBooking = createAsyncThunk(
   'bookings/createBooking',
-  async (data: CreateBookingData) => {
-    const booking = await bookingsApi.createBooking(data);
-    return booking;
+  async (data: CreateBookingData, { rejectWithValue }) => {
+    try {
+      const booking = await bookingsApi.createBooking(data);
+      return booking;
+    } catch (error: any) {
+      // Получаем детальную ошибку от сервера
+      if (error.response?.data?.detail) {
+        return rejectWithValue(error.response.data.detail);
+      }
+      return rejectWithValue(error.message || 'Ошибка создания бронирования');
+    }
   }
 );
 
@@ -104,7 +112,7 @@ const bookingsSlice = createSlice({
       })
       .addCase(createBooking.rejected, (state, action) => {
         state.createLoading = false;
-        state.createError = action.error.message || 'Ошибка создания бронирования';
+        state.createError = (action.payload as string) || action.error.message || 'Ошибка создания бронирования';
       })
       // Complete booking
       .addCase(completeBooking.pending, (state) => {
