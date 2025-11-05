@@ -5,6 +5,7 @@ import { Vehicle } from '../../types';
 import { ROUTES } from '../../utils/constants';
 import Badge from '../../components/ui/Badge';
 import Card from '../../components/ui/Card';
+import { optimizeImageUrl, generateSrcSet, IMAGE_SIZES } from '../../utils/imageOptimizer';
 import {
   MapPinIcon,
   BoltIcon,
@@ -64,7 +65,9 @@ const VehicleCard: React.FC<VehicleCardProps> = React.memo(({ vehicle }) => {
           <div className="relative h-48 bg-neutral-800 overflow-hidden">
             {vehicle.image_url ? (
               <img
-                src={vehicle.image_url}
+                src={optimizeImageUrl(vehicle.image_url, IMAGE_SIZES.card)}
+                srcSet={generateSrcSet(vehicle.image_url, [400, 600, 800])}
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 alt={`${vehicle.brand} ${vehicle.model}`}
                 className="w-full h-full object-cover"
                 loading="lazy"

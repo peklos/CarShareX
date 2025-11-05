@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
 import {
   ArrowLeftIcon,
   MapPinIcon,
@@ -18,7 +19,9 @@ import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
 import Badge from '../../components/ui/Badge';
 import Spinner from '../../components/ui/Spinner';
-import { ROUTES } from '../../utils/constants';
+import { ROUTES, API_URL } from '../../utils/constants';
+import { optimizeImageUrl, generateSrcSet, IMAGE_SIZES } from '../../utils/imageOptimizer';
+import { Tariff } from '../../types';
 
 const VehicleDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +31,11 @@ const VehicleDetail: React.FC = () => {
   const { selectedVehicle: vehicle, loading } = useAppSelector((state) => state.vehicles);
   const { createLoading, createError } = useAppSelector((state) => state.bookings);
   const { isAuthenticated, role } = useAppSelector((state) => state.auth);
+
+  // Tariffs state
+  const [tariffs, setTariffs] = useState<Tariff[]>([]);
+  const [selectedTariffId, setSelectedTariffId] = useState<number | null>(null);
+  const [loadingTariffs, setLoadingTariffs] = useState(false);
 
   // Separate fields for start date and time
   const [startDay, setStartDay] = useState('');
@@ -42,6 +50,7 @@ const VehicleDetail: React.FC = () => {
 
   // Calculated cost
   const [estimatedCost, setEstimatedCost] = useState(0);
+  const [calculatingCost, setCalculatingCost] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -49,9 +58,34 @@ const VehicleDetail: React.FC = () => {
     }
   }, [dispatch, id]);
 
-  // Calculate estimated cost
+  // Load tariffs
   useEffect(() => {
-    if (!vehicle?.tariff) return;
+    const loadTariffs = async () => {
+      setLoadingTariffs(true);
+      try {
+        const response = await axios.get<Tariff[]>(`${API_URL}/tariffs/`);
+        setTariffs(response.data);
+
+        // Set default tariff to vehicle's tariff or first tariff
+        if (vehicle?.tariff_id) {
+          setSelectedTariffId(vehicle.tariff_id);
+        } else if (response.data.length > 0) {
+          setSelectedTariffId(response.data[0].id);
+        }
+      } catch (error) {
+        console.error('Failed to load tariffs:', error);
+        toast.error('Не удалось загрузить тарифы');
+      } finally {
+        setLoadingTariffs(false);
+      }
+    };
+
+    loadTariffs();
+  }, [vehicle?.tariff_id]);
+
+  // Calculate estimated cost using API
+  useEffect(() => {
+    if (!selectedTariffId) return;
 
     const days = parseInt(durationDays) || 0;
     const hours = parseInt(durationHours) || 0;
@@ -59,15 +93,42 @@ const VehicleDetail: React.FC = () => {
 
     const totalHours = days * 24 + hours + minutes / 60;
 
-    let cost = 0;
-    if (vehicle.tariff.price_per_hour) {
-      cost = vehicle.tariff.price_per_hour * totalHours;
-    } else if (vehicle.tariff.price_per_minute) {
-      cost = vehicle.tariff.price_per_minute * totalHours * 60;
+    if (totalHours <= 0) {
+      setEstimatedCost(0);
+      return;
     }
 
-    setEstimatedCost(cost);
-  }, [durationDays, durationHours, durationMinutes, vehicle?.tariff]);
+    const calculateCost = async () => {
+      setCalculatingCost(true);
+      try {
+        const response = await axios.post(`${API_URL}/bookings/calculate-cost`, {
+          tariff_id: selectedTariffId,
+          duration_hours: totalHours,
+        });
+        setEstimatedCost(response.data.total_cost);
+      } catch (error) {
+        console.error('Failed to calculate cost:', error);
+        // Fallback to local calculation
+        const selectedTariff = tariffs.find(t => t.id === selectedTariffId);
+        if (selectedTariff) {
+          let cost = 0;
+          if (selectedTariff.price_per_hour && totalHours >= 1) {
+            cost = selectedTariff.price_per_hour * totalHours;
+          } else if (selectedTariff.price_per_minute) {
+            cost = selectedTariff.price_per_minute * totalHours * 60;
+          } else if (selectedTariff.price_per_hour) {
+            cost = selectedTariff.price_per_hour * Math.max(1, totalHours);
+          }
+          setEstimatedCost(Math.round(cost * 100) / 100);
+        }
+      } finally {
+        setCalculatingCost(false);
+      }
+    };
+
+    const debounceTimer = setTimeout(calculateCost, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [durationDays, durationHours, durationMinutes, selectedTariffId, tariffs]);
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,8 +146,8 @@ const VehicleDetail: React.FC = () => {
 
     if (!vehicle) return;
 
-    if (!vehicle.tariff_id) {
-      toast.error('У автомобиля не установлен тариф');
+    if (!selectedTariffId) {
+      toast.error('Выберите тариф');
       return;
     }
 
@@ -158,7 +219,7 @@ const VehicleDetail: React.FC = () => {
       await dispatch(
         createBooking({
           vehicle_id: vehicle.id,
-          tariff_id: vehicle.tariff_id,
+          tariff_id: selectedTariffId,
           start_time: startDateTime.toISOString(),
           duration_hours: totalDurationHours,
         })
@@ -256,10 +317,12 @@ const VehicleDetail: React.FC = () => {
               <div className="relative h-64 lg:h-96 bg-neutral-800">
                 {vehicle.image_url ? (
                   <img
-                    src={vehicle.image_url}
+                    src={optimizeImageUrl(vehicle.image_url, IMAGE_SIZES.detail)}
+                    srcSet={generateSrcSet(vehicle.image_url, [600, 800, 1200, 1600])}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                     alt={`${vehicle.brand} ${vehicle.model}`}
                     className="w-full h-full object-cover"
-                    loading="lazy"
+                    loading="eager"
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full bg-gradient-to-br from-neutral-100 to-neutral-200">
@@ -365,6 +428,52 @@ const VehicleDetail: React.FC = () => {
                   </div>
                 ) : (
                   <form onSubmit={handleBooking} className="space-y-6">
+                    {/* Tariff Selection */}
+                    <div>
+                      <label className="block text-sm font-medium text-neutral-300 mb-3">
+                        Выберите тариф
+                      </label>
+                      {loadingTariffs ? (
+                        <div className="text-center py-4">
+                          <span className="text-neutral-400">Загрузка тарифов...</span>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 gap-2">
+                          {tariffs.map((tariff) => (
+                            <label
+                              key={tariff.id}
+                              className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-colors ${
+                                selectedTariffId === tariff.id
+                                  ? 'border-primary-500 bg-primary-500/10'
+                                  : 'border-neutral-600 hover:border-neutral-500'
+                              }`}
+                            >
+                              <div className="flex items-center space-x-3">
+                                <input
+                                  type="radio"
+                                  name="tariff"
+                                  value={tariff.id}
+                                  checked={selectedTariffId === tariff.id}
+                                  onChange={() => setSelectedTariffId(tariff.id)}
+                                  className="w-4 h-4 text-primary-500 focus:ring-primary-500"
+                                />
+                                <div>
+                                  <p className="font-medium text-neutral-50">{tariff.name}</p>
+                                  <p className="text-xs text-neutral-400">
+                                    {tariff.price_per_hour
+                                      ? `${tariff.price_per_hour} ₽/час`
+                                      : tariff.price_per_minute
+                                        ? `${tariff.price_per_minute} ₽/мин`
+                                        : 'Цена не указана'}
+                                  </p>
+                                </div>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
                     {/* Start Date */}
                     <div>
                       <label className="block text-sm font-medium text-neutral-300 mb-3">
@@ -511,22 +620,26 @@ const VehicleDetail: React.FC = () => {
                     </div>
 
                     {/* Estimated Cost */}
-                    {vehicle.tariff && estimatedCost > 0 && (
+                    {selectedTariffId && (
                       <div className="bg-primary-500/10 border border-primary-500/30 rounded-lg p-4">
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-neutral-300">Стоимость бронирования:</span>
-                          <span className="text-2xl font-bold text-primary-500">
-                            {estimatedCost.toFixed(2)} ₽
-                          </span>
+                          {calculatingCost ? (
+                            <span className="text-lg text-neutral-400">Расчет...</span>
+                          ) : (
+                            <span className="text-2xl font-bold text-primary-500">
+                              {estimatedCost.toFixed(2)} ₽
+                            </span>
+                          )}
                         </div>
-                        {vehicle.tariff.price_per_hour && (
+                        {tariffs.find(t => t.id === selectedTariffId)?.price_per_hour && (
                           <p className="text-xs text-neutral-400 mt-1">
-                            Тариф: {vehicle.tariff.price_per_hour} ₽/час
+                            Тариф: {tariffs.find(t => t.id === selectedTariffId)?.price_per_hour} ₽/час
                           </p>
                         )}
-                        {vehicle.tariff.price_per_minute && (
+                        {tariffs.find(t => t.id === selectedTariffId)?.price_per_minute && (
                           <p className="text-xs text-neutral-400 mt-1">
-                            Тариф: {vehicle.tariff.price_per_minute} ₽/мин
+                            Тариф: {tariffs.find(t => t.id === selectedTariffId)?.price_per_minute} ₽/мин
                           </p>
                         )}
                       </div>
