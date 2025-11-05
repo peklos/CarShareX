@@ -20,7 +20,6 @@ import Card from '../../components/ui/Card';
 import Badge from '../../components/ui/Badge';
 import Spinner from '../../components/ui/Spinner';
 import { ROUTES, API_URL } from '../../utils/constants';
-import { optimizeImageUrl, generateSrcSet, IMAGE_SIZES } from '../../utils/imageOptimizer';
 import { Tariff } from '../../types';
 
 const VehicleDetail: React.FC = () => {
@@ -30,7 +29,7 @@ const VehicleDetail: React.FC = () => {
 
   const { selectedVehicle: vehicle, loading } = useAppSelector((state) => state.vehicles);
   const { createLoading, createError } = useAppSelector((state) => state.bookings);
-  const { isAuthenticated, role, user } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, role } = useAppSelector((state) => state.auth);
 
   // Tariffs state
   const [tariffs, setTariffs] = useState<Tariff[]>([]);

@@ -103,7 +103,7 @@ const authSlice = createSlice({
         state.user = action.payload;
         localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(action.payload));
       })
-      .addCase(refreshUserProfile.rejected, (state, action) => {
+      .addCase(refreshUserProfile.rejected, (_state, action) => {
         console.error('Failed to refresh user profile:', action.error);
       });
   },

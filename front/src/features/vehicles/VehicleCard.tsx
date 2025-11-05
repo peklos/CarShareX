@@ -5,7 +5,6 @@ import { Vehicle } from '../../types';
 import { ROUTES } from '../../utils/constants';
 import Badge from '../../components/ui/Badge';
 import Card from '../../components/ui/Card';
-import { optimizeImageUrl, generateSrcSet, IMAGE_SIZES } from '../../utils/imageOptimizer';
 import {
   MapPinIcon,
   BoltIcon,

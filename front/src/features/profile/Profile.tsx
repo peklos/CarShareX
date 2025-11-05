@@ -75,11 +75,14 @@ const Profile: React.FC = () => {
         drivers_license: data.drivers_license || undefined,
       };
 
-      const updatedUser = await profileApi.updateProfile(updateData);
-      dispatch(updateUser(updatedUser));
-
-      toast.success('Профиль обновлен успешно!');
-      setIsEditing(false);
+      const response = await profileApi.updateProfile(updateData);
+      if (response.data) {
+        dispatch(updateUser(response.data));
+        toast.success('Профиль обновлен успешно!');
+        setIsEditing(false);
+      } else {
+        toast.error(response.error || 'Ошибка обновления профиля');
+      }
     } catch (error: any) {
       const message = error.response?.data?.detail || 'Ошибка обновления профиля';
       toast.error(message);
@@ -110,11 +113,15 @@ const Profile: React.FC = () => {
 
     setLoading(true);
     try {
-      const updatedUser = await profileApi.topUpBalance(amount);
-      dispatch(updateUser(updatedUser));
-      toast.success(`Баланс пополнен на ${amount.toFixed(2)} ₽`);
-      setShowTopUp(false);
-      setTopUpAmount('1000');
+      const response = await profileApi.topUpBalance(amount);
+      if (response.data) {
+        dispatch(updateUser(response.data));
+        toast.success(`Баланс пополнен на ${amount.toFixed(2)} ₽`);
+        setShowTopUp(false);
+        setTopUpAmount('1000');
+      } else {
+        toast.error(response.error || 'Ошибка пополнения баланса');
+      }
     } catch (error: any) {
       const message = error.response?.data?.detail || 'Ошибка пополнения баланса';
       toast.error(message);
