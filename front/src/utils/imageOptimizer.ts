@@ -32,6 +32,11 @@ export function optimizeImageUrl(
     return `${API_URL}${url}`;
   }
 
+  // Для Loremflickr и других сервисов возвращаем URL как есть
+  if (url.indexOf('loremflickr.com') !== -1 || url.indexOf('flickr.com') !== -1) {
+    return url;
+  }
+
   // Проверяем, является ли URL изображением с Unsplash
   if (url.indexOf('unsplash.com') === -1) {
     return url;

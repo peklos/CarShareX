@@ -14,17 +14,18 @@ def initialize_database(db: Session):
     print("🚀 Инициализация базы данных...")
     print("="*50 + "\n")
 
-    # Список локальных картинок автомобилей (SVG файлы в проекте)
+    # Список картинок автомобилей из Loremflickr (доступно в РФ)
+    # Каждый URL будет возвращать случайную картинку авто при каждом запросе
     car_images = [
-        "/static/images/cars/car1.svg",
-        "/static/images/cars/car2.svg",
-        "/static/images/cars/car3.svg",
-        "/static/images/cars/car4.svg",
-        "/static/images/cars/car5.svg"
+        "https://loremflickr.com/800/600/car?random=1",
+        "https://loremflickr.com/800/600/car?random=2",
+        "https://loremflickr.com/800/600/car?random=3",
+        "https://loremflickr.com/800/600/car?random=4",
+        "https://loremflickr.com/800/600/car?random=5"
     ]
 
     def get_random_car_image():
-        """Возвращает случайную картинку автомобиля из локальных файлов"""
+        """Возвращает случайную картинку автомобиля из Loremflickr"""
         return random.choice(car_images)
 
     # Роли
