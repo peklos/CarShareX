@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './features/auth/ProtectedRoute';
+import { useAppDispatch, useAppSelector } from './app/hooks';
+import { refreshUserProfile } from './features/auth/authSlice';
 
 // Pages
 import Home from './pages/Home';
@@ -27,6 +29,16 @@ import AdminBranches from './features/admin/AdminBranches';
 import { ROUTES } from './utils/constants';
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { isAuthenticated, role } = useAppSelector((state) => state.auth);
+
+  // Загружаем свежий профиль при старте приложения (если пользователь залогинен)
+  useEffect(() => {
+    if (isAuthenticated && role === 'client') {
+      dispatch(refreshUserProfile());
+    }
+  }, [dispatch, isAuthenticated, role]);
+
   return (
     <BrowserRouter>
       <Toaster
