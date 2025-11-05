@@ -76,6 +76,7 @@ def create_booking(booking_data: booking_schemas.BookingCreate, user_id: int, db
         vehicle_id=booking_data.vehicle_id,
         tariff_id=booking_data.tariff_id,
         start_time=booking_data.start_time,
+        duration_hours=booking_data.duration_hours,
         total_cost=total_cost,
         status="active"
     )

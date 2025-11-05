@@ -14,6 +14,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchVehicleById } from './vehiclesSlice';
 import { createBooking } from '../bookings/bookingsSlice';
+import { updateUser } from '../auth/authSlice';
 import Layout from '../../components/layout/Layout';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
@@ -30,7 +31,7 @@ const VehicleDetail: React.FC = () => {
 
   const { selectedVehicle: vehicle, loading } = useAppSelector((state) => state.vehicles);
   const { createLoading, createError } = useAppSelector((state) => state.bookings);
-  const { isAuthenticated, role } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, role, user } = useAppSelector((state) => state.auth);
 
   // Tariffs state
   const [tariffs, setTariffs] = useState<Tariff[]>([]);
@@ -224,6 +225,12 @@ const VehicleDetail: React.FC = () => {
           duration_hours: totalDurationHours,
         })
       ).unwrap();
+
+      // Обновляем баланс пользователя после успешного бронирования
+      if (user && 'balance' in user) {
+        const newBalance = user.balance - estimatedCost;
+        dispatch(updateUser({ balance: newBalance }));
+      }
 
       toast.success(`Бронирование создано! Списано ${estimatedCost.toFixed(2)} ₽`);
       navigate(ROUTES.BOOKINGS);

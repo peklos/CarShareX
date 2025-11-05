@@ -15,6 +15,7 @@ class BookingResponse(BaseModel):
     tariff_id: int
     start_time: datetime
     end_time: Optional[datetime]
+    duration_hours: Optional[float]
     total_cost: float
     status: str
 
