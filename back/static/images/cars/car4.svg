@@ -1,0 +1,16 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#3498db"/>
+  <!-- Car body -->
+  <rect x="200" y="250" width="400" height="200" fill="#ffffff" rx="10"/>
+  <!-- Car roof -->
+  <polygon points="250,250 350,150 450,150 550,250" fill="#ffffff"/>
+  <!-- Windows -->
+  <polygon points="260,240 340,160 400,160 440,240" fill="#34495e"/>
+  <!-- Wheels -->
+  <circle cx="280" cy="460" r="40" fill="#2c3e50"/>
+  <circle cx="520" cy="460" r="40" fill="#2c3e50"/>
+  <circle cx="280" cy="460" r="20" fill="#95a5a6"/>
+  <circle cx="520" cy="460" r="20" fill="#95a5a6"/>
+  <!-- Text -->
+  <text x="400" y="550" font-family="Arial, sans-serif" font-size="48" fill="#ffffff" text-anchor="middle" font-weight="bold">Автомобиль 4</text>
+</svg>

@@ -14,17 +14,17 @@ def initialize_database(db: Session):
     print("🚀 Инициализация базы данных...")
     print("="*50 + "\n")
 
-    # Список доступных картинок автомобилей (доступны в РФ)
+    # Список локальных картинок автомобилей (SVG файлы в проекте)
     car_images = [
-        "https://cdn.pixabay.com/photo/2016/11/18/17/46/automobile-1835506_1280.jpg",
-        "https://cdn.pixabay.com/photo/2017/03/05/00/34/panorama-2117310_1280.jpg",
-        "https://cdn.pixabay.com/photo/2015/07/11/23/02/plane-841441_1280.jpg",
-        "https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg",
-        "https://cdn.pixabay.com/photo/2012/11/02/13/02/car-63930_1280.jpg"
+        "/static/images/cars/car1.svg",
+        "/static/images/cars/car2.svg",
+        "/static/images/cars/car3.svg",
+        "/static/images/cars/car4.svg",
+        "/static/images/cars/car5.svg"
     ]
 
     def get_random_car_image():
-        """Возвращает случайную картинку автомобиля"""
+        """Возвращает случайную картинку автомобиля из локальных файлов"""
         return random.choice(car_images)
 
     # Роли

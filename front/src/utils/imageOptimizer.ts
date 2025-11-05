@@ -3,6 +3,8 @@
  * Добавляет параметры для автоматического изменения размера и формата
  */
 
+import { API_URL } from './constants';
+
 interface ImageOptimizationOptions {
   width?: number;
   height?: number;
@@ -23,6 +25,11 @@ export function optimizeImageUrl(
   // Если URL пустой или не является строкой, возвращаем его как есть
   if (!url || typeof url !== 'string') {
     return url;
+  }
+
+  // Если это локальный путь (начинается с /static), преобразуем в полный URL
+  if (url.startsWith('/static')) {
+    return `${API_URL}${url}`;
   }
 
   // Проверяем, является ли URL изображением с Unsplash
