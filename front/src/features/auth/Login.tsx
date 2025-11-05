@@ -11,7 +11,7 @@ import Input from '../../components/ui/Input';
 import { loginSchema, LoginFormData } from '../../utils/validators';
 import { authApi, employeeAuthApi } from './authApi';
 import { useAppDispatch } from '../../app/hooks';
-import { loginStart, loginSuccess, loginFailure } from './authSlice';
+import { loginStart, loginSuccess, loginFailure, refreshUserProfile } from './authSlice';
 import { ROUTES } from '../../utils/constants';
 
 const Login: React.FC = () => {
@@ -49,6 +49,10 @@ const Login: React.FC = () => {
           user: response.user,
           role: 'client',
         }));
+
+        // Загружаем свежий профиль с сервера (включая актуальный баланс)
+        dispatch(refreshUserProfile());
+
         toast.success(`Добро пожаловать, ${response.user.first_name}!`);
         navigate(ROUTES.VEHICLES);
       }
