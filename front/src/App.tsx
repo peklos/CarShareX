@@ -10,6 +10,7 @@ import { API_URL } from './utils/constants';
 
 // Pages
 import Home from './pages/Home';
+import Search from './pages/Search';
 import Login from './features/auth/Login';
 import Register from './features/auth/Register';
 import Vehicles from './features/vehicles/Vehicles';
@@ -124,6 +125,15 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute requireRole="client">
               <Transactions />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.SEARCH}
+          element={
+            <ProtectedRoute requireRole="client">
+              <Search />
             </ProtectedRoute>
           }
         />
