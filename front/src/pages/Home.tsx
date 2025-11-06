@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   BoltIcon,
   ClockIcon,
   ShieldCheckIcon,
-  CurrencyDollarIcon
+  CurrencyDollarIcon,
+  QuestionMarkCircleIcon
 } from '@heroicons/react/24/outline';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
+import UserGuideModal from '../components/ui/UserGuideModal';
 import { ROUTES } from '../utils/constants';
+import { useAppSelector } from '../app/hooks';
 
 const Home: React.FC = () => {
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
   const features = [
     {
       icon: BoltIcon,
@@ -57,11 +62,22 @@ const Home: React.FC = () => {
                 Посмотреть автомобили
               </Button>
             </Link>
-            <Link to={ROUTES.REGISTER}>
-              <Button variant="outline" size="lg">
-                Зарегистрироваться
+            {isAuthenticated ? (
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => setIsGuideOpen(true)}
+              >
+                <QuestionMarkCircleIcon className="h-5 w-5 mr-2 inline" />
+                Справка по пользованию
               </Button>
-            </Link>
+            ) : (
+              <Link to={ROUTES.REGISTER}>
+                <Button variant="outline" size="lg">
+                  Зарегистрироваться
+                </Button>
+              </Link>
+            )}
           </div>
         </motion.div>
       </section>
@@ -89,20 +105,28 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-primary rounded-2xl p-12 text-center text-white">
-        <h2 className="text-3xl font-bold mb-4">
-          Готовы начать?
-        </h2>
-        <p className="text-lg mb-8 opacity-90">
-          Зарегистрируйтесь сейчас и получите 500 ₽ на первую поездку
+      {/* CTA Section - only for non-authenticated users */}
+      {!isAuthenticated && (
+        <section className="bg-gradient-primary rounded-2xl p-12 text-center text-white">
+          <h2 className="text-3xl font-bold mb-4">
+            Готовы начать?
+          </h2>
+          <p className="text-lg mb-8 opacity-90">
+            Зарегистрируйтесь сейчас и получите 500 ₽ на первую поездку
         </p>
-        <Link to={ROUTES.REGISTER}>
-          <Button variant="secondary" size="lg">
-            Начать прямо сейчас
-          </Button>
-        </Link>
-      </section>
+          <Link to={ROUTES.REGISTER}>
+            <Button variant="secondary" size="lg">
+              Начать прямо сейчас
+            </Button>
+          </Link>
+        </section>
+      )}
+
+      {/* User Guide Modal */}
+      <UserGuideModal
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+      />
     </div>
   );
 };
