@@ -16,6 +16,7 @@ import {
   CurrencyDollarIcon,
   MapPinIcon,
   BuildingOfficeIcon,
+  MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { logout } from '../../features/auth/authSlice';
@@ -305,6 +306,19 @@ const Header: React.FC = () => {
                                   <Menu.Item>
                                     {({ active }) => (
                                       <Link
+                                        to={ROUTES.SEARCH}
+                                        className={`${
+                                          active ? 'bg-neutral-700' : ''
+                                        } flex items-center space-x-2 px-4 py-2 text-sm text-neutral-300`}
+                                      >
+                                        <MagnifyingGlassIcon className="h-4 w-4" />
+                                        <span>Поиск по сайту</span>
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
                                         to={ROUTES.PROFILE}
                                         className={`${
                                           active ? 'bg-neutral-700' : ''
@@ -448,14 +462,24 @@ const Header: React.FC = () => {
 
                       {/* Additional links for client */}
                       {role === 'client' && (
-                        <Disclosure.Button
-                          as={Link}
-                          to={ROUTES.TRANSACTIONS}
-                          className="flex items-center space-x-2 px-3 py-2 rounded-lg font-medium text-neutral-300 hover:bg-neutral-700"
-                        >
-                          <CreditCardIcon className="h-5 w-5" />
-                          <span>Транзакции</span>
-                        </Disclosure.Button>
+                        <>
+                          <Disclosure.Button
+                            as={Link}
+                            to={ROUTES.SEARCH}
+                            className="flex items-center space-x-2 px-3 py-2 rounded-lg font-medium text-neutral-300 hover:bg-neutral-700"
+                          >
+                            <MagnifyingGlassIcon className="h-5 w-5" />
+                            <span>Поиск по сайту</span>
+                          </Disclosure.Button>
+                          <Disclosure.Button
+                            as={Link}
+                            to={ROUTES.TRANSACTIONS}
+                            className="flex items-center space-x-2 px-3 py-2 rounded-lg font-medium text-neutral-300 hover:bg-neutral-700"
+                          >
+                            <CreditCardIcon className="h-5 w-5" />
+                            <span>Транзакции</span>
+                          </Disclosure.Button>
+                        </>
                       )}
 
                       {/* Logout button */}
