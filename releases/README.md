@@ -34,7 +34,7 @@
 #### Файлы для скачивания
 - **Приложение**: `CarShareX-1.0.0-windows.exe` (19 MB)
 - **Установщик WebView2**: `install-webview2.bat` (автоматический установщик)
-- **Исправление DLL ошибки**: `fix-dll-windows.bat` (если видите ошибку WebView2Loader.dll)
+- **Копирование DLL**: `copy-webview2-dll.bat` (автоматически найдёт и скопирует WebView2Loader.dll)
 
 #### Установка (ВАЖНО: следуйте по порядку)
 
@@ -48,8 +48,9 @@
 6. Пройдите предупреждение SmartScreen: "Дополнительно" → "Выполнить в любом случае"
 
 **Если после этого видите ошибку "WebView2Loader.dll":**
-1. Запустите `fix-dll-windows.bat` в той же папке
-2. Попробуйте запустить CarShareX снова
+1. Запустите `copy-webview2-dll.bat` в той же папке
+2. Скрипт автоматически найдёт и скопирует нужный файл
+3. Попробуйте запустить CarShareX снова
 
 **Способ 2: Ручная установка WebView2**
 
@@ -64,8 +65,8 @@
 6. Пройдите предупреждение SmartScreen: "Дополнительно" → "Выполнить в любом случае"
 
 **Если после этого видите ошибку "WebView2Loader.dll":**
-1. Запустите `fix-dll-windows.bat` в той же папке
-2. Или вручную скопируйте `WebView2Loader.dll` из `C:\Program Files (x86)\Microsoft\EdgeWebView\Application\[версия]\` в папку с CarShareX
+1. Запустите `copy-webview2-dll.bat` в той же папке (автоматически найдёт и скопирует)
+2. Или вручную найдите `WebView2Loader.dll` в `C:\Program Files (x86)\Microsoft\EdgeWebView\Application\[версия]\` и скопируйте в папку с CarShareX
 
 **Способ 3: С официального сайта Microsoft**
 
