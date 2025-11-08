@@ -32,6 +32,13 @@
       "deb": {
         "depends": []
       }
+    },
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      },
+      "wix": null,
+      "nsis": null
     }
   }
 }
