@@ -1,31 +1,15 @@
 {
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "CarShareX",
+  "version": "1.0.0",
+  "identifier": "com.carsharex.app",
   "build": {
     "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:5173",
     "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:5173",
-    "distDir": "../dist",
-    "withGlobalTauri": false
+    "frontendDist": "../dist"
   },
-  "package": {
-    "productName": "CarShareX",
-    "version": "1.0.0"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "shell": {
-        "all": false,
-        "open": true
-      }
-    },
-    "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "com.carsharex.app"
-    },
-    "security": {
-      "csp": null
-    },
+  "app": {
     "windows": [
       {
         "fullscreen": false,
@@ -36,6 +20,18 @@
         "minWidth": 800,
         "minHeight": 600
       }
-    ]
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "linux": {
+      "deb": {
+        "depends": []
+      }
+    }
   }
 }
