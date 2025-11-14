@@ -48,7 +48,7 @@ public class AuthController : ControllerBase
             Phone = userData.Phone,
             Password = userData.Password,  // БЕЗ хеширования (учебный проект)
             DriversLicense = userData.DriversLicense,
-            Balance = 0.0m
+            Balance = 0.0
         };
 
         _context.Users.Add(newUser);
