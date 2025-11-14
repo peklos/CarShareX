@@ -94,10 +94,10 @@ public class TariffCreateDto
     public string Name { get; set; } = null!;
 
     [JsonPropertyName("price_per_minute")]
-    public double?? PricePerMinute { get; set; }
+    public double? PricePerMinute { get; set; }
 
     [JsonPropertyName("price_per_hour")]
-    public double?? PricePerHour { get; set; }
+    public double? PricePerHour { get; set; }
 }
 
 public class TariffUpdateDto
@@ -106,8 +106,8 @@ public class TariffUpdateDto
     public string? Name { get; set; }
 
     [JsonPropertyName("price_per_minute")]
-    public double?? PricePerMinute { get; set; }
+    public double? PricePerMinute { get; set; }
 
     [JsonPropertyName("price_per_hour")]
-    public double?? PricePerHour { get; set; }
+    public double? PricePerHour { get; set; }
 }
