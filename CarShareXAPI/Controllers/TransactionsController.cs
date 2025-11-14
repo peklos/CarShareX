@@ -72,7 +72,7 @@ public class TransactionsController : ControllerBase
     [HttpPost("deposit")]
     public async Task<IActionResult> DepositBalance(
         [FromQuery(Name = "user_id")] int userId,
-        [FromQuery] decimal amount,
+        [FromQuery] double amount,
         [FromQuery] string description = "Пополнение баланса")
     {
         var user = await _context.Users
@@ -115,7 +115,7 @@ public class TransactionCreateDto
     public string TransactionType { get; set; } = null!;
 
     [JsonPropertyName("amount")]
-    public decimal Amount { get; set; }
+    public double? Amount { get; set; }
 
     [JsonPropertyName("description")]
     public string? Description { get; set; }

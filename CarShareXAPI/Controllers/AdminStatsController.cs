@@ -38,13 +38,13 @@ public class AdminStatsController : ControllerBase
         // Общая выручка
         var totalRevenue = await _context.Bookings
             .Where(b => b.Status == "completed")
-            .SumAsync(b => (decimal?)b.TotalCost) ?? 0m;
+            .SumAsync(b => (double?)b.TotalCost) ?? 0;
 
         // Выручка за текущий месяц
         var currentMonthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         var monthlyRevenue = await _context.Bookings
             .Where(b => b.Status == "completed" && b.EndTime >= currentMonthStart)
-            .SumAsync(b => (decimal?)b.TotalCost) ?? 0m;
+            .SumAsync(b => (double?)b.TotalCost) ?? 0;
 
         // Самые популярные автомобили (топ-5 по количеству бронирований)
         var popularVehicles = await _context.Vehicles
@@ -83,7 +83,7 @@ public class AdminStatsController : ControllerBase
                 u.LastName,
                 u.Email,
                 TripsCount = _context.Bookings.Count(b => b.UserId == u.Id),
-                TotalSpent = _context.Bookings.Where(b => b.UserId == u.Id).Sum(b => (decimal?)b.TotalCost) ?? 0m
+                TotalSpent = _context.Bookings.Where(b => b.UserId == u.Id).Sum(b => (double?)b.TotalCost) ?? 0
             })
             .OrderByDescending(x => x.TripsCount)
             .Take(5)
@@ -148,7 +148,7 @@ public class AdminStatsController : ControllerBase
 
         var dailyRevenue = await _context.Bookings
             .Where(b => b.Status == "completed" && b.EndTime >= last30Days)
-            .GroupBy(b => b.EndTime.Date)
+            .GroupBy(b => b.EndTime!.Value.Date)
             .Select(g => new
             {
                 date = g.Key.ToString("yyyy-MM-dd"),
