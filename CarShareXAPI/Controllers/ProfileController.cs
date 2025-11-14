@@ -133,5 +133,5 @@ public class UserUpdateDto
 public class TopUpBalanceRequest
 {
     [JsonPropertyName("amount")]
-    public decimal Amount { get; set; }
+    public double? Amount { get; set; }
 }

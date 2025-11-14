@@ -53,8 +53,8 @@ public class BookingsController : ControllerBase
         }
 
         // Расчет стоимости (за день = 24 часа по почасовому тарифу)
-        decimal pricePerDay;
-        decimal totalCost;
+        double pricePerDay;
+        double totalCost;
 
         if (tariff.PricePerHour.HasValue)
         {
@@ -240,8 +240,8 @@ public class BookingsController : ControllerBase
         }
 
         // Расчет стоимости (за день = 24 часа по почасовому тарифу)
-        decimal pricePerDay;
-        decimal totalCost;
+        double pricePerDay;
+        double totalCost;
 
         if (tariff.PricePerHour.HasValue)
         {
@@ -294,7 +294,7 @@ public class BookingCompleteDto
     public DateTime EndTime { get; set; }
 
     [JsonPropertyName("total_cost")]
-    public decimal TotalCost { get; set; }
+    public double? TotalCost { get; set; }
 }
 
 public class CostCalculationRequest
@@ -321,8 +321,8 @@ public class CostCalculationResponse
     public int DaysCount { get; set; }
 
     [JsonPropertyName("total_cost")]
-    public decimal TotalCost { get; set; }
+    public double? TotalCost { get; set; }
 
     [JsonPropertyName("price_per_day")]
-    public decimal PricePerDay { get; set; }
+    public double? PricePerDay { get; set; }
 }

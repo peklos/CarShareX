@@ -307,6 +307,9 @@ public class Booking
     [JsonPropertyName("vehicle")]
     public Vehicle? Vehicle { get; set; }
 
+    [JsonPropertyName("tariff")]
+    public Tariff? Tariff { get; set; }
+
     [JsonIgnore]
     public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
