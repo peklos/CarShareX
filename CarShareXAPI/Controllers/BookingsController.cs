@@ -173,7 +173,7 @@ public class BookingsController : ControllerBase
 
         // Обновление бронирования
         booking.EndTime = completeData.EndTime;
-        booking.TotalCost = completeData.TotalCost;
+        booking.TotalCost = completeData.TotalCost ?? 0;
         booking.Status = "completed";
 
         // Освобождение автомобиля
@@ -185,7 +185,7 @@ public class BookingsController : ControllerBase
         // Списание с баланса
         if (booking.User != null)
         {
-            booking.User.Balance -= completeData.TotalCost;
+            booking.User.Balance -= completeData.TotalCost ?? 0;
         }
 
         // Создание транзакции
@@ -194,7 +194,7 @@ public class BookingsController : ControllerBase
             UserId = booking.UserId,
             BookingId = booking.Id,
             TransactionType = "payment",
-            Amount = completeData.TotalCost,
+            Amount = completeData.TotalCost ?? 0,
             Status = "completed"
         };
 

@@ -94,7 +94,7 @@ public class ProfileController : ControllerBase
         }
 
         // Обновляем баланс
-        user.Balance += request.Amount;
+        user.Balance += request.Amount ?? 0;
 
         // Создаем транзакцию
         var transaction = new Transaction
@@ -102,7 +102,7 @@ public class ProfileController : ControllerBase
             UserId = userId,
             BookingId = null,
             TransactionType = "deposit",
-            Amount = request.Amount,
+            Amount = request.Amount ?? 0,
             Description = $"Пополнение баланса на {request.Amount:F2} ₽",
             Status = "completed"
         };

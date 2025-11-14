@@ -48,7 +48,7 @@ public class TransactionsController : ControllerBase
         // Обновление баланса для депозита
         if (transactionData.TransactionType == "deposit")
         {
-            user.Balance += transactionData.Amount;
+            user.Balance += transactionData.Amount ?? 0;
         }
 
         // Создание транзакции
@@ -56,7 +56,7 @@ public class TransactionsController : ControllerBase
         {
             UserId = userId,
             TransactionType = transactionData.TransactionType,
-            Amount = transactionData.Amount,
+            Amount = transactionData.Amount ?? 0,
             Description = transactionData.Description,
             BookingId = transactionData.BookingId,
             Status = "completed"
