@@ -1,0 +1,164 @@
+name: Build CarShareX Desktop Apps
+
+on:
+  push:
+    branches: [ main, claude/** ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Позволяет запускать вручную
+
+jobs:
+  build-backend:
+    name: Build Backend API (.exe)
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 8.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      working-directory: CarShareXAPI
+      run: dotnet restore
+
+    - name: Build Backend
+      working-directory: CarShareXAPI
+      run: |
+        dotnet publish -c Release -r win-x64 --self-contained true `
+          /p:PublishSingleFile=true `
+          /p:IncludeNativeLibrariesForSelfExtract=true `
+          /p:EnableCompressionInSingleFile=true `
+          /p:PublishReadyToRun=true `
+          /p:PublishTrimmed=false
+
+    - name: Rename Backend executable
+      working-directory: CarShareXAPI/bin/Release/net8.0/win-x64/publish
+      run: Rename-Item -Path "CarShareX.exe" -NewName "CarShareX-Backend.exe"
+
+    - name: Upload Backend Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: CarShareX-Backend-Windows
+        path: CarShareXAPI/bin/Release/net8.0/win-x64/publish/CarShareX-Backend.exe
+        if-no-files-found: error
+
+  build-frontend:
+    name: Build Frontend Desktop App (.exe)
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: front/package-lock.json
+
+    - name: Setup Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Rust cache
+      uses: swatinem/rust-cache@v2
+      with:
+        workspaces: './front/src-tauri -> target'
+
+    - name: Create .env file
+      working-directory: front
+      run: |
+        echo "VITE_API_URL=http://localhost:5000" | Out-File -FilePath .env -Encoding UTF8
+
+    - name: Install frontend dependencies
+      working-directory: front
+      run: npm ci
+
+    - name: Build Tauri app
+      working-directory: front
+      run: npm run tauri:build
+
+    - name: Rename Frontend executable
+      working-directory: front/src-tauri/target/release
+      run: Rename-Item -Path "CarShareX.exe" -NewName "CarShareX-Frontend.exe"
+
+    - name: Upload Frontend Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: CarShareX-Frontend-Windows
+        path: front/src-tauri/target/release/CarShareX-Frontend.exe
+        if-no-files-found: error
+
+  create-release:
+    name: Create Release Package
+    needs: [build-backend, build-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/claude/')
+
+    steps:
+    - name: Download Backend Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: CarShareX-Backend-Windows
+        path: ./release
+
+    - name: Download Frontend Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: CarShareX-Frontend-Windows
+        path: ./release
+
+    - name: Create README for release
+      run: |
+        cat > ./release/README.txt << 'EOF'
+        CarShareX Desktop Application
+        =============================
+
+        Это приложение состоит из двух компонентов:
+
+        1. CarShareX-Backend.exe  - Backend API сервер (запускается на http://localhost:5000)
+        2. CarShareX-Frontend.exe - Desktop приложение (Tauri)
+
+        Как запустить:
+        -------------
+
+        Шаг 1: Запустите CarShareX-Backend.exe
+                Дождитесь сообщения "✅ CarShareX Backend API запущен"
+                Оставьте окно открытым!
+
+        Шаг 2: Запустите CarShareX-Frontend.exe
+                Откроется окно приложения
+
+        База данных:
+        ------------
+        SQLite БД автоматически создается в: %APPDATA%\CarShareX\carsharex.db
+
+        Тестовые данные:
+        ---------------
+        Клиент:
+          Email: ivan@mail.ru
+          Пароль: password123
+
+        Админ:
+          Email: admin@carsharex.ru
+          Пароль: admin123
+
+        API Documentation:
+        -----------------
+        После запуска backend открыть: http://localhost:5000/swagger
+
+        EOF
+
+    - name: List release files
+      run: ls -lah ./release
+
+    - name: Upload Combined Release
+      uses: actions/upload-artifact@v4
+      with:
+        name: CarShareX-Desktop-Complete
+        path: ./release/*
+        if-no-files-found: error
