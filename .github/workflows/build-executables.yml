@@ -72,7 +72,7 @@ jobs:
     - name: Create .env file
       working-directory: front
       run: |
-        echo "VITE_API_URL=http://localhost:5000" | Out-File -FilePath .env -Encoding UTF8
+        echo "VITE_API_URL=http://localhost:5000/api" | Out-File -FilePath .env -Encoding UTF8
 
     - name: Install frontend dependencies
       working-directory: front
