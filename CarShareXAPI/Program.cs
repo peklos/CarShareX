@@ -22,12 +22,14 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins(
-                "tauri://localhost",           // Tauri production
+                "tauri://localhost",            // Tauri production
+                "https://tauri.localhost",      // Tauri production (HTTPS)
                 "http://tauri.localhost",       // Tauri alternative
                 "http://localhost:1420",        // Tauri dev (default port)
                 "http://localhost:5173",        // Vite dev server
                 "http://127.0.0.1:1420",
-                "http://127.0.0.1:5173"
+                "http://127.0.0.1:5173",
+                "https://tauri.localhost:1420"  // Tauri dev HTTPS
               )
               .AllowAnyMethod()
               .AllowAnyHeader()
