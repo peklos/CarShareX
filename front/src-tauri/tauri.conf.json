@@ -12,7 +12,12 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": false,
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["http://localhost:5000/**", "http://127.0.0.1:5000/**"]
+      }
     },
     "bundle": {
       "active": true,

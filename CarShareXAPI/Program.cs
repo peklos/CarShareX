@@ -16,14 +16,15 @@ Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
 builder.Services.AddDbContext<CarShareContext>(options =>
     options.UseSqlite($"Data Source={dbPath}"));
 
-// CORS для React фронтенда
+// CORS для Tauri desktop приложения
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.SetIsOriginAllowed(_ => true)  // Разрешить любые origins (включая tauri://)
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
@@ -59,14 +60,7 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarShareX A
 
 app.UseCors();
 
-// Статические файлы (React build)
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
 app.MapControllers();
-
-// Fallback для React Router
-app.MapFallbackToFile("index.html");
 
 Console.WriteLine("✅ CarShareX API работает");
 Console.WriteLine($"📊 Swagger: http://localhost:5000/swagger");
