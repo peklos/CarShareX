@@ -1,0 +1,88 @@
+name: Build Complete App (C# Backend + Tauri Frontend)
+
+on:
+  push:
+    branches:
+      - claude/setup-local-backend-api-01UQy2XUFHmSdxeyNKCb2Srx
+  workflow_dispatch:
+
+jobs:
+  build-backend:
+    name: Build C# Backend
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build C# Backend (API only, no wwwroot)
+        working-directory: CarShareXAPI
+        run: |
+          dotnet restore --nologo
+          dotnet publish -c Release -r win-x64 --self-contained true `
+            /p:PublishSingleFile=true `
+            /p:IncludeNativeLibrariesForSelfExtract=true `
+            /p:EnableCompressionInSingleFile=true `
+            /p:PublishReadyToRun=true `
+            /p:PublishTrimmed=false `
+            --nologo
+
+      - name: Upload C# Backend exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: CarShareX-Backend-API
+          path: CarShareXAPI/bin/Release/net8.0/win-x64/publish/CarShareXAPI.exe
+
+  build-frontend:
+    name: Build Tauri Frontend
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: front/package-lock.json
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './front/src-tauri -> target'
+
+      - name: Install frontend dependencies
+        working-directory: front
+        run: npm ci
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: front
+          tauriScript: npm run tauri
+
+      - name: Upload Tauri MSI
+        uses: actions/upload-artifact@v4
+        with:
+          name: CarShareX-Desktop-MSI
+          path: front/src-tauri/target/release/bundle/msi/*.msi
+          if-no-files-found: warn
+
+      - name: Upload Tauri exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: CarShareX-Desktop-EXE
+          path: front/src-tauri/target/release/*.exe
+          if-no-files-found: warn
