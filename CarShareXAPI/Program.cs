@@ -16,14 +16,22 @@ Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
 builder.Services.AddDbContext<CarShareContext>(options =>
     options.UseSqlite($"Data Source={dbPath}"));
 
-// CORS для React фронтенда
+// CORS для Tauri десктоп приложения
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins(
+                "tauri://localhost",           // Tauri production
+                "http://tauri.localhost",       // Tauri alternative
+                "http://localhost:1420",        // Tauri dev (default port)
+                "http://localhost:5173",        // Vite dev server
+                "http://127.0.0.1:1420",
+                "http://127.0.0.1:5173"
+              )
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
@@ -59,17 +67,14 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarShareX A
 
 app.UseCors();
 
-// Статические файлы (React build)
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
 app.MapControllers();
 
-// Fallback для React Router
-app.MapFallbackToFile("index.html");
-
-Console.WriteLine("✅ CarShareX API работает");
+Console.WriteLine("✅ CarShareX Backend API запущен");
+Console.WriteLine($"🌐 API URL: http://localhost:5000");
 Console.WriteLine($"📊 Swagger: http://localhost:5000/swagger");
 Console.WriteLine($"🗄️  База данных: {dbPath}");
+Console.WriteLine();
+Console.WriteLine("💡 Для работы приложения запустите Tauri frontend отдельно");
+Console.WriteLine("   В папке front выполните: npm run tauri:dev или npm run tauri:build");
 
 app.Run("http://0.0.0.0:5000");

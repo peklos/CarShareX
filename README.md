@@ -1,51 +1,52 @@
-# 🚗 CarShareX(render вбанен временно)
+# 🚗 CarShareX Desktop
 
-> Современная платформа каршеринга с продвинутой архитектурой и enterprise-ready решениями
+> Десктоп приложение для каршеринга на C# + Tauri с встроенной SQLite БД
 
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![C#](https://img.shields.io/badge/C%23-8.0-239120?style=for-the-badge&logo=csharp&logoColor=white)](https://docs.microsoft.com/en-us/dotnet/csharp/)
+[![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.2+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Tauri](https://img.shields.io/badge/Tauri-1.6-FFC131?style=for-the-badge&logo=tauri&logoColor=white)](https://tauri.app/)
+[![SQLite](https://img.shields.io/badge/SQLite-3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 [![Redux](https://img.shields.io/badge/Redux_Toolkit-1.9-764ABC?style=for-the-badge&logo=redux&logoColor=white)](https://redux-toolkit.js.org/)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://delicate-lokum-0cb456.netlify.app/)
-[![API Docs](https://img.shields.io/badge/API_Docs-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://delicate-lokum-0cb456.netlify.app/docs)
 [![Telegram](https://img.shields.io/badge/Telegram-@swslt1616-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/swslt1616)
 
 ---
 
 ## 📋 О проекте
 
-**CarShareX** — это полнофункциональная платформа каршеринга, разработанная с использованием современного технологического стека и архитектурных паттернов enterprise-уровня.
+**CarShareX Desktop** — это полнофункциональное десктоп приложение для каршеринга с автономной работой. Состоит из двух независимых компонентов:
+
+1. **Backend (C# API)** - REST API на ASP.NET Core с встроенной SQLite БД
+2. **Frontend (Tauri Desktop)** - Нативное десктоп приложение на React + Tauri
 
 ### 🎯 Ключевые особенности
 
-- **🏗️ Многослойная архитектура** с четким разделением ответственности
+- **💻 Два отдельных .exe файла** - backend API и desktop frontend
+- **🗄️ Встроенная SQLite БД** - работает автономно без внешних зависимостей
 - **🔐 Двухуровневая система авторизации** (клиенты + админ-панель с ролями)
-- **⚡ Real-time обновления** состояния бронирований и транзакций
 - **📊 Продвинутая админ-панель** с детальной статистикой и аналитикой
 - **🎨 Адаптивный UI/UX** с анимациями и современным дизайном
-- **🚀 Production-ready деплой** на облачных платформах (Netlify, Render, Neon)
-- **📱 SPA архитектура** с клиентским роутингом
+- **🚀 Single-file executables** - один .exe для backend, один для frontend
+- **🔧 Простой деплой** - скопировать и запустить, без установки
 
 ---
 
 ## 🛠️ Технологический стек
 
-### Backend (API)
+### Backend (C# API)
 
 | Технология | Версия | Назначение |
 |------------|--------|-----------|
-| ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white) **Python** | 3.11+ | Основной язык backend-разработки |
-| ![FastAPI](https://img.shields.io/badge/-FastAPI-009688?logo=fastapi&logoColor=white) **FastAPI** | 0.115.0 | Высокопроизводительный async веб-фреймворк |
-| ![SQLAlchemy](https://img.shields.io/badge/-SQLAlchemy-D71F00?logo=sqlalchemy&logoColor=white) **SQLAlchemy** | 2.0.35 | ORM для работы с базой данных |
-| ![Pydantic](https://img.shields.io/badge/-Pydantic-E92063?logo=pydantic&logoColor=white) **Pydantic** | 2.9.2 | Валидация данных и сериализация |
-| ![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-4169E1?logo=postgresql&logoColor=white) **PostgreSQL** | 16 | Основная реляционная БД (production) |
-| ![Uvicorn](https://img.shields.io/badge/-Uvicorn-499848?logo=gunicorn&logoColor=white) **Uvicorn** | 0.31.0 | ASGI сервер для async приложений |
+| ![C#](https://img.shields.io/badge/-C%23-239120?logo=csharp&logoColor=white) **C#** | 8.0+ | Основной язык backend-разработки |
+| ![.NET](https://img.shields.io/badge/-.NET-512BD4?logo=dotnet&logoColor=white) **ASP.NET Core** | 8.0 | Веб-фреймворк для REST API |
+| ![EF Core](https://img.shields.io/badge/-EF_Core-512BD4?logo=dotnet&logoColor=white) **Entity Framework Core** | 8.0 | ORM для работы с базой данных |
+| ![SQLite](https://img.shields.io/badge/-SQLite-003B57?logo=sqlite&logoColor=white) **SQLite** | 3.x | Встроенная реляционная БД |
+| ![Swagger](https://img.shields.io/badge/-Swagger-85EA2D?logo=swagger&logoColor=black) **Swashbuckle** | 6.5.0 | Автоматическая документация API |
 
-### Frontend (Client & Admin)
+### Frontend (Tauri Desktop)
 
 | Технология | Версия | Назначение |
 |------------|--------|-----------|
@@ -61,14 +62,13 @@
 | ![Framer Motion](https://img.shields.io/badge/-Framer_Motion-0055FF?logo=framer&logoColor=white) **Framer Motion** | 10.16.5 | Продвинутые анимации и transitions |
 | ![Headless UI](https://img.shields.io/badge/-Headless_UI-66E3FF?logo=headlessui&logoColor=black) **Headless UI** | 1.7.17 | Доступные UI компоненты |
 
-### DevOps & Deployment
+### Build & Runtime
 
-| Сервис | Назначение |
-|--------|-----------|
-| ![Netlify](https://img.shields.io/badge/-Netlify-00C7B7?logo=netlify&logoColor=white) **Netlify** | Хостинг frontend-приложения с CDN |
-| ![Render](https://img.shields.io/badge/-Render-46E3B7?logo=render&logoColor=white) **Render** | Хостинг FastAPI backend |
-| ![Neon](https://img.shields.io/badge/-Neon-000000?logo=neon&logoColor=white) **Neon** | Serverless PostgreSQL database |
-| ![Git](https://img.shields.io/badge/-Git-F05032?logo=git&logoColor=white) **Git/GitHub** | Version control и CI/CD |
+| Технология | Назначение |
+|-----------|-----------|
+| ![Tauri](https://img.shields.io/badge/-Tauri-FFC131?logo=tauri&logoColor=black) **Tauri** | Кросс-платформенные desktop приложения |
+| ![Rust](https://img.shields.io/badge/-Rust-000000?logo=rust&logoColor=white) **Rust** | Backend для Tauri (компиляция) |
+| ![Git](https://img.shields.io/badge/-Git-F05032?logo=git&logoColor=white) **Git/GitHub** | Version control |
 
 ---
 
@@ -78,97 +78,132 @@
 
 ```
 CarShareX/
-├── 🎨 front/                    # Frontend приложение
-│   ├── src/
-│   │   ├── app/                # Redux store конфигурация
-│   │   ├── features/           # Feature-based модули
-│   │   │   ├── auth/          # Аутентификация
-│   │   │   ├── admin/         # Админ-панель
-│   │   │   ├── bookings/      # Бронирования
-│   │   │   ├── vehicles/      # Автомобили
-│   │   │   ├── profile/       # Профиль пользователя
-│   │   │   └── transactions/  # Транзакции
-│   │   ├── components/        # Переиспользуемые компоненты
-│   │   │   ├── layout/       # Layout компоненты
-│   │   │   └── ui/           # UI компоненты
-│   │   ├── pages/            # Страницы приложения
-│   │   ├── types/            # TypeScript типы и интерфейсы
-│   │   └── utils/            # Утилиты и хелперы
+├── 💻 CarShareXAPI/            # Backend C# API
+│   ├── Controllers/           # API контроллеры
+│   │   ├── AuthController.cs
+│   │   ├── VehiclesController.cs
+│   │   ├── BookingsController.cs
+│   │   ├── Admin*.cs
+│   │   └── ...
+│   ├── Data/                 # Entity Framework Core
+│   │   ├── CarShareContext.cs
+│   │   └── DatabaseInitializer.cs
+│   ├── Models/               # Модели данных
+│   │   ├── User.cs
+│   │   ├── Vehicle.cs
+│   │   ├── Booking.cs
+│   │   └── ...
+│   ├── Program.cs           # Точка входа
+│   ├── appsettings.json
+│   ├── build-backend.bat    # 🆕 Сборка backend .exe
+│   └── build-backend.sh     # 🆕 Сборка backend .exe
+│
+├── 🎨 front/                  # Frontend Tauri Desktop
+│   ├── src/                  # React приложение
+│   │   ├── app/             # Redux store
+│   │   ├── features/        # Feature-based модули
+│   │   │   ├── auth/       # Аутентификация
+│   │   │   ├── admin/      # Админ-панель
+│   │   │   ├── bookings/   # Бронирования
+│   │   │   ├── vehicles/   # Автомобили
+│   │   │   ├── profile/    # Профиль
+│   │   │   └── transactions/
+│   │   ├── components/     # Компоненты
+│   │   ├── types/          # TypeScript типы
+│   │   └── utils/          # Утилиты
+│   ├── src-tauri/          # Tauri Rust backend
+│   │   ├── src/
+│   │   ├── icons/
+│   │   ├── Cargo.toml
+│   │   └── tauri.conf.json
+│   ├── .env                # 🆕 Конфигурация API
 │   ├── package.json
-│   ├── tsconfig.json
-│   ├── tailwind.config.js
 │   └── vite.config.ts
 │
-├── 🔧 back/                     # Backend API
-│   ├── db/
-│   │   ├── database.py        # Конфигурация БД
-│   │   ├── models.py          # SQLAlchemy модели
-│   │   └── init_data.py       # Seed данные
-│   ├── routers/               # API endpoints
-│   │   ├── auth.py           # Клиентская авторизация
-│   │   ├── employee_auth.py  # Админ авторизация
-│   │   ├── profile.py        # Профиль пользователя
-│   │   ├── vehicles.py       # Управление автомобилями
-│   │   ├── bookings.py       # Бронирования
-│   │   ├── transactions.py   # Транзакции
-│   │   ├── tariffs.py        # Тарифы
-│   │   ├── parking_zones.py  # Парковочные зоны
-│   │   ├── admin_*.py        # Админ endpoints
-│   │   └── ...
-│   ├── schemas/              # Pydantic схемы
-│   │   ├── user.py
-│   │   ├── vehicle.py
-│   │   ├── booking.py
-│   │   └── ...
-│   ├── main.py              # Entry point FastAPI
-│   ├── requirements.txt
-│   └── runtime.txt
-│
-├── 📚 DEPLOYMENT.md            # Инструкции по деплою
-└── 🗒️ README.md                # Документация проекта
+├── 📚 BUILD_AND_RUN.md      # 🆕 Инструкции по сборке
+└── 🗒️ README.md              # Документация проекта
 ```
 
 ### 🔄 Архитектура взаимодействия
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                         Browser                              │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │   React SPA (TypeScript + Redux Toolkit)            │   │
-│  │   ├── Client App (Public Routes)                    │   │
-│  │   ├── Admin Panel (Protected Routes)                │   │
-│  │   └── Shared UI Components                          │   │
-│  └──────────────────┬──────────────────────────────────┘   │
-└────────────────────┼────────────────────────────────────────┘
-                      │ HTTP/REST (Axios)
+│            Tauri Desktop Window (CarShareX.exe)              │
+│  ┌───────────────────────────────────────────────────┐     │
+│  │   React UI (TypeScript + Redux Toolkit)           │     │
+│  │   ├── Client App (Public Routes)                  │     │
+│  │   ├── Admin Panel (Protected Routes)              │     │
+│  │   └── Shared UI Components                        │     │
+│  └──────────────────┬─────────────────────────────────┘     │
+└────────────────────┼─────────────────────────────────────────┘
+                      │ HTTP/REST API (Axios)
+                      │ http://localhost:5000
                       │
-        ┌─────────────▼───────────────┐
-        │   Netlify CDN (Frontend)    │
-        └─────────────┬───────────────┘
-                      │
-                      │ API Calls
-                      │
-        ┌─────────────▼───────────────┐
-        │   Render (FastAPI Backend)  │
-        │  ┌───────────────────────┐  │
-        │  │   main.py (FastAPI)   │  │
-        │  │   ├── Routers Layer   │  │
-        │  │   ├── Schemas Layer   │  │
-        │  │   └── DB Layer        │  │
-        │  └───────────┬───────────┘  │
-        └──────────────┼──────────────┘
-                       │ SQLAlchemy ORM
-                       │
-        ┌──────────────▼──────────────┐
-        │ Neon (PostgreSQL Database)  │
-        │  ├── users                  │
-        │  ├── employees              │
-        │  ├── vehicles               │
-        │  ├── bookings               │
-        │  ├── transactions           │
-        │  └── ...                    │
-        └─────────────────────────────┘
+        ┌─────────────▼────────────────┐
+        │  Backend API (CarShareX.exe) │
+        │  ┌────────────────────────┐  │
+        │  │   ASP.NET Core Web API │  │
+        │  │   ├── Controllers      │  │
+        │  │   ├── Models           │  │
+        │  │   └── EF Core Context  │  │
+        │  └─────────┬──────────────┘  │
+        └────────────┼───────────────────┘
+                     │ Entity Framework Core
+                     │
+        ┌────────────▼──────────────────┐
+        │   SQLite (Local Database)     │
+        │   %APPDATA%/CarShareX/        │
+        │   carsharex.db                │
+        │   ├── users                   │
+        │   ├── employees               │
+        │   ├── vehicles                │
+        │   ├── bookings                │
+        │   ├── transactions            │
+        │   └── ...                     │
+        └───────────────────────────────┘
 ```
+
+---
+
+## 🚀 Быстрый старт
+
+### Сборка приложений
+
+#### 1️⃣ Backend (C# API)
+```bash
+cd CarShareXAPI
+./build-backend.bat    # Windows
+# или
+./build-backend.sh     # Linux/macOS
+```
+**Результат:** `CarShareXAPI/bin/Release/net8.0/win-x64/publish/CarShareX.exe`
+
+#### 2️⃣ Frontend (Tauri Desktop)
+```bash
+cd front
+npm install
+npm run tauri:build
+```
+**Результат:** `front/src-tauri/target/release/CarShareX.exe`
+
+### Запуск приложений
+
+**Development режим:**
+```bash
+# Терминал 1 - Backend
+cd CarShareXAPI
+dotnet run
+
+# Терминал 2 - Frontend
+cd front
+npm run tauri:dev
+```
+
+**Production режим:**
+1. Запустите `CarShareX.exe` из папки `CarShareXAPI/bin/.../publish/` (Backend API)
+2. Запустите `CarShareX.exe` из папки `front/src-tauri/target/release/` (Desktop App)
+
+📖 **Полная документация:** См. [BUILD_AND_RUN.md](BUILD_AND_RUN.md)
 
 ---
 
