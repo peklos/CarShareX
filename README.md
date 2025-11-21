@@ -203,7 +203,18 @@ npm run tauri:dev
 1. Запустите `CarShareX.exe` из папки `CarShareXAPI/bin/.../publish/` (Backend API)
 2. Запустите `CarShareX.exe` из папки `front/src-tauri/target/release/` (Desktop App)
 
-📖 **Полная документация:** См. [BUILD_AND_RUN.md](BUILD_AND_RUN.md)
+### 🤖 Автоматическая сборка через GitHub Actions
+
+GitHub Actions автоматически собирает оба .exe файла при каждом push!
+
+**Скачать готовые .exe:**
+1. Перейдите в [Actions](../../actions) → "Build CarShareX Desktop Apps"
+2. Выберите последний успешный запуск ✅
+3. Скачайте артефакт **CarShareX-Desktop-Complete**
+
+🤖 **Подробная инструкция:** См. [GITHUB_ACTIONS_GUIDE.md](GITHUB_ACTIONS_GUIDE.md)
+
+📖 **Локальная сборка:** См. [BUILD_AND_RUN.md](BUILD_AND_RUN.md)
 
 ---
 
